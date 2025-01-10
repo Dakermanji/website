@@ -1,5 +1,6 @@
 //! config/express.js
 import express from 'express';
+import router from './routes.js';
 
 // Initialize the Express application
 const app = express();
@@ -9,6 +10,7 @@ const app = express();
 
 // Step 2: Register routes
 // All application routes are defined and linked here
+app.use('/', router);
 
 // Step 3: Apply error handler
 // Handles errors globally, including 404 and server errors
