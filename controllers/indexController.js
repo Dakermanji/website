@@ -9,6 +9,7 @@ export const getIndex = (req, res) => {
 			navBar: navBar.index,
 			about: aboutData,
 			styles: ['index'],
+			scripts: ['index'],
 		});
 	} catch (error) {
 		console.error('Error loading data:', error);
