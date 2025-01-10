@@ -1,12 +1,11 @@
-import express from 'express';
-
-const app = express();
-const PORT = process.env.PORT || 3000;
+//! app.js
+import app from './config/express.js';
+import env from './config/dotenv.js';
 
 app.get('/', (req, res) => {
 	res.send('Test');
 });
 
-app.listen(PORT, () => {
-	console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(env.PORT, () => {
+	console.log(`Server is running on http://${env.HOST}:${env.PORT}`);
 });
