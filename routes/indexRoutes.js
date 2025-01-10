@@ -1,11 +1,10 @@
 //! routes/indexRoutes.js
 
 import express from 'express';
+import { getIndex } from '../controllers/indexController.js';
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-	res.send('Test');
-});
+router.get('/', getIndex);
 
 export default router;
