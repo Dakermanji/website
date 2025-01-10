@@ -92,3 +92,24 @@
     </div>
   </div>
 </section>
+
+<!-- My Work Section -->
+<section id="portfolio">
+  <div class="container">
+    <h2 class="text-center mb-5">My Work</h2>
+    <div class="work-list">
+      <% projects.forEach(project => { %>
+      <div class="work text-center">
+        <a href="/<%= project.link %>">
+          <h4 class='mb-4 mt-3'><%= project.title %></h4>
+          <img src="/images/index/<%= project.img %>" alt="<%= project.title %>">
+        </a>
+      </div>
+      <% }) %>
+    </div>
+  </div>
+  <div class="text-center mt-4">
+    <button id="see-more-btn" class="btn btn-primary">See More</button>
+  </div>
+  </div>
+</section>
