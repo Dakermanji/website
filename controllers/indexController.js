@@ -1,6 +1,14 @@
 //! controllers/indexController.js
+
+import { navBar } from '../data/navBar.js';
 export const getIndex = (req, res) => {
-	res.render('index', {
-		title: 'Home - Dakermanji Web Dev',
-	});
+	try {
+		res.render('index', {
+			title: 'Home - Dakermanji Web Dev',
+			navBar: navBar.index,
+		});
+	} catch (error) {
+		console.error('Error loading data:', error);
+		res.status(500).send('Error loading data');
+	}
 };

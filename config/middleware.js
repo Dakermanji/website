@@ -31,6 +31,10 @@ const applyMiddlewares = (app) => {
 	app.set('views', './views');
 
 	// Custom middlewares:
+	app.use((req, res, next) => {
+		res.locals.currentRoute = req.path;
+		next();
+	});
 };
 
 export default applyMiddlewares;
