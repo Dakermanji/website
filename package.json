@@ -24,5 +24,7 @@
 	],
 	"author": "Behnam Dakermanji",
 	"license": "ISC",
-	"dependencies": {}
+	"dependencies": {
+		"express": "^4.21.2"
+	}
 }
