@@ -17,6 +17,13 @@ const env = {
 	HOST:
 		process.env.HOST ||
 		(warnIfUsingDefault('HOST', 'localhost'), 'localhost'),
+	SESSION_SECRET:
+		process.env.SESSION_SECRET ||
+		(() => {
+			throw new Error(
+				'SESSION_SECRET is not defined. Please set it in your environment variables.'
+			);
+		})(),
 };
 
 export default env;
