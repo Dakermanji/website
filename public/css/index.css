@@ -343,10 +343,17 @@ h1 {
     opacity: 1;
     transform: translateY(0);
     max-height: 500px;
+    transition: transform var(--transition-duration) ease, opacity var(--transition-duration) ease;
+    transform: scale(1.05);
 }
 
 .work a {
     text-decoration: none;
+}
+
+.work a:focus {
+    outline: 2px solid var(--color-primary-dark);
+    outline-offset: 5px;
 }
 
 .work h4 {
@@ -369,6 +376,11 @@ h1 {
 
 .work:hover h4 {
     color: var(--color-primary-dark);
+}
+
+#see-more-btn:focus {
+    outline: 2px solid var(--color-primary-dark);
+    outline-offset: 3px;
 }
 
 /* Responsive Adjustments */

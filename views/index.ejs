@@ -6,7 +6,7 @@
 <section class="hero-section">
   <div class="hero-content">
     <small class="role">Full Stack <span class='orange'>W</span>eb <span class='orange'>D</span>eveloper</small>
-    <h1>Hi, I'm Behnam <span class='orange'>D</span>akermanji from Canada <img src="/images/index/canada-flag.png" alt="Canada Flag" class="flag-icon"></h1>
+    <h1>Hi, I'm Behnam <span class='orange'>D</span>akermanji from Canada <img src="/images/index/canada-flag.png" alt="Canada Flag" class="flag-icon" loading='lazy'></h1>
   </div>
 </section>
 
@@ -17,7 +17,7 @@
     <div class="row">
       <!-- About Image Column -->
       <div class="about-col-1 text-center">
-        <img src="<%= about.image %>" alt="Humanoid robot working on PC" />
+        <img src="<%= about.image %>" alt="Humanoid robot working on PC" loading='lazy' />
       </div>
 
       <!-- About Content Column with Background -->
@@ -27,9 +27,9 @@
         <% }) %>
 
         <!-- Tab Titles -->
-        <div class="tab-titles">
+        <div class="tab-titles" role="tablist">
           <% Object.keys(about.tabs).forEach(tab => { %>
-          <p class="tab-links <%= tab === 'experience' ? 'active' : '' %>" data-tab="<%= tab %>"><%= tab.charAt(0).toUpperCase() + tab.slice(1) %></p>
+          <p class="tab-links <%= tab === 'experience' ? 'active' : '' %>" data-tab="<%= tab %>" role="tab" aria-selected="<%= tab === 'experience' ? 'true' : 'false' %>"><%= tab.charAt(0).toUpperCase() + tab.slice(1) %></p>
           <% }) %>
         </div>
 
@@ -102,14 +102,14 @@
       <div class="work text-center">
         <a href="/<%= project.link %>">
           <h4 class='mb-4 mt-3'><%= project.title %></h4>
-          <img src="/images/index/<%= project.img %>" alt="<%= project.title %>">
+          <img src="/images/index/<%= project.img %>" alt="<%= project.title %>" loading="lazy">
         </a>
       </div>
       <% }) %>
     </div>
   </div>
   <div class="text-center mt-4">
-    <button id="see-more-btn" class="btn btn-primary">See More</button>
+    <button id="see-more-btn" class="btn btn-primary" aria-label="See More Projects">See More</button>
   </div>
   </div>
 </section>

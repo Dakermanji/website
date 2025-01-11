@@ -83,12 +83,17 @@ showProjects();
 seeMoreBtn.addEventListener('click', handleSeeMore);
 
 // Recalculate projects per row on window resize and adjust visible projects
+let resizeTimeout;
 window.addEventListener('resize', () => {
-	// Recalculate how many projects fit per row
-	projectsPerRow = getProjectsPerRow();
-
-	// Reset visible projects based on the recalculated projects per row
-	visibleProjects = projectsPerRow;
-	projects.forEach((proj) => proj.classList.remove('visible')); // Hide all projects
-	showProjects(); // Show the initial set based on new screen size
+	clearTimeout(resizeTimeout);
+	resizeTimeout = setTimeout(() => {
+		// Recalculate how many projects fit per row
+		projectsPerRow = getProjectsPerRow();
+		// Reset visible projects based on the recalculated projects per row
+		visibleProjects = projectsPerRow;
+		// Hide all projects
+		projects.forEach((proj) => proj.classList.remove('visible'));
+		// Show the initial set based on new screen size
+		showProjects();
+	}, 200); // Adjust debounce delay as needed
 });
