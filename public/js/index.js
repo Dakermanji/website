@@ -29,3 +29,66 @@ document.querySelectorAll('.tab-links').forEach((tabLink) => {
 		}
 	});
 });
+
+const projects = document.querySelectorAll('.work');
+const seeMoreBtn = document.getElementById('see-more-btn');
+
+// Function to calculate how many projects fit per row
+function getProjectsPerRow() {
+	const container = document.querySelector('.work-list');
+
+	// Temporarily make one project visible to measure its width
+	projects[0].classList.add('visible');
+	const projectWidth = projects[0].offsetWidth + 20;
+
+	projects[0].classList.remove('visible');
+
+	const containerWidth = container.offsetWidth;
+
+	// Calculate how many projects can fit in one row
+	return Math.floor(containerWidth / projectWidth);
+}
+
+let projectsPerRow = getProjectsPerRow();
+let visibleProjects = projectsPerRow;
+
+// Function to show projects based on how many fit in a row
+function showProjects() {
+	// Show only the visible projects
+	for (let i = 0; i < visibleProjects; i++) {
+		if (projects[i]) {
+			projects[i].classList.add('visible');
+		}
+	}
+
+	// Hide the button if all projects are visible
+	if (visibleProjects >= projects.length) {
+		seeMoreBtn.style.display = 'none';
+	} else {
+		seeMoreBtn.style.display = 'inline-block'; // Make sure the button is visible if needed
+	}
+}
+
+// Function to handle "See More" button clicks
+function handleSeeMore() {
+	// Increase the number of visible projects by one row
+	visibleProjects += projectsPerRow;
+	showProjects();
+}
+
+// Adjust project visibility based on the initial load and resizing
+showProjects();
+
+// Attach click event to the "See More" button
+seeMoreBtn.addEventListener('click', handleSeeMore);
+
+// Recalculate projects per row on window resize and adjust visible projects
+window.addEventListener('resize', () => {
+	// Recalculate how many projects fit per row
+	projectsPerRow = getProjectsPerRow();
+
+	// Reset visible projects based on the recalculated projects per row
+	visibleProjects = projectsPerRow;
+	projects.forEach((proj) => proj.classList.remove('visible')); // Hide all projects
+	showProjects(); // Show the initial set based on new screen size
+});
