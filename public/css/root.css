@@ -5,6 +5,10 @@
     /* Colors */
     --color-primary: #ff7f27;
     --color-primary-dark: #fa6806;
+    --color-secondary: #4db6ac;
+    --color-secondary-dark: #00897b;
+    --color-tertiary: #6c757d;
+    --color-tertiary-dark: #495057;
     --color-dark: #222;
     --color-link: #1d57ad;
     --color-projects: #575d88;
