@@ -1,4 +1,5 @@
 //! config/dotenv.js
+
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -46,6 +47,21 @@ const env = {
 			);
 		})(),
 	DB_PORT: process.env.DB_PORT || (warnIfUsingDefault('DB_PORT', 3306), 3306),
+
+	SENTRY_DSN:
+		process.env.SENTRY_DSN ||
+		(() => {
+			throw new Error(
+				'SENTRY_DSN is not defined. Please set it in your environment variables.'
+			);
+		})(),
+	SENTRY_PROJECT_ID:
+		process.env.SENTRY_PROJECT_ID ||
+		(() => {
+			throw new Error(
+				'SENTRY_PROJECT_ID is not defined. Please set it in your environment variables.'
+			);
+		})(),
 };
 
 export default env;

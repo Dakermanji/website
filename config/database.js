@@ -1,5 +1,8 @@
+//! config/database.js
+
 import mysql from 'mysql2';
 import env from './dotenv.js';
+import Sentry from './instrument.js';
 
 const pool = mysql.createPool({
 	host: env.DB_HOST,
@@ -16,6 +19,7 @@ let isDatabaseConnected = false;
 
 pool.getConnection((err, connection) => {
 	if (err) {
+		Sentry.captureException(err);
 		handleDatabaseError(err);
 		isDatabaseConnected = false;
 	} else {
@@ -30,20 +34,32 @@ pool.getConnection((err, connection) => {
 function handleDatabaseError(err) {
 	switch (err.code) {
 		case 'PROTOCOL_CONNECTION_LOST':
+			Sentry.captureMessage('Database connection was closed.', 'warning'); // Log a warning in Sentry
 			console.error('Database connection was closed.');
 			break;
+
 		case 'ER_CON_COUNT_ERROR':
+			Sentry.captureMessage(
+				'Database has too many connections.',
+				'warning'
+			); // Log a warning in Sentry
 			console.error('Database has too many connections.');
 			break;
+
 		case 'ECONNREFUSED':
+			Sentry.captureMessage('Database connection was refused.', 'error'); // Log as an error
 			console.error('Database connection was refused.');
 			break;
+
 		default:
-			console.error(
-				env.NODE_ENV === 'development'
-					? `[Database Error]: ${err.message}`
-					: 'An error occurred while connecting to the database.'
-			);
+			if (env.NODE_ENV === 'development') {
+				console.error(`[Database Error]: ${err.message}`);
+			} else {
+				console.error(
+					'An error occurred while connecting to the database.'
+				);
+			}
+			Sentry.captureException(err); // Log other unexpected errors as exceptions
 	}
 }
 

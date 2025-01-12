@@ -1,9 +1,15 @@
 //! middlewares/errorHandler.js
+
+import Sentry from '../config/instrument.js';
 const errorHandler = (err, req, res, next) => {
-	console.error(err.stack); // Log the error stack for debugging
+	// Send the error to Sentry
+	Sentry.captureException(err);
 
 	const statusCode = err.status || 500;
-	const message = err.message || 'An unexpected error occurred.';
+	const message =
+		env.NODE_ENV === 'development'
+			? err.message || 'An unexpected error occurred.'
+			: 'Internal Server Error';
 
 	res.status(statusCode).send(message);
 };

@@ -1,6 +1,7 @@
 //! config/express.js
-import express from 'express';
 
+import './instrument.js'; // Initialize Sentry as early as possible
+import express from 'express';
 import applyMiddlewares from './middleware.js';
 import router from './routes.js';
 import errorHandler from '../middlewares/errorHandler.js';
