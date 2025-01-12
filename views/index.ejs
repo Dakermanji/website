@@ -121,10 +121,22 @@
     <div class="row justify-content-center">
       <div class="col-md-6">
 
-        <!-- TODO: Display Flash Messages HERE -->
+        <!-- Display Flash Messages -->
+        <% if (success_msg && success_msg.length > 0) { %>
+        <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+          <%= success_msg %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% } %>
+
+        <% if (error_msg && error_msg.length > 0) { %>
+        <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+          <%= error_msg %>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% } %>
 
         <!-- Contatct Form -->
-
         <form action="/send-message" method="POST">
           <div class="mb-3 form-group">
             <label for="name" class="form-label" aria-label="Your Name">Your Name</label>
