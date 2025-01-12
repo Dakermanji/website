@@ -24,6 +24,28 @@ const env = {
 				'SESSION_SECRET is not defined. Please set it in your environment variables.'
 			);
 		})(),
+
+	DB_HOST:
+		process.env.DB_HOST ||
+		(warnIfUsingDefault('DB_HOST', 'localhost'), 'localhost'),
+	DB_USER:
+		process.env.DB_USER || (warnIfUsingDefault('DB_USER', 'root'), 'root'),
+
+	DB_PASSWORD:
+		process.env.DB_PASSWORD ||
+		(() => {
+			throw new Error(
+				'DB_PASSWORD is not defined. Please set it in your environment variables.'
+			);
+		})(),
+	DB_NAME:
+		process.env.DB_NAME ||
+		(() => {
+			throw new Error(
+				'DB_NAME is not defined. Please set it in your environment variables.'
+			);
+		})(),
+	DB_PORT: process.env.DB_PORT || (warnIfUsingDefault('DB_PORT', 3306), 3306),
 };
 
 export default env;
