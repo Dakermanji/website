@@ -4,6 +4,7 @@ import { navBar } from '../data/navBar.js';
 import { aboutData } from '../data/aboutData.js';
 import { servicesData } from '../data/servicesData.js';
 import { projects } from '../data/projectsData.js';
+import { promisePool } from '../config/database.js';
 
 // Handle Get Index Page
 export const getIndex = (req, res) => {
@@ -26,10 +27,18 @@ export const getIndex = (req, res) => {
 };
 
 // Handle Contact Form Submission
-export const postMessage = (req, res) => {
+import { promisePool } from '../config/database.js';
+
+export const postMessage = async (req, res) => {
 	try {
 		const { name, email, message } = req.body;
-		console.log('Message received:', { name, email, message });
+
+		// Insert the message into the database
+		const query = `
+            INSERT INTO messages (name, email, message)
+            VALUES (?, ?, ?)
+        `;
+		await promisePool.execute(query, [name, email, message]);
 
 		req.flash('success', 'Your message has been sent successfully!');
 		res.redirect('/');
