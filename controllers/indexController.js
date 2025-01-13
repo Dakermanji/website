@@ -1,5 +1,6 @@
 //! controllers/indexController.js
 
+import validator from 'validator';
 import { navBar } from '../data/navBar.js';
 import { aboutData } from '../data/aboutData.js';
 import { servicesData } from '../data/servicesData.js';
@@ -27,22 +28,23 @@ export const getIndex = (req, res) => {
 };
 
 // Handle Contact Form Submission
-// Handle Contact Form Submission
 export const postMessage = async (req, res) => {
 	try {
 		const { name, email, message } = req.body;
 
-		// Use the Message model to save the message
+		// Validate input lengths (server-side validation)
+		if (name.length > 100 || email.length > 100 || message.length > 1000) {
+			req.flash('error', 'Input exceeds allowed length.');
+			return res.redirect('/');
+		}
+
+		// Save the sanitized and validated data to the database
 		await Message.create({ name, email, message });
 
-		// Add a success flash message
 		req.flash('success', 'Your message has been sent successfully!');
 		res.redirect('/');
 	} catch (error) {
-		// Log the error for debugging purposes
 		console.error('Error handling message submission:', error);
-
-		// Add an error flash message
 		req.flash('error', 'Something went wrong. Please try again.');
 		res.redirect('/');
 	}
