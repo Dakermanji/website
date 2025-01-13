@@ -2,6 +2,7 @@
 import express from 'express';
 
 import indexRouter from '../routes/indexRoutes.js';
+import projectsRoutes from '../routes/projectsRoutes.js';
 
 const router = express.Router();
 
@@ -10,6 +11,7 @@ const router = express.Router();
 // Step 2: Define application routes
 // Base routes are mounted here, linking to their respective route handlers
 router.use('/', indexRouter);
+router.use('/projects', projectsRoutes);
 
 // Step 3: Handle 404 errors
 // Catch-all route for unmatched paths
