@@ -7,9 +7,10 @@ Features
 --------
 
 - **Dynamic Content**: Sections are dynamically rendered using EJS templates and modularized data sources.
-- **Contact Form**: Messages submitted via the contact form are stored in a database for future management.
+- **Contact Form**: Messages submitted via the contact form are sanitized, validated, and stored securely in a database.
 - **Sentry Integration**: Full error tracking and performance monitoring using Sentry.
 - **Responsive Design**: Optimized for all devices using Bootstrap.
+- **SEO Friendly**: Follows modern web standards for improved discoverability.
 - **Backend**: Node.js with Express.js.
 - **Database**: MySQL with connection pooling for scalability.
 
@@ -36,10 +37,7 @@ Installation
     npm install
     ```
 
-3. Replace packages:
-    Replace `connect-flash` in `node_modules` with the updated version from [this repository](https://github.com/Dakermanji/connect-flash).
-
-4. Set up environment variables:
+3. Set up environment variables:
 
     Create a `.env` file in the root directory and add the following:
 
@@ -56,20 +54,23 @@ Installation
     SENTRY_PROJECT_ID=your-sentry-project-id
     ```
 
-5. Initialize the database:
+4. Initialize the database:
 
     Create the required tables by running the SQL scripts in the `sql/` folder:
     - `messages.sql`
 
-6. Start the server:
+5. Start the server:
 
     ```bash
     npm start
     ```
 
-7. Visit the website:
+6. Visit the website:
 
     Open your browser and navigate to [http://localhost:3000](http://localhost:3000).
+
+7. (Optional) Deploy to production:
+    - Set `NODE_ENV=production` in your environment variables.
 
 Usage
 -----
@@ -78,21 +79,11 @@ Usage
 - Use the contact form to send a message.
 - Explore dynamic sections such as "About Me," "Services," and "Portfolio."
 
-Technologies Used
------------------
-
-- **Frontend**: EJS, Bootstrap 5
-- **Backend**: Node.js, Express.js
-- **Database**: MySQL
-- **Error Tracking**: Sentry
-- **Session Management**: express-session, express-flash
-
 Screenshots
 -----------
 
-<!-- Add screenshots here -->
-- **Home Page**: _Coming Soon_
-- **Contact Form**: _Coming Soon_
+- **Home Page**: ![Home Page](./screenshots/home.png)
+- **Contact Form**: ![Contact Form](./screenshots/contact.png)
 
 Contributing
 ------------
@@ -131,5 +122,5 @@ Contact
 If you have any questions or feedback, feel free to contact me:
 
 - **Email**: [dakermanji@gmail.com](mailto:dakermanji@gmail.com)
-- **LinkedIn**: [LinkedIn Profile](https://linkedin.com/in/yourprofile)
+- **LinkedIn**: [LinkedIn Profile](https://linkedin.com/in/dakermanji)
 - **GitHub**: [GitHub Profile](https://github.com/Dakermanji)
