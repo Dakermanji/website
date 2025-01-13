@@ -1,22 +1,27 @@
 import validator from 'validator';
 
+const disallowedChars = /[^a-zA-Z0-9 .,?!]/; // Adjust as needed
 export const sanitizeForm = (req, res, next) => {
 	try {
 		// Trim and sanitize inputs
-		req.body.name = validator.escape(validator.trim(req.body.name || ''));
-		req.body.email = validator.normalizeEmail(req.body.email || '');
-		req.body.message = validator.escape(
-			validator.trim(req.body.message || '')
-		);
+		let { name, email, message } = req.body;
+
+		name = validator.escape(validator.trim(name || ''));
+		email = validator.normalizeEmail(email || '');
+		message = validator.escape(validator.trim(message || ''));
 
 		// Validate input lengths
-		if (
-			req.body.name.length > 100 ||
-			req.body.email.length > 100 ||
-			req.body.message.length > 1000
-		) {
+		if (name.length > 100 || email.length > 100 || message.length > 1000) {
 			req.flash('error', 'Input exceeds allowed length.');
-			return res.redirect('/');
+			return res.redirect('/#flash-message');
+		}
+		if (!validator.isEmail(email)) {
+			req.flash('error', 'Invalid email address.');
+			return res.redirect('/#flash-message');
+		}
+		if (disallowedChars.test(message)) {
+			req.flash('error', 'Your message contains invalid characters.');
+			return res.redirect('/#flash-message');
 		}
 
 		next(); // Proceed to the next middleware or route handler

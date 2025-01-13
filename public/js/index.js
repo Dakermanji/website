@@ -97,3 +97,10 @@ window.addEventListener('resize', () => {
 		showProjects();
 	}, 200); // Adjust debounce delay as needed
 });
+
+// Check if the URL contains #contact and scroll smoothly
+if (window.location.hash === '#flash-message') {
+	document
+		.querySelector('#flash-message')
+		.scrollIntoView({ behavior: 'smooth' });
+}

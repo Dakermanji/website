@@ -117,20 +117,18 @@
 <!-- Contact Me Section -->
 <section id="contact" class="py-5">
   <div class="container">
-    <h2 class="text-center mb-5">Contact Me</h2>
+    <h2 class="mb-5">Contact Me</h2>
     <div class="row justify-content-center">
       <div class="col-md-6">
 
         <!-- Display Flash Messages -->
         <% if (success_msg && success_msg.length > 0) { %>
-        <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+        <div id='flash-message' class="alert alert-success alert-dismissible fade show text-center" role="alert">
           <%= success_msg %>
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        <% } %>
-
-        <% if (error_msg && error_msg.length > 0) { %>
-        <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+        <% } else if (error_msg && error_msg.length > 0) { %>
+        <div id='flash-message' class="alert alert-danger alert-dismissible fade show text-center" role="alert">
           <%= error_msg %>
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -150,21 +148,23 @@
             <label for="message">Your Message</label>
             <textarea id="message" name="message" class="form-control" maxlength="1000" rows="5" required></textarea>
           </div>
-          <button type="submit" class="btn btn-primary">Send Message</button>
+          <div class='text-center'>
+            <button type="submit" class="btn btn-primary">Send Message</button>
+          </div>
         </form>
       </div>
     </div>
 
     <!-- Social Media -->
     <div class="text-center mt-4">
-      <p>You can also reach me at <a href="mailto:dakermanji@gmail.com">dakermanji@gmail.com</a></p>
+      <p>You can also reach me at <a target='_blank' href="mailto:dakermanji@gmail.com">dakermanji@gmail.com</a></p>
       <div class="social-icons">
-        <a href="https://facebook.com/yourprofile" target="_blank" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-        <a href="https://facebook.com/yourprofile" target="_blank" aria-label="Facebook Messenger"><i class="bi bi-messenger"></i></a>
-        <a href="https://twitter.com/yourprofile" target="_blank" aria-label="X"><i class="bi bi-twitter-x"></i></a>
-        <a href="https://linkedin.com/in/yourprofile" target="_blank" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-        <a href="https://github.com/yourprofile" target="_blank" aria-label="GitHub"><i class="bi bi-github"></i></a>
-        <a href="https://github.com/yourprofile" target="_blank" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+        <a href="https://facebook.com/yourprofile" target="_blank" rel="noopener noreferrer" aria-label="Facebook" data-bs-toggle="tooltip" title="Facebook"><i class=" bi bi-facebook"></i></a>
+        <a href="https://facebook.com/yourprofile" aria-label="Facebook Messenger" target="_blank" rel="noopener noreferrer" data-bs-toggle="tooltip" title="Facebook Messenger"><i class="bi bi-messenger"></i></a>
+        <a href="https://twitter.com/yourprofile" target="_blank" rel="noopener noreferrer" aria-label="X" data-bs-toggle="tooltip" title="X/Twitter"><i class="bi bi-twitter-x"></i></a>
+        <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" data-bs-toggle="tooltip" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+        <a href="https://github.com/yourprofile" target="_blank" rel="noopener noreferrer" aria-label="GitHub" data-bs-toggle="tooltip" title="GitHub"><i class="bi bi-github"></i></a>
+        <a href="https://github.com/yourprofile" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" data-bs-toggle="tooltip" title="WhatsApp"><i class="bi bi-whatsapp"></i></a>
       </div>
     </div>
   </div>

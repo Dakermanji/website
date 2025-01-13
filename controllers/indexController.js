@@ -1,6 +1,5 @@
 //! controllers/indexController.js
 
-import validator from 'validator';
 import { navBar } from '../data/navBar.js';
 import { aboutData } from '../data/aboutData.js';
 import { servicesData } from '../data/servicesData.js';
@@ -32,20 +31,14 @@ export const postMessage = async (req, res) => {
 	try {
 		const { name, email, message } = req.body;
 
-		// Validate input lengths (server-side validation)
-		if (name.length > 100 || email.length > 100 || message.length > 1000) {
-			req.flash('error', 'Input exceeds allowed length.');
-			return res.redirect('/');
-		}
-
 		// Save the sanitized and validated data to the database
 		await Message.create({ name, email, message });
 
 		req.flash('success', 'Your message has been sent successfully!');
-		res.redirect('/');
+		res.redirect('/#flash-message');
 	} catch (error) {
 		console.error('Error handling message submission:', error);
 		req.flash('error', 'Something went wrong. Please try again.');
-		res.redirect('/');
+		res.redirect('/#flash-message');
 	}
 };
