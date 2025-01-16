@@ -1,0 +1,51 @@
+<div id="authModal" class="custom-modal">
+  <div class="custom-modal-backdrop"></div>
+  <div class="custom-modal-content">
+    <div class="custom-modal-header">
+      <h5 class="custom-modal-title">Login or Register</h5>
+      <button class="custom-modal-close" id="closeModal">×</button>
+    </div>
+    <div class="custom-modal-body">
+      <!-- Tab Navigation -->
+      <ul class="nav nav-tabs" id="authTabs" role="tablist">
+        <li class="nav-item">
+          <button class="nav-link active" id="login-tab" data-tab="login">Login</button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" id="register-tab" data-tab="register">Register</button>
+        </li>
+      </ul>
+      <!-- Tab Content -->
+      <div id="login" class="custom-tab-content active">
+        <form action="/login" method="POST">
+          <div class="mb-3">
+            <label for="login-email" class="form-label">Email</label>
+            <input type="email" id="login-email" class="form-control" name="email" required />
+          </div>
+          <div class="mb-3">
+            <label for="login-password" class="form-label">Password</label>
+            <input type="password" id="login-password" class="form-control" name="password" required />
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+      </div>
+      <div id="register" class="custom-tab-content">
+        <form action="/register" method="POST">
+          <div class="mb-3">
+            <label for="register-email" class="form-label">Email</label>
+            <input type="email" id="register-email" class="form-control" name="email" required />
+          </div>
+          <div class="mb-3">
+            <label for="register-password" class="form-label">Password</label>
+            <input type="password" id="register-password" class="form-control" name="password" required />
+          </div>
+          <div class="mb-3">
+            <label for="register-confirm-password" class="form-label">Confirm Password</label>
+            <input type="password" id="register-confirm-password" class="form-control" name="confirmPassword" required />
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Register</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,9 @@
 //! public/js/index.js
 // Mouse move effect to adjust transparency around cursor within the hero section
 const main = document.querySelector('main');
+const projects = document.querySelectorAll('.work');
+const seeMoreBtn = document.getElementById('see-more-btn');
+const tabLinks = document.querySelectorAll('.tab-links');
 
 main.addEventListener('mousemove', (event) => {
 	const overlay = main.querySelector('.background-overlay');
@@ -11,7 +14,7 @@ main.addEventListener('mousemove', (event) => {
 });
 
 // Handle tab switching for the About section
-document.querySelectorAll('.tab-links').forEach((tabLink) => {
+tabLinks.forEach((tabLink) => {
 	tabLink.addEventListener('click', function () {
 		// Remove 'active' class from all tab-links and tab-contents
 		document
@@ -29,9 +32,6 @@ document.querySelectorAll('.tab-links').forEach((tabLink) => {
 		}
 	});
 });
-
-const projects = document.querySelectorAll('.work');
-const seeMoreBtn = document.getElementById('see-more-btn');
 
 // Function to calculate how many projects fit per row
 function getProjectsPerRow() {
@@ -104,3 +104,39 @@ if (window.location.hash === '#flash-message') {
 		.querySelector('#flash-message')
 		.scrollIntoView({ behavior: 'smooth' });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+	const authModal = document.getElementById('authModal');
+	const openModalBtn = document.getElementById('openAuthModal');
+	const closeModalBtn = document.getElementById('closeModal');
+	const tabs = document.querySelectorAll('#authTabs .nav-link');
+	const tabContents = document.querySelectorAll('.custom-tab-content');
+
+	// Open Modal
+	openModalBtn.addEventListener('click', () => {
+		authModal.classList.add('active');
+	});
+
+	// Close Modal
+	closeModalBtn.addEventListener('click', () => {
+		authModal.classList.remove('active');
+	});
+
+	// Tab Switching
+	tabs.forEach((tab) => {
+		tab.addEventListener('click', () => {
+			// Remove active class from all tabs and contents
+			tabs.forEach((t) => t.classList.remove('active'));
+			tabContents.forEach((content) =>
+				content.classList.remove('active')
+			);
+
+			// Activate current tab and corresponding content
+			tab.classList.add('active');
+			const target = document.getElementById(
+				tab.getAttribute('data-tab')
+			);
+			target.classList.add('active');
+		});
+	});
+});
