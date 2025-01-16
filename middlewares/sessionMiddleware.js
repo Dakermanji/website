@@ -1,10 +1,9 @@
-//! middlewares/sessionFlash.js
+//! middlewares/sessionMiddleware.js
 
 import session from 'express-session';
-import flash from 'express-flash';
 import env from '../config/dotenv.js';
 
-export const sessionFlash = (app) => {
+export const initializeSession = (app) => {
 	app.use(
 		session({
 			secret: env.SESSION_SECRET, // Use your environment variable for the session secret
@@ -17,14 +16,4 @@ export const sessionFlash = (app) => {
 			},
 		})
 	);
-
-	// Initialize flash middleware
-	app.use(flash());
-
-	// Add flash messages to response locals for rendering in views
-	app.use((req, res, next) => {
-		res.locals.success = req.flash('success'); // Success messages
-		res.locals.error = req.flash('error'); // Error messages
-		next();
-	});
 };
