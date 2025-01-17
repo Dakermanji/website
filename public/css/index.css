@@ -29,7 +29,7 @@ section {
     top: 25vh;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 1050;
+    z-index: 5;
     max-width: 500px;
     width: 90%;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
@@ -534,7 +534,7 @@ h1 {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 1050;
+    z-index: 4;
     background: rgba(0, 0, 0, 0.5);
     justify-content: center;
     align-items: center;

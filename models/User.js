@@ -8,7 +8,7 @@ class User {
 	static async create({
 		username,
 		email,
-		hashedPassword,
+		hashedPassword = null,
 		googleId = null,
 		githubId = null,
 	}) {
@@ -44,46 +44,84 @@ class User {
 
 	// Find or create a user by Google profile
 	static async findOrCreateGoogleUser(profile) {
-		const query = `
-            SELECT * FROM users WHERE google_id = ? LIMIT 1
-        `;
-		const [rows] = await promisePool.execute(query, [profile.id]);
+		const email = profile._json.email;
+
+		// Check if a user exists with the given email
+		const query = `SELECT * FROM users WHERE email = ? LIMIT 1`;
+		const [rows] = await promisePool.execute(query, [email]);
+
 		if (rows.length > 0) {
-			return rows[0];
+			// User exists, link Google account if not already linked
+			const user = rows[0];
+			if (!user.google_id) {
+				await this.updateGoogleId(user.id, profile.id);
+			}
+			return user;
 		}
 
-		// If the user doesn't exist, create a new one
+		// If no user exists, create a new one
 		const insertQuery = `
             INSERT INTO users (id, username, email, google_id, confirmed)
             VALUES (UUID(), ?, ?, ?, true)
         `;
-		const values = [
-			profile.displayName,
-			profile.emails[0].value,
-			profile.id,
-		];
+		const values = [profile.displayName, email, profile.id];
 		const [result] = await promisePool.execute(insertQuery, values);
 		return this.findById(result.insertId);
 	}
 
 	// Find or create a user by GitHub profile
 	static async findOrCreateGitHubUser(profile) {
-		const query = `
-            SELECT * FROM users WHERE github_id = ? LIMIT 1
-        `;
-		const [rows] = await promisePool.execute(query, [profile.id]);
+		const email = profile.email;
+
+		// Check if a user exists with the given email
+		const query = `SELECT * FROM users WHERE email = ? LIMIT 1`;
+		const [rows] = await promisePool.execute(query, [email]);
+
 		if (rows.length > 0) {
-			return rows[0];
+			// User exists, link GitHub account if not already linked
+			const user = rows[0];
+			if (!user.github_id) {
+				await this.updateGitHubId(user.id, profile.id);
+			}
+			return user;
 		}
 
-		// If the user doesn't exist, create a new one
+		// If no user exists, create a new one
 		const insertQuery = `
             INSERT INTO users (id, username, email, github_id, confirmed)
             VALUES (UUID(), ?, ?, ?, true)
         `;
-		const values = [profile.username, profile.emails[0].value, profile.id];
+		const values = [profile.username, email, profile.id];
 		const [result] = await promisePool.execute(insertQuery, values);
 		return this.findById(result.insertId);
+	}
+
+	// Link Google ID to an existing user
+	static async updateGoogleId(userId, googleId) {
+		const query = `
+            UPDATE users
+            SET google_id = ?
+            WHERE id = ?
+        `;
+		const [result] = await promisePool.execute(query, [googleId, userId]);
+		return result;
+	}
+
+	// Link GitHub ID to an existing user
+	static async updateGitHubId(userId, githubId) {
+		const query = `
+            UPDATE users
+            SET github_id = ?
+            WHERE id = ?
+        `;
+		const [result] = await promisePool.execute(query, [githubId, userId]);
+		return result;
+	}
+
+	// Hash a password
+	static async hashPassword(password) {
+		const saltRounds = 10; // Adjust as needed for your security requirements
+		return await bcrypt.hash(password, saltRounds);
 	}
 
 	// Validate a user's password
@@ -103,28 +141,6 @@ class User {
 			tokenExpiry,
 			id,
 		]);
-		return result;
-	}
-
-	// Link GitHub ID to an existing user
-	static async updateGitHubId(userId, githubId) {
-		const query = `
-        UPDATE users
-        SET github_id = ?
-        WHERE id = ?
-    `;
-		const [result] = await promisePool.execute(query, [githubId, userId]);
-		return result;
-	}
-
-	// Link Google ID to an existing user
-	static async updateGoogleId(userId, googleId) {
-		const query = `
-        UPDATE users
-        SET google_id = ?
-        WHERE id = ?
-    `;
-		const [result] = await promisePool.execute(query, [googleId, userId]);
 		return result;
 	}
 }
