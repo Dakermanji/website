@@ -9,31 +9,39 @@ import axios from 'axios';
 import User from '../models/User.js';
 import env from './dotenv.js';
 
-// Local Strategy
 passport.use(
-	new LocalStrategy(async (username, password, done) => {
-		try {
-			// Find the user by username
-			const user = await User.findByUsername(username);
-			if (!user) {
-				return done(null, false, {
-					message: 'Invalid username or password.',
-				});
-			}
+	new LocalStrategy(
+		{
+			usernameField: 'email',
+			passwordField: 'password',
+		},
+		async (email, password, done) => {
+			try {
+				// Find the user by email
+				const user = await User.findByEmail(email);
+				if (!user) {
+					return done(null, false, {
+						message: 'Invalid email or password.',
+					});
+				}
 
-			// Validate the password
-			const isValid = await user.validatePassword(password);
-			if (!isValid) {
-				return done(null, false, {
-					message: 'Invalid username or password.',
-				});
-			}
+				// Validate the password
+				const isValid = await User.validatePassword(
+					password,
+					user.hashed_password
+				);
+				if (!isValid) {
+					return done(null, false, {
+						message: 'Invalid email or password.',
+					});
+				}
 
-			return done(null, user);
-		} catch (error) {
-			return done(error);
+				return done(null, user);
+			} catch (error) {
+				return done(error);
+			}
 		}
-	})
+	)
 );
 
 // Google OAuth Strategy

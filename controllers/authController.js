@@ -38,18 +38,20 @@ export const register = async (req, res) => {
 			const methodsMessage = registrationMethods.join(' and '); // Example: "locally and Google"
 			let suggestion = '';
 
-			if (registrationMethods.includes('locally')) {
-				suggestion = 'Please log in using your email and password.';
-			} else if (
+			if (
 				registrationMethods.includes('Google') ||
 				registrationMethods.includes('GitHub')
 			) {
-				suggestion = 'Please log in using the appropriate method.';
+				suggestion =
+					'<br />Please log in using the appropriate method.';
+			} else if (registrationMethods.includes('locally')) {
+				suggestion +=
+					'<br />Please log in using your email and password.';
 			}
 
 			req.flash(
 				'error',
-				`This email is already registered via ${methodsMessage}. ${suggestion} If you want to set a password, please use forgot password.`
+				`This email is already registered via ${methodsMessage}.${suggestion}<br />If you want to set a password, please use forgot password.`
 			);
 			return res.redirect('/?auth=true');
 		}
