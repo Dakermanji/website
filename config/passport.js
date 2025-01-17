@@ -4,7 +4,7 @@ import passport from 'passport';
 import LocalStrategy from 'passport-local';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as GitHubStrategy } from 'passport-github2';
-import User from '../models/User.js'; // Your User model
+import User from '../models/User.js';
 
 // Local Strategy
 passport.use(
