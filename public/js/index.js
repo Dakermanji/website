@@ -98,13 +98,6 @@ window.addEventListener('resize', () => {
 	}, 200); // Adjust debounce delay as needed
 });
 
-// Check if the URL contains #contact and scroll smoothly
-if (window.location.hash === '#flash-message') {
-	document
-		.querySelector('#flash-message')
-		.scrollIntoView({ behavior: 'smooth' });
-}
-
 document.addEventListener('DOMContentLoaded', () => {
 	const authModal = document.getElementById('authModal');
 	const openModalBtn = document.getElementById('openAuthModal');
@@ -113,14 +106,23 @@ document.addEventListener('DOMContentLoaded', () => {
 	const tabContents = document.querySelectorAll('.custom-tab-content');
 
 	// Open Modal
-	openModalBtn.addEventListener('click', () => {
+	const openModal = () => {
 		authModal.classList.add('active');
-	});
+	};
 
 	// Close Modal
 	closeModalBtn.addEventListener('click', () => {
 		authModal.classList.remove('active');
 	});
+
+	// Handle query parameter to auto-open modal
+	const urlParams = new URLSearchParams(window.location.search);
+	if (urlParams.get('auth') === 'true') {
+		openModal();
+	}
+
+	// Open modal when the button is clicked
+	openModalBtn.addEventListener('click', openModal);
 
 	// Tab Switching
 	tabs.forEach((tab) => {
