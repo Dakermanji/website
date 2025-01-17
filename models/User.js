@@ -105,6 +105,28 @@ class User {
 		]);
 		return result;
 	}
+
+	// Link GitHub ID to an existing user
+	static async updateGitHubId(userId, githubId) {
+		const query = `
+        UPDATE users
+        SET github_id = ?
+        WHERE id = ?
+    `;
+		const [result] = await promisePool.execute(query, [githubId, userId]);
+		return result;
+	}
+
+	// Link Google ID to an existing user
+	static async updateGoogleId(userId, googleId) {
+		const query = `
+        UPDATE users
+        SET google_id = ?
+        WHERE id = ?
+    `;
+		const [result] = await promisePool.execute(query, [googleId, userId]);
+		return result;
+	}
 }
 
 export default User;
