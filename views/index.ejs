@@ -1,6 +1,21 @@
 <!-- views/index.ejs -->
 
+<!-- Display Flash Messages -->
+<% if (success_msg && success_msg.length > 0) { %>
+<div id='flash-message' class="flash-message alert alert-success alert-dismissible fade show text-center" role="alert">
+  <%= success_msg %>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<% } else if (error_msg && error_msg.length > 0) { %>
+<div id='flash-message' class="flash-message alert alert-danger alert-dismissible fade show text-center" role="alert">
+  <%= error_msg %>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<% } %>
+
+<!-- Overlay -->
 <div class="background-overlay"></div>
+
 
 <!-- Hero Section -->
 <section class="hero-section">
@@ -120,19 +135,6 @@
     <h2 class="mb-5">Contact Me</h2>
     <div class="row justify-content-center">
       <div class="col-md-6">
-
-        <!-- Display Flash Messages -->
-        <% if (success_msg && success_msg.length > 0) { %>
-        <div id='flash-message' class="alert alert-success alert-dismissible fade show text-center" role="alert">
-          <%= success_msg %>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        <% } else if (error_msg && error_msg.length > 0) { %>
-        <div id='flash-message' class="alert alert-danger alert-dismissible fade show text-center" role="alert">
-          <%= error_msg %>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        <% } %>
 
         <!-- Contatct Form -->
         <form action="/send-message" method="POST" class="needs-validation" novalidate>

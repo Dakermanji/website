@@ -23,6 +23,24 @@ section {
     z-index: 3;
 }
 
+/* Flash Message */
+.flash-message {
+    position: fixed;
+    top: 25vh;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1050;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.flash-message .btn-close {
+    font-size: 1.2rem;
+}
+
+/* Overlay */
+
 .background-overlay {
     position: absolute;
     top: 0;
@@ -43,6 +61,7 @@ section {
     transition: background-position 0.1s ease, background var(--transition-duration) ease;
 }
 
+/* Sections' Buttons */
 #see-more-btn,
 #contact .btn {
     color: white;

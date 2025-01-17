@@ -35,10 +35,10 @@ export const postMessage = async (req, res) => {
 		await Message.create({ name, email, message });
 
 		req.flash('success', 'Your message has been sent successfully!');
-		res.redirect('/#flash-message');
+		res.redirect('/');
 	} catch (error) {
 		console.error('Error handling message submission:', error);
 		req.flash('error', 'Something went wrong. Please try again.');
-		res.redirect('/#flash-message');
+		res.redirect('/');
 	}
 };
