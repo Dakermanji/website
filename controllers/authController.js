@@ -1,12 +1,10 @@
-//! controllers/authController.js
-
 import passport from '../config/passport.js';
 import User from '../models/User.js';
 
 // Handle local login
 export const login = passport.authenticate('local', {
 	successRedirect: '/',
-	failureRedirect: '/#authModal',
+	failureRedirect: '/?auth=true', // Updated to include query parameter for modal
 	failureFlash: true,
 });
 
@@ -18,7 +16,7 @@ export const register = async (req, res) => {
 		// Basic validation
 		if (password !== confirmPassword) {
 			req.flash('error', 'Passwords do not match.');
-			return res.redirect('/#authModal');
+			return res.redirect('/?auth=true'); // Updated
 		}
 
 		// Check if the email or username already exists
@@ -27,7 +25,7 @@ export const register = async (req, res) => {
 			(await User.findByUsername(username));
 		if (existingUser) {
 			req.flash('error', 'Username or email already in use.');
-			return res.redirect('/#authModal');
+			return res.redirect('/?auth=true'); // Updated
 		}
 
 		// Hash the password
@@ -36,11 +34,11 @@ export const register = async (req, res) => {
 		// Create the user
 		await User.create({ username, email, hashedPassword });
 		req.flash('success', 'Registration successful. Please log in.');
-		res.redirect('/#authModal');
+		res.redirect('/?auth=true'); // Updated
 	} catch (error) {
 		console.error('Error during registration:', error);
 		req.flash('error', 'Something went wrong. Please try again.');
-		res.redirect('/#authModal');
+		res.redirect('/?auth=true'); // Updated
 	}
 };
 
@@ -51,7 +49,7 @@ export const googleLogin = passport.authenticate('google', {
 
 export const googleCallback = passport.authenticate('google', {
 	successRedirect: '/',
-	failureRedirect: '/#authModal',
+	failureRedirect: '/?auth=true', // Updated
 	failureFlash: true,
 });
 
@@ -62,7 +60,7 @@ export const githubLogin = passport.authenticate('github', {
 
 export const githubCallback = passport.authenticate('github', {
 	successRedirect: '/',
-	failureRedirect: '/#authModal',
+	failureRedirect: '/?auth=true', // Updated
 	failureFlash: true,
 });
 
