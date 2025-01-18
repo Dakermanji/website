@@ -602,17 +602,38 @@ h1 {
 }
 
 /* Modal Styling for Smaller Screens */
+/* Modal Styling for Smaller Screens */
 @media (max-width: 768px) {
     .custom-modal-content {
         max-width: 90%;
         /* Adjust width for mobile devices */
-        padding: 15px;
-        /* Reduce padding for smaller screens */
+        padding: 20px;
+        /* Ensure enough padding for smaller screens */
+        margin: 10px;
+        /* Add margin for better spacing */
+    }
+
+    .custom-modal-header {
+        flex-direction: column;
+        /* Stack title and close button vertically */
+        align-items: flex-start;
+        /* Align to the left */
     }
 
     .custom-modal-title {
         font-size: 1.2rem;
         /* Smaller title for mobile */
+        margin-bottom: 10px;
+        /* Add spacing below the title */
+    }
+
+    .custom-modal-close {
+        position: absolute;
+        /* Keep the close button at the top-right */
+        top: 10px;
+        right: 10px;
+        font-size: 1.2rem;
+        /* Adjust size for smaller screens */
     }
 
     .custom-tab-content form {
@@ -620,9 +641,21 @@ h1 {
         /* Reduce font size for form elements */
     }
 
-    .custom-modal-close {
-        font-size: 1.2rem;
-        /* Adjust close button size */
+    .custom-modal-body {
+        padding: 10px;
+        /* Reduce padding inside the modal body */
+    }
+
+    .nav-tabs {
+        justify-content: center;
+        /* Center align tabs */
+        font-size: 0.85rem;
+        /* Smaller font for tabs */
+    }
+
+    .nav-tabs .nav-item {
+        margin: 0 5px;
+        /* Reduce spacing between tabs */
     }
 }
 
@@ -632,18 +665,25 @@ h1 {
         /* Slightly narrower on extra small screens */
     }
 
-    .custom-tab-content form {
-        font-size: 0.85rem;
-        /* Further reduce font size */
-    }
-
     .custom-modal-title {
         font-size: 1rem;
         /* Adjust title size for very small screens */
     }
 
-    .psw-requirements li {
-        font-size: 0.8rem;
-        /* Smaller password requirement text */
+    .custom-tab-content form {
+        font-size: 0.85rem;
+        /* Further reduce font size */
+    }
+
+    .btn {
+        font-size: 0.85rem;
+        /* Smaller button font size */
+        padding: 8px 12px;
+        /* Reduce padding for buttons */
+    }
+
+    .psw-requirements {
+        display: none;
+        /* Hide password requirements on very small screens */
     }
 }
