@@ -9,15 +9,16 @@ import axios from 'axios';
 import User from '../models/User.js';
 import env from './dotenv.js';
 
+// Local Strategy
 passport.use(
 	new LocalStrategy(
 		{
-			usernameField: 'email',
+			usernameField: 'email', // Use email instead of the default username
 			passwordField: 'password',
 		},
 		async (email, password, done) => {
 			try {
-				// Find the user by email
+				// Find user by email
 				const user = await User.findByEmail(email);
 				if (!user) {
 					return done(null, false, {
@@ -25,14 +26,23 @@ passport.use(
 					});
 				}
 
-				// Validate the password
+				// Validate password
 				const isValid = await User.validatePassword(
 					password,
 					user.hashed_password
 				);
+
 				if (!isValid) {
 					return done(null, false, {
 						message: 'Invalid email or password.',
+					});
+				}
+
+				// Check if the user is confirmed
+				if (!user.confirmed) {
+					return done(null, false, {
+						message:
+							'Please confirm your email to log in, or use Google or GitHub.',
 					});
 				}
 
