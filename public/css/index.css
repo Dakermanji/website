@@ -600,3 +600,50 @@ h1 {
     color: green;
     font-weight: bold;
 }
+
+/* Modal Styling for Smaller Screens */
+@media (max-width: 768px) {
+    .custom-modal-content {
+        max-width: 90%;
+        /* Adjust width for mobile devices */
+        padding: 15px;
+        /* Reduce padding for smaller screens */
+    }
+
+    .custom-modal-title {
+        font-size: 1.2rem;
+        /* Smaller title for mobile */
+    }
+
+    .custom-tab-content form {
+        font-size: 0.9rem;
+        /* Reduce font size for form elements */
+    }
+
+    .custom-modal-close {
+        font-size: 1.2rem;
+        /* Adjust close button size */
+    }
+}
+
+@media (max-width: 480px) {
+    .custom-modal-content {
+        max-width: 95%;
+        /* Slightly narrower on extra small screens */
+    }
+
+    .custom-tab-content form {
+        font-size: 0.85rem;
+        /* Further reduce font size */
+    }
+
+    .custom-modal-title {
+        font-size: 1rem;
+        /* Adjust title size for very small screens */
+    }
+
+    .psw-requirements li {
+        font-size: 0.8rem;
+        /* Smaller password requirement text */
+    }
+}

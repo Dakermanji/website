@@ -18,6 +18,7 @@ a.nav-link:hover {
 
 nav .nav-item {
     position: relative;
+    cursor: pointer;
 }
 
 nav a.nav-link::after {
