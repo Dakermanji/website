@@ -92,6 +92,28 @@ const env = {
 				'GOOGLE_CLIENT_SECRET is not defined. Please set it in your environment variables.'
 			);
 		})(),
+
+	EMAIL_SERVICE:
+		process.env.EMAIL_SERVICE ||
+		(() => {
+			throw new Error(
+				'EMAIL_SERVICE is not defined. Please set it in your environment variables.'
+			);
+		})(),
+	EMAIL_USER:
+		process.env.EMAIL_USER ||
+		(() => {
+			throw new Error(
+				'EMAIL_USER is not defined. Please set it in your environment variables.'
+			);
+		})(),
+	EMAIL_PASS:
+		process.env.EMAIL_PASS ||
+		(() => {
+			throw new Error(
+				'EMAIL_PASS is not defined. Please set it in your environment variables.'
+			);
+		})(),
 };
 
 export default env;

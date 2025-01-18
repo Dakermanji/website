@@ -11,12 +11,22 @@ class User {
 		hashedPassword = null,
 		googleId = null,
 		githubId = null,
+		token = null,
+		tokenExpiry = null,
 	}) {
 		const query = `
-            INSERT INTO users (id, username, email, hashed_password, google_id, github_id, confirmed)
-            VALUES (UUID(), ?, ?, ?, ?, ?, false)
+            INSERT INTO users (id, username, email, hashed_password, google_id, github_id, confirmed, token, token_expiry)
+            VALUES (UUID(), ?, ?, ?, ?, ?, false,?,?)
         `;
-		const values = [username, email, hashedPassword, googleId, githubId];
+		const values = [
+			username,
+			email,
+			hashedPassword,
+			googleId,
+			githubId,
+			token,
+			tokenExpiry,
+		];
 		const [result] = await promisePool.execute(query, values);
 		return result;
 	}
@@ -141,6 +151,24 @@ class User {
 			tokenExpiry,
 			id,
 		]);
+		return result;
+	}
+
+	// Find user by token
+	static async findByToken(token) {
+		const query = `SELECT * FROM users WHERE token = ? LIMIT 1`;
+		const [rows] = await promisePool.execute(query, [token]);
+		return rows[0] || null;
+	}
+
+	// Confirm email
+	static async confirmEmail(userId) {
+		const query = `
+        UPDATE users
+        SET confirmed = true, token = NULL, token_expiry = NULL
+        WHERE id = ?
+    `;
+		const [result] = await promisePool.execute(query, [userId]);
 		return result;
 	}
 }

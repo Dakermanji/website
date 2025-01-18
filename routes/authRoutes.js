@@ -9,6 +9,7 @@ import {
 	githubLogin,
 	githubCallback,
 	logout,
+	confirmEmail,
 } from '../controllers/authController.js';
 
 const router = express.Router();
@@ -27,5 +28,8 @@ router.get('/github/callback', githubCallback);
 
 // Logout
 router.get('/logout', logout);
+
+// Confirm-email
+router.get('/confirm-email', confirmEmail);
 
 export default router;

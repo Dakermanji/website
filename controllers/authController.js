@@ -1,8 +1,11 @@
 //! controllers/authController.js
 
+import bcrypt from 'bcrypt';
+import crypto from 'crypto';
+import transporter from '../config/transporter.js';
+
 import passport from '../config/passport.js';
 import User from '../models/User.js';
-import bcrypt from 'bcrypt';
 
 // Handle local login
 export const login = passport.authenticate('local', {
@@ -56,12 +59,39 @@ export const register = async (req, res) => {
 			return res.redirect('/?auth=true');
 		}
 
-		// Hash the password
+		// Generate hashed password
 		const hashedPassword = await bcrypt.hash(password, 10);
 
+		// Generate confirmation token
+		const token = crypto.randomBytes(32).toString('hex');
+		const tokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24-hour expiry
+
 		// Create the user
-		await User.create({ username, email, hashedPassword });
-		req.flash('success', 'Registration successful. Please log in.');
+		await User.create({
+			username,
+			email,
+			hashedPassword,
+			token,
+			tokenExpiry,
+		});
+
+		const confirmUrl = `http://${req.headers.host}/auth/confirm-email?token=${token}`;
+		const mailOptions = {
+			to: email,
+			subject: 'Confirm Your Email',
+			html: `
+                <h1>Email Confirmation</h1>
+                <p>Please click the link below to confirm your email:</p>
+                <a href="${confirmUrl}">Confirm Email</a>
+            `,
+		};
+
+		await transporter.sendMail(mailOptions);
+
+		req.flash(
+			'success',
+			'Registration successful. Please check your email to confirm your account.'
+		);
 		res.redirect('/?auth=true');
 	} catch (error) {
 		console.error('Error during registration:', error);
@@ -155,4 +185,28 @@ export const logout = (req, res) => {
 		req.flash('success', 'Logged out successfully.');
 		res.redirect('/');
 	});
+};
+
+// Handle Confrim Email
+export const confirmEmail = async (req, res) => {
+	try {
+		const { token } = req.query;
+
+		const user = await User.findByToken(token);
+		if (!user || user.token_expiry < new Date()) {
+			req.flash('error', 'Invalid or expired token.');
+			return res.redirect('/?auth=true');
+		}
+
+		await User.confirmEmail(user.id);
+		req.flash(
+			'success',
+			'Email confirmed successfully! You can now log in.'
+		);
+		res.redirect('/?auth=true');
+	} catch (error) {
+		console.error('Error during email confirmation:', error);
+		req.flash('error', 'Something went wrong. Please try again.');
+		res.redirect('/?auth=true');
+	}
 };
