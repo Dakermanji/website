@@ -18,11 +18,21 @@
         </li>
         <% }) %>
         <li class="nav-item">
+          <% if (!user) { %>
+          <!-- If the user is not logged in -->
           <a class="nav-link" id="openAuthModal">
             <span class="bi bi-box-arrow-in-right nav-icon" data-bs-toggle="tooltip" title="Login / Register"></span>
             <span class="nav-text">Login / Register</span>
           </a>
+          <% } else { %>
+          <!-- If the user is logged in -->
+          <a class="nav-link" href="/logout">
+            <span class="bi bi-box-arrow-left nav-icon" data-bs-toggle="tooltip" title="Logout"></span>
+            <span class="nav-text">Logout</span>
+          </a>
+          <% } %>
         </li>
+
       </ul>
     </div>
     <% } %>
