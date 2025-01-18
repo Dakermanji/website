@@ -72,6 +72,14 @@ export const sanitizeRegisterForm = (req, res, next) => {
 		return res.redirect('/?auth=true');
 	}
 
+	if (!/^[A-Za-z0-9_.-]+$/.test(req.body.username)) {
+		req.flash(
+			'error',
+			'Username can only contain letters, numbers, underscores, dots, and hyphens.'
+		);
+		return res.redirect('/?auth=true');
+	}
+
 	if (!validator.isEmail(req.body.email)) {
 		req.flash('error', 'Invalid email address.');
 		return res.redirect('/?auth=true');
