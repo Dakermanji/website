@@ -17,7 +17,7 @@ export const getIndex = (req, res) => {
 			projects,
 			success_msg: res.locals.success,
 			error_msg: res.locals.error,
-			styles: ['index'],
+			styles: ['index', 'login'],
 			scripts: ['index'],
 		});
 	} catch (error) {
