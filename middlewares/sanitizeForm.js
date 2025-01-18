@@ -77,7 +77,8 @@ export const sanitizeRegisterForm = (req, res, next) => {
 
 	// Password strength validation
 	const passwordStrengthRegex =
-		/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+		/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@$%^&*()\[\]{}\-_=<>.,:;'"])[A-Za-z\d!@$%^&*()\[\]{}\-_=<>.,:;'"]{8,}$/;
+
 	if (!passwordStrengthRegex.test(req.body.password)) {
 		req.flash(
 			'error',
