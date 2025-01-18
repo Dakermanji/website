@@ -142,3 +142,35 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	});
 });
+
+// Colorize Password Requirements
+const passwordInput = document.getElementById('register-password');
+const requirements = {
+	lower: /[a-z]/,
+	upper: /[A-Z]/,
+	digit: /\d/,
+	symbol: /[!@$%^&*()\[\]{}\-_=<>.,:;'"\~`#\\|\/+]/,
+	length: /.{8,}/,
+};
+
+const updateRequirementState = (input, pattern, elementId) => {
+	const requirementElement = document.getElementById(elementId);
+	if (pattern.test(input)) {
+		requirementElement.classList.add('valid');
+		requirementElement.classList.remove('invalid');
+	} else {
+		requirementElement.classList.remove('valid');
+		requirementElement.classList.add('invalid');
+	}
+};
+
+passwordInput.addEventListener('input', () => {
+	const passwordValue = passwordInput.value;
+
+	// Check each requirement
+	updateRequirementState(passwordValue, requirements.lower, 'lower');
+	updateRequirementState(passwordValue, requirements.upper, 'upper');
+	updateRequirementState(passwordValue, requirements.digit, 'digit');
+	updateRequirementState(passwordValue, requirements.symbol, 'symbol');
+	updateRequirementState(passwordValue, requirements.length, 'psw-length');
+});
