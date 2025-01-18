@@ -1,11 +1,14 @@
 //! controllers/authController.js
 
 import bcrypt from 'bcrypt';
-import crypto from 'crypto';
-import transporter from '../config/transporter.js';
 
 import passport from '../config/passport.js';
 import User from '../models/User.js';
+import {
+	generateToken,
+	sendConfirmationEmail,
+	handleExistingUser,
+} from '../utils/registerHelper.js';
 
 // Handle local login
 export const login = passport.authenticate('local', {
@@ -29,42 +32,15 @@ export const register = async (req, res) => {
 		const existingUser =
 			(await User.findByEmail(email)) ||
 			(await User.findByUsername(username));
-
 		if (existingUser) {
-			let registrationMethods = [];
-			if (existingUser.hashed_password)
-				registrationMethods.push('locally');
-			if (existingUser.google_id) registrationMethods.push('Google');
-			if (existingUser.github_id) registrationMethods.push('GitHub');
-
-			// Build the user-friendly message
-			const methodsMessage = registrationMethods.join(' and '); // Example: "locally and Google"
-			let suggestion = '';
-
-			if (
-				registrationMethods.includes('Google') ||
-				registrationMethods.includes('GitHub')
-			) {
-				suggestion =
-					'<br />Please log in using the appropriate method.';
-			} else if (registrationMethods.includes('locally')) {
-				suggestion +=
-					'<br />Please log in using your email and password.';
-			}
-
-			req.flash(
-				'error',
-				`This email is already registered via ${methodsMessage}.${suggestion}<br />If you want to set a password, please use forgot password.`
-			);
-			return res.redirect('/?auth=true');
+			return handleExistingUser(existingUser, req, res);
 		}
 
 		// Generate hashed password
 		const hashedPassword = await bcrypt.hash(password, 10);
 
-		// Generate confirmation token
-		const token = crypto.randomBytes(32).toString('hex');
-		const tokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24-hour expiry
+		// Generate token and expiry
+		const { token, tokenExpiry } = generateToken();
 
 		// Create the user
 		await User.create({
@@ -75,18 +51,9 @@ export const register = async (req, res) => {
 			tokenExpiry,
 		});
 
+		// Send confirmation email
 		const confirmUrl = `http://${req.headers.host}/auth/confirm-email?token=${token}`;
-		const mailOptions = {
-			to: email,
-			subject: 'Confirm Your Email',
-			html: `
-                <h1>Email Confirmation</h1>
-                <p>Please click the link below to confirm your email:</p>
-                <a href="${confirmUrl}">Confirm Email</a>
-            `,
-		};
-
-		await transporter.sendMail(mailOptions);
+		await sendConfirmationEmail(email, confirmUrl);
 
 		req.flash(
 			'success',
