@@ -34,12 +34,11 @@ export const sanitizeMessageForm = (req, res, next) => {
 export const sanitizeLoginForm = (req, res, next) => {
 	const { email, password } = req.body;
 
-	// Sanitize inputs
-	req.body.email = validator.normalizeEmail(email, {
+	// Trim and escape inputs
+	req.body.email = validator.normalizeEmail(email || '', {
 		gmail_remove_dots: false,
 	});
-	req.body.password = validator.escape(password);
-
+	req.body.password = validator.trim(password || '');
 	// Validate inputs
 	if (!validator.isEmail(req.body.email)) {
 		req.flash('error', 'Invalid email address.');
@@ -57,13 +56,13 @@ export const sanitizeLoginForm = (req, res, next) => {
 export const sanitizeRegisterForm = (req, res, next) => {
 	const { username, email, password, confirmPassword } = req.body;
 
-	// Sanitize inputs
-	req.body.username = validator.escape(username);
-	req.body.email = validator.normalizeEmail(email, {
+	// Trim and escape inputs
+	req.body.username = validator.escape(validator.trim(username || ''));
+	req.body.email = validator.normalizeEmail(email || '', {
 		gmail_remove_dots: false,
 	});
-	req.body.password = validator.escape(password);
-	req.body.confirmPassword = validator.escape(confirmPassword);
+	req.body.password = validator.trim(password || '');
+	req.body.confirmPassword = validator.trim(confirmPassword || '');
 
 	// Validate inputs
 	if (validator.isEmpty(req.body.username) || req.body.username.length < 3) {
@@ -76,8 +75,14 @@ export const sanitizeRegisterForm = (req, res, next) => {
 		return res.redirect('/?auth=true');
 	}
 
-	if (validator.isEmpty(req.body.password) || req.body.password.length < 6) {
-		req.flash('error', 'Password must be at least 6 characters long.');
+	// Password strength validation
+	const passwordStrengthRegex =
+		/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+	if (!passwordStrengthRegex.test(req.body.password)) {
+		req.flash(
+			'error',
+			'Password must be at least 8 characters long and include one uppercase letter, one lowercase letter, one number, and one special character.'
+		);
 		return res.redirect('/?auth=true');
 	}
 
