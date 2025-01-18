@@ -2,12 +2,12 @@ import { promisePool } from '../config/database.js';
 
 class Message {
 	// Insert a new message into the database
-	static async create({ name, email, message }) {
+	static async create({ user_id, subject, message }) {
 		const query = `
-            INSERT INTO messages (name, email, message)
+            INSERT INTO messages (user_id, subject, message)
             VALUES (?, ?, ?)
         `;
-		return promisePool.execute(query, [name, email, message]);
+		return promisePool.execute(query, [user_id, subject, message]);
 	}
 
 	// Fetch all messages (optional)

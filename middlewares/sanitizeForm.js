@@ -2,35 +2,31 @@
 
 import validator from 'validator';
 
-const disallowedChars = /[^a-zA-Z0-9 .,?!]/; // Adjust as needed
 export const sanitizeMessageForm = (req, res, next) => {
-	try {
-		// Trim and sanitize inputs
-		let { name, email, message } = req.body;
+	const { subject, message } = req.body;
 
-		name = validator.escape(validator.trim(name || ''));
-		email = validator.normalizeEmail(email || '');
-		message = validator.escape(validator.trim(message || ''));
+	// Sanitize inputs
+	req.body.subject = validator.escape(validator.trim(subject || ''));
+	req.body.message = validator.escape(validator.trim(message || ''));
 
-		// Validate input lengths
-		if (name.length > 100 || email.length > 100 || message.length > 1000) {
-			req.flash('error', 'Input exceeds allowed length.');
-			return res.redirect('/#flash-message');
-		}
-		if (!validator.isEmail(email)) {
-			req.flash('error', 'Invalid email address.');
-			return res.redirect('/#flash-message');
-		}
-		if (disallowedChars.test(message)) {
-			req.flash('error', 'Your message contains invalid characters.');
-			return res.redirect('/#flash-message');
-		}
-
-		next(); // Proceed to the next middleware or route handler
-	} catch (error) {
-		console.error('Error sanitizing form data:', error);
-		next(error);
+	// Validate inputs
+	if (validator.isEmpty(req.body.subject) || req.body.subject.length > 100) {
+		req.flash(
+			'error',
+			'Subject is required and must be under 100 characters.'
+		);
+		return res.redirect('/#contact');
 	}
+
+	if (validator.isEmpty(req.body.message) || req.body.message.length > 1000) {
+		req.flash(
+			'error',
+			'Message is required and must be under 1000 characters.'
+		);
+		return res.redirect('/#contact');
+	}
+
+	next();
 };
 
 export const sanitizeLoginForm = (req, res, next) => {

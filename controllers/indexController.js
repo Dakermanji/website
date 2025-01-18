@@ -29,10 +29,20 @@ export const getIndex = (req, res) => {
 // Handle Contact Form Submission
 export const postMessage = async (req, res) => {
 	try {
-		const { name, email, message } = req.body;
+		const { subject, message } = req.body;
 
-		// Save the sanitized and validated data to the database
-		await Message.create({ name, email, message });
+		if (!req.isAuthenticated()) {
+			req.flash(
+				'error',
+				'Please logged in or register to send a message.'
+			);
+			return res.redirect('/?auth=true');
+		}
+
+		const user_id = req.user.id;
+
+		// Save the message with the user_id
+		await Message.create({ user_id, subject, message });
 
 		req.flash('success', 'Your message has been sent successfully!');
 		res.redirect('/');
