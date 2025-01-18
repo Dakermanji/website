@@ -11,12 +11,16 @@ import {
 	logout,
 	confirmEmail,
 } from '../controllers/authController.js';
+import {
+	sanitizeLoginForm,
+	sanitizeRegisterForm,
+} from '../middlewares/sanitizeForm.js';
 
 const router = express.Router();
 
 // Local authentication
-router.post('/login', login);
-router.post('/register', register);
+router.post('/login', sanitizeLoginForm, login);
+router.post('/register', sanitizeRegisterForm, register);
 
 // Google OAuth
 router.get('/google', googleLogin);

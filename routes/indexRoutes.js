@@ -1,5 +1,5 @@
 //! routes/indexRoutes.js
-import { sanitizeForm } from '../middlewares/sanitizeForm.js';
+import { sanitizeMessageForm } from '../middlewares/sanitizeForm.js';
 
 import express from 'express';
 import { getIndex, postMessage } from '../controllers/indexController.js';
@@ -10,6 +10,6 @@ const router = express.Router();
 router.get('/', getIndex);
 
 // Send message route
-router.post('/send-message', sanitizeForm, postMessage);
+router.post('/send-message', sanitizeMessageForm, postMessage);
 
 export default router;

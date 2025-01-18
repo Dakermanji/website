@@ -1,7 +1,7 @@
 import validator from 'validator';
 
 const disallowedChars = /[^a-zA-Z0-9 .,?!]/; // Adjust as needed
-export const sanitizeForm = (req, res, next) => {
+export const sanitizeMessageForm = (req, res, next) => {
 	try {
 		// Trim and sanitize inputs
 		let { name, email, message } = req.body;
@@ -29,4 +29,62 @@ export const sanitizeForm = (req, res, next) => {
 		console.error('Error sanitizing form data:', error);
 		next(error);
 	}
+};
+
+export const sanitizeLoginForm = (req, res, next) => {
+	const { email, password } = req.body;
+
+	// Sanitize inputs
+	req.body.email = validator.normalizeEmail(email, {
+		gmail_remove_dots: false,
+	});
+	req.body.password = validator.escape(password);
+
+	// Validate inputs
+	if (!validator.isEmail(req.body.email)) {
+		req.flash('error', 'Invalid email address.');
+		return res.redirect('/?auth=true');
+	}
+
+	if (validator.isEmpty(req.body.password)) {
+		req.flash('error', 'Password cannot be empty.');
+		return res.redirect('/?auth=true');
+	}
+
+	next();
+};
+
+export const sanitizeRegisterForm = (req, res, next) => {
+	const { username, email, password, confirmPassword } = req.body;
+
+	// Sanitize inputs
+	req.body.username = validator.escape(username);
+	req.body.email = validator.normalizeEmail(email, {
+		gmail_remove_dots: false,
+	});
+	req.body.password = validator.escape(password);
+	req.body.confirmPassword = validator.escape(confirmPassword);
+
+	// Validate inputs
+	if (validator.isEmpty(req.body.username) || req.body.username.length < 3) {
+		req.flash('error', 'Username must be at least 3 characters long.');
+		return res.redirect('/?auth=true');
+	}
+
+	if (!validator.isEmail(req.body.email)) {
+		req.flash('error', 'Invalid email address.');
+		return res.redirect('/?auth=true');
+	}
+
+	if (validator.isEmpty(req.body.password) || req.body.password.length < 6) {
+		req.flash('error', 'Password must be at least 6 characters long.');
+		return res.redirect('/?auth=true');
+	}
+
+	if (req.body.password !== req.body.confirmPassword) {
+		req.flash('error', 'Passwords do not match.');
+		return res.redirect('/?auth=true');
+	}
+
+	next();
 };
