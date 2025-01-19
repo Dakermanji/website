@@ -178,27 +178,23 @@ export const confirmEmail = async (req, res) => {
 export const resendConfirmation = async (req, res) => {
 	try {
 		const { email } = req.body;
+		const message =
+			'If this email is registered and not confirmed, we have resent a confirmation email.';
 
 		// Validate email and find user
-		const user = await validateAndFindUser(email, req, res);
+		const user = await validateAndFindUser(message, email, req, res);
 		if (!user) return; // Redirects handled in helper
 
 		// Check if user is already confirmed
 		if (user.confirmed) {
-			req.flash(
-				'success',
-				'Your account is already confirmed. You can log in.'
-			);
+			req.flash('success', message);
 			return res.redirect('/?auth=true');
 		}
 
 		// Resend confirmation email
 		await resendConfirmationEmail(user, req.headers.host);
 
-		req.flash(
-			'success',
-			'A new confirmation email has been sent to your inbox.'
-		);
+		req.flash('success', message);
 		res.redirect('/?auth=true');
 	} catch (error) {
 		console.error('Error resending confirmation email:', error);

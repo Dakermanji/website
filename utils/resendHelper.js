@@ -12,7 +12,7 @@ import { generateToken, sendEmail } from './authUtilHelper.js';
  * @param {object} res - The response object for redirection.
  * @returns {object|null} - The user object if validation passes, otherwise null.
  */
-export const validateAndFindUser = async (email, req, res) => {
+export const validateAndFindUser = async (message, email, req, res) => {
 	if (!email || !validator.isEmail(email)) {
 		req.flash('error', 'Invalid email address.');
 		return res.redirect('/?auth=true');
@@ -20,7 +20,7 @@ export const validateAndFindUser = async (email, req, res) => {
 
 	const user = await User.findByEmail(email);
 	if (!user) {
-		req.flash('error', 'No account found with this email.');
+		req.flash('error', message);
 		return res.redirect('/?auth=true');
 	}
 

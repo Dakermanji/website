@@ -115,7 +115,7 @@ export const sanitizeRegisterForm = (req, res, next) => {
 	if (!passwordStrengthRegex.test(req.body.password)) {
 		req.flash(
 			'error',
-			'Password must be at least 8 characters long and include one uppercase letter, one lowercase letter, one number, and one special character.'
+			'Password Requirements:<br>- at least 8 characters long.<br>- has one uppercase letter.<br>- has one lowercase letter.<br>- has one number.<br>- has one special character.'
 		);
 		return res.redirect('/?auth=true');
 	}
