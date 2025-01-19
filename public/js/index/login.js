@@ -1,8 +1,4 @@
-const authModal = document.getElementById('authModal');
-const openModalBtn = document.getElementById('openAuthModal');
-const closeModalBtn = document.getElementById('closeModal');
-const tabs = document.querySelectorAll('#authTabs .nav-link');
-const tabContents = document.querySelectorAll('.auth-tab-content');
+//! public/js/login.js
 
 // Open Modal
 const openModal = () => {

@@ -18,8 +18,13 @@ export const getIndex = (req, res) => {
 			projects,
 			success_msg: res.locals.success,
 			error_msg: res.locals.error,
-			styles: ['index', 'login'],
-			scripts: ['index', 'login'],
+			styles: ['index/main', 'index/login', 'index/forgot_resend'],
+			scripts: [
+				'index/index_selectors',
+				'index/main',
+				'index/login',
+				'index/forgot_resend',
+			],
 		});
 	} catch (error) {
 		console.error('Error loading index page:', error);

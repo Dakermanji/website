@@ -1,9 +1,5 @@
 //! public/js/index.js
 // Mouse move effect to adjust transparency around cursor within the hero section
-const main = document.querySelector('main');
-const projects = document.querySelectorAll('.work');
-const seeMoreBtn = document.getElementById('see-more-btn');
-const tabLinks = document.querySelectorAll('.tab-links');
 
 main.addEventListener('mousemove', (event) => {
 	const overlay = main.querySelector('.background-overlay');
