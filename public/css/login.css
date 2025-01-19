@@ -29,6 +29,18 @@
     overflow-y: auto;
 }
 
+#authModal .nav-link {
+    color: var(--color-tertiary);
+}
+
+#authModal .nav-link:hover {
+    color: var(--color-tertiary-dark);
+}
+
+#authModal .nav-link.active {
+    color: var(--color-primary-dark);
+}
+
 .custom-modal-header {
     display: flex;
     justify-content: space-between;
