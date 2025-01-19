@@ -5,6 +5,7 @@ import { aboutData } from '../data/aboutData.js';
 import { servicesData } from '../data/servicesData.js';
 import { projects } from '../data/projectsData.js';
 import Message from '../models/Message.js';
+import { sanitizeInput } from '../middlewares/sanitizeForm.js';
 
 // Handle Get Index Page
 export const getIndex = (req, res) => {
@@ -21,8 +22,11 @@ export const getIndex = (req, res) => {
 			scripts: ['index', 'login'],
 		});
 	} catch (error) {
-		console.error('Error loading data:', error);
-		res.status(500).send('Error loading data');
+		console.error('Error loading index page:', error);
+		res.status(500).render('error', {
+			title: 'Error',
+			message: 'Failed to load the homepage.',
+		});
 	}
 };
 
@@ -31,18 +35,20 @@ export const postMessage = async (req, res) => {
 	try {
 		const { subject, message } = req.body;
 
+		// Sanitize inputs
+		const sanitizedSubject = sanitizeInput(subject);
+		const sanitizedMessage = sanitizeInput(message);
+
 		if (!req.isAuthenticated()) {
-			req.flash(
-				'error',
-				'Please logged in or register to send a message.'
-			);
+			req.flash('error', 'Please log in or register to send a message.');
 			return res.redirect('/?auth=true');
 		}
 
-		const user_id = req.user.id;
-
-		// Save the message with the user_id
-		await Message.create({ user_id, subject, message });
+		await Message.create({
+			user_id: req.user.id,
+			subject: sanitizedSubject,
+			message: sanitizedMessage,
+		});
 
 		req.flash('success', 'Your message has been sent successfully!');
 		res.redirect('/');

@@ -2,12 +2,36 @@
 
 import validator from 'validator';
 
+/**
+ * Sanitizes and trims input data to ensure clean and safe data.
+ * @param {string} input - The raw user input.
+ * @param {object} [options] - Additional options for sanitization.
+ * @returns {string} The sanitized input.
+ */
+export const sanitizeInput = (
+	input,
+	options = { escape: true, trim: true }
+) => {
+	let sanitized = input;
+
+	if (options.trim) {
+		sanitized = validator.trim(sanitized);
+	}
+	if (options.escape) {
+		sanitized = validator.escape(sanitized);
+	}
+
+	return sanitized;
+};
+
+// Existing functions for sanitizing forms
+
 export const sanitizeMessageForm = (req, res, next) => {
 	const { subject, message } = req.body;
 
-	// Sanitize inputs
-	req.body.subject = validator.escape(validator.trim(subject || ''));
-	req.body.message = validator.escape(validator.trim(message || ''));
+	// Sanitize inputs using the new sanitizeInput helper
+	req.body.subject = sanitizeInput(subject);
+	req.body.message = sanitizeInput(message);
 
 	// Validate inputs
 	if (validator.isEmpty(req.body.subject) || req.body.subject.length > 100) {
@@ -32,11 +56,12 @@ export const sanitizeMessageForm = (req, res, next) => {
 export const sanitizeLoginForm = (req, res, next) => {
 	const { email, password } = req.body;
 
-	// Trim and escape inputs
+	// Sanitize inputs
 	req.body.email = validator.normalizeEmail(email || '', {
 		gmail_remove_dots: false,
 	});
-	req.body.password = validator.trim(password || '');
+	req.body.password = sanitizeInput(password);
+
 	// Validate inputs
 	if (!validator.isEmail(req.body.email)) {
 		req.flash('error', 'Invalid email address.');
@@ -54,13 +79,15 @@ export const sanitizeLoginForm = (req, res, next) => {
 export const sanitizeRegisterForm = (req, res, next) => {
 	const { username, email, password, confirmPassword } = req.body;
 
-	// Trim and escape inputs
-	req.body.username = validator.escape(validator.trim(username || ''));
+	// Sanitize inputs
+	req.body.username = sanitizeInput(username);
 	req.body.email = validator.normalizeEmail(email || '', {
 		gmail_remove_dots: false,
 	});
-	req.body.password = validator.trim(password || '');
-	req.body.confirmPassword = validator.trim(confirmPassword || '');
+	req.body.password = sanitizeInput(password, { escape: false }); // Avoid escaping passwords to keep them intact
+	req.body.confirmPassword = sanitizeInput(confirmPassword, {
+		escape: false,
+	});
 
 	// Validate inputs
 	if (validator.isEmpty(req.body.username) || req.body.username.length < 3) {
