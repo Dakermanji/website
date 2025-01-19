@@ -1,9 +1,6 @@
 //! controllers/authController.js
 
 import bcrypt from 'bcrypt';
-import validator from 'validator';
-import crypto from 'crypto';
-import transporter from '../config/transporter.js';
 
 import passport from '../config/passport.js';
 import User from '../models/User.js';
@@ -12,6 +9,10 @@ import {
 	sendConfirmationEmail,
 	handleExistingUser,
 } from '../utils/registerHelper.js';
+import {
+	validateAndFindUser,
+	resendConfirmationEmail,
+} from '../utils/resendHelper.js';
 
 // Handle local login
 export const login = passport.authenticate('local', {
@@ -185,19 +186,11 @@ export const resendConfirmation = async (req, res) => {
 	try {
 		const { email } = req.body;
 
-		if (!email || !validator.isEmail(email)) {
-			req.flash('error', 'Invalid email address.');
-			return res.redirect('/?auth=true');
-		}
+		// Validate email and find user
+		const user = await validateAndFindUser(email, req, res);
+		if (!user) return; // Redirects handled in helper
 
-		// Check if the user exists and is not already confirmed
-		const user = await User.findByEmail(email);
-
-		if (!user) {
-			req.flash('error', 'No account found with this email.');
-			return res.redirect('/?auth=true');
-		}
-
+		// Check if user is already confirmed
 		if (user.confirmed) {
 			req.flash(
 				'success',
@@ -206,26 +199,8 @@ export const resendConfirmation = async (req, res) => {
 			return res.redirect('/?auth=true');
 		}
 
-		// Generate a new confirmation token
-		const token = crypto.randomBytes(32).toString('hex');
-		const tokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24-hour expiry
-
-		// Update user with the new token
-		await User.updateToken(user.id, token, tokenExpiry);
-
-		// Send confirmation email
-		const confirmUrl = `http://${req.headers.host}/auth/confirm-email?token=${token}`;
-		const mailOptions = {
-			to: email,
-			subject: 'Confirm Your Email',
-			html: `
-                <h1>Email Confirmation</h1>
-                <p>Please click the link below to confirm your email:</p>
-                <a href="${confirmUrl}">Confirm Email</a>
-            `,
-		};
-
-		await transporter.sendMail(mailOptions);
+		// Resend confirmation email
+		await resendConfirmationEmail(user, req.headers.host);
 
 		req.flash(
 			'success',
