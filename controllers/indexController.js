@@ -18,7 +18,7 @@ export const getIndex = (req, res) => {
 			success_msg: res.locals.success,
 			error_msg: res.locals.error,
 			styles: ['index', 'login'],
-			scripts: ['index'],
+			scripts: ['index', 'login'],
 		});
 	} catch (error) {
 		console.error('Error loading data:', error);
