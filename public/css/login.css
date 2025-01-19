@@ -1,6 +1,6 @@
 /*! public/css/login.css */
 /* *** Modal Styling *** */
-.custom-modal {
+.auth-modal {
     display: none;
     position: fixed;
     top: 0;
@@ -13,11 +13,11 @@
     align-items: center;
 }
 
-.custom-modal.active {
+.auth-modal.active {
     display: flex;
 }
 
-.custom-modal-content {
+.auth-modal-content {
     background: #fff;
     border-radius: 10px;
     width: 100%;
@@ -41,19 +41,19 @@
     color: var(--color-primary-dark);
 }
 
-.custom-modal-header {
+.auth-modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
 }
 
-.custom-modal-title {
+.auth-modal-title {
     font-size: 1.5rem;
     font-weight: bold;
 }
 
-.custom-modal-close {
+.auth-modal-close {
     background: none;
     border: none;
     position: absolute;
@@ -67,20 +67,20 @@
     transition: color var(--transition-duration) ease;
 }
 
-.custom-modal-close i {
+.auth-modal-close i {
     font-size: inherit;
 }
 
-.custom-modal-close:hover {
+.auth-modal-close:hover {
     color: var(--color-primary-dark);
 }
 
 /* Tab Navigation */
-.custom-tab-content {
+.auth-tab-content {
     display: none;
 }
 
-.custom-tab-content.active {
+.auth-tab-content.active {
     display: block;
 }
 
@@ -104,35 +104,35 @@
 
 /* Responsive Styles */
 @media (max-width: 768px) {
-    .custom-modal-content {
+    .auth-modal-content {
         max-height: 85%;
         max-width: 90%;
         padding: 15px;
         margin: 10px;
     }
 
-    .custom-modal-header {
+    .auth-modal-header {
         flex-direction: column;
         align-items: flex-start;
     }
 
-    .custom-modal-title {
+    .auth-modal-title {
         font-size: 1.2rem;
         margin-bottom: 10px;
     }
 
-    .custom-modal-close {
+    .auth-modal-close {
         position: absolute;
         top: 10px;
         right: 10px;
         font-size: 1.2rem;
     }
 
-    .custom-tab-content form {
+    .auth-tab-content form {
         font-size: 0.9rem;
     }
 
-    .custom-modal-body {
+    .auth-modal-body {
         padding: 10px;
     }
 
@@ -147,16 +147,16 @@
 }
 
 @media (max-width: 480px) {
-    .custom-modal-content {
+    .auth-modal-content {
         max-width: 95%;
         max-height: 80%;
     }
 
-    .custom-modal-title {
+    .auth-modal-title {
         font-size: 1rem;
     }
 
-    .custom-tab-content form {
+    .auth-tab-content form {
         font-size: 0.85rem;
     }
 
