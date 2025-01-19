@@ -25,6 +25,8 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     position: relative;
     padding: 20px;
+    max-height: 80%;
+    overflow-y: auto;
 }
 
 .custom-modal-header {
@@ -77,8 +79,9 @@
 /* Responsive Styles */
 @media (max-width: 768px) {
     .custom-modal-content {
+        max-height: 85%;
         max-width: 90%;
-        padding: 20px;
+        padding: 15px;
         margin: 10px;
     }
 
@@ -120,6 +123,7 @@
 @media (max-width: 480px) {
     .custom-modal-content {
         max-width: 95%;
+        max-height: 80%;
     }
 
     .custom-modal-title {
