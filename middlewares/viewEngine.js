@@ -1,4 +1,4 @@
-//! middlewares\viewEngine.js
+//! middlewares/viewEngine.js
 
 import expressLayouts from 'express-ejs-layouts';
 import { logMiddlewareErrors } from './helpers.js';

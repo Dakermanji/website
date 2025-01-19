@@ -1,3 +1,5 @@
+//! public/js/index/forgot_resend.js
+
 // Open Modal
 openUtilityModalBtn.addEventListener('click', () => {
 	authUtilityModal.classList.add('active');

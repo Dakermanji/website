@@ -1,5 +1,6 @@
 /*! public/css/header_footer.css */
-/* Header */
+
+/* *** Header *** */
 nav .navbar-brand {
     font-weight: bold;
 }
@@ -70,7 +71,7 @@ a.nav-link.active::after {
     }
 }
 
-/* Footer */
+/* *** Footer *** */
 
 footer {
     position: fixed;

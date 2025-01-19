@@ -1,3 +1,5 @@
+//! models/Message.js
+
 import { promisePool } from '../config/database.js';
 
 class Message {

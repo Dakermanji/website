@@ -1,4 +1,5 @@
 //! routes/indexRoutes.js
+
 import { sanitizeMessageForm } from '../middlewares/sanitizeForm.js';
 
 import express from 'express';

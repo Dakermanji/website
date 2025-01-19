@@ -1,4 +1,5 @@
 //! data/aboutData.js
+
 export const aboutData = {
 	title: 'About Me',
 	image: '/images/index/humanoid-robot.png',

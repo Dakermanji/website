@@ -1,4 +1,5 @@
 //! config/routes.js
+
 import express from 'express';
 
 import indexRouter from '../routes/indexRoutes.js';

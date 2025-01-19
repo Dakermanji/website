@@ -1,4 +1,5 @@
 //! middlewares/helpers.js
+
 export const logMiddlewareErrors = (middleware) => {
 	return (req, res, next) => {
 		try {

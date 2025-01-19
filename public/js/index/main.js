@@ -1,4 +1,5 @@
-//! public/js/index.js
+//! public/js/main.js
+
 // Mouse move effect to adjust transparency around cursor within the hero section
 
 main.addEventListener('mousemove', (event) => {

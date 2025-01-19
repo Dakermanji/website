@@ -1,3 +1,5 @@
+//! utils/registerHelper.js
+
 import crypto from 'crypto';
 import transporter from '../config/transporter.js';
 

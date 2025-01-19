@@ -1,4 +1,5 @@
 //! data/projectsData.js
+
 export const projects = [
 	{
 		img: 'weather_app.jpg',

@@ -1,4 +1,5 @@
 //! data/navBar.js
+
 export const navBar = {
 	index: [
 		{

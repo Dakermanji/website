@@ -1,4 +1,4 @@
-//! middlewares\flashMiddleware.js
+//! middlewares/flashMiddleware.js
 
 import flash from 'express-flash';
 

@@ -1,6 +1,6 @@
 /*! public/css/root.css */
 
-/* Root Variables */
+/* *** Root Variables *** */
 :root {
     /* Colors */
     --color-primary: #ff7f27;
@@ -22,7 +22,7 @@
     --transition-duration: 0.4s;
 }
 
-/* Global Styles */
+/* *** Global Styles *** */
 html {
     scroll-behavior: smooth;
 }
@@ -48,7 +48,7 @@ html {
     margin: 0;
 }
 
-/* Main Container */
+/* *** Main Container *** */
 main.container {
     flex: 1;
     padding: 2rem;
@@ -61,12 +61,12 @@ main.container {
     z-index: 2;
 }
 
-/* Utility Classes */
+/* *** Utility Classes *** */
 .orange {
     color: var(--color-primary);
 }
 
-/* Responsive Styles */
+/* *** Responsive Styles *** */
 @media (max-width: 768px) {
     main {
         padding: 1rem;

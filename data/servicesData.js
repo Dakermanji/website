@@ -1,3 +1,5 @@
+//! data/servicesData.js
+
 export const servicesData = {
 	title: 'My Services',
 	services: [
