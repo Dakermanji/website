@@ -15,6 +15,7 @@ import {
 	sanitizeLoginForm,
 	sanitizeRegisterForm,
 } from '../middlewares/sanitizeForm.js';
+import { resendConfirmation } from '../controllers/authController.js';
 
 const router = express.Router();
 
@@ -35,5 +36,8 @@ router.get('/logout', logout);
 
 // Confirm-email
 router.get('/confirm-email', confirmEmail);
+
+// Resend confirmation email
+router.post('/resend-confirmation', resendConfirmation);
 
 export default router;
