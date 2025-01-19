@@ -1,26 +1,25 @@
 //! utils/registerHelper.js
 
-import crypto from 'crypto';
-import transporter from '../config/transporter.js';
+import { generateToken, sendEmail } from './authUtilHelper.js';
+import User from '../models/User.js';
 
-export const generateToken = () => {
-	const token = crypto.randomBytes(32).toString('hex');
-	const tokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24-hour expiry
-	return { token, tokenExpiry };
-};
+/**
+ * Handle registration logic and email confirmation.
+ * @param {object} user - The user object to process.
+ * @param {string} host - The request host for generating the confirmation URL.
+ */
+export const handleRegistration = async (user, host) => {
+	const { token, tokenExpiry } = generateToken();
+	await User.updateToken(user.id, token, tokenExpiry);
 
-export const sendConfirmationEmail = async (email, confirmUrl) => {
-	const mailOptions = {
-		to: email,
-		subject: 'Confirm Your Email',
-		html: `
-            <h1>Email Confirmation</h1>
-            <p>Please click the link below to confirm your email:</p>
-            <a href="${confirmUrl}">Confirm Email</a>
-        `,
-	};
+	const confirmUrl = `http://${host}/auth/confirm-email?token=${token}`;
+	const emailContent = `
+        <h1>Welcome to Dakermanji Web Dev</h1>
+        <p>Please confirm your email address by clicking the link below:</p>
+        <a href="${confirmUrl}">Confirm Email</a>
+    `;
 
-	return transporter.sendMail(mailOptions);
+	await sendEmail(user.email, 'Confirm Your Email', emailContent);
 };
 
 export const handleExistingUser = (existingUser, req, res) => {

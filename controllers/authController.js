@@ -5,8 +5,7 @@ import bcrypt from 'bcrypt';
 import passport from '../config/passport.js';
 import User from '../models/User.js';
 import {
-	generateToken,
-	sendConfirmationEmail,
+	handleRegistration,
 	handleExistingUser,
 } from '../utils/registerHelper.js';
 import {
@@ -40,24 +39,18 @@ export const register = async (req, res) => {
 			return handleExistingUser(existingUser, req, res);
 		}
 
-		// Generate hashed password
+		// Hash the password
 		const hashedPassword = await bcrypt.hash(password, 10);
 
-		// Generate token and expiry
-		const { token, tokenExpiry } = generateToken();
-
 		// Create the user
-		await User.create({
+		const user = await User.create({
 			username,
 			email,
 			hashedPassword,
-			token,
-			tokenExpiry,
 		});
 
-		// Send confirmation email
-		const confirmUrl = `http://${req.headers.host}/auth/confirm-email?token=${token}`;
-		await sendConfirmationEmail(email, confirmUrl);
+		// Handle registration and send confirmation email
+		await handleRegistration(user, req.headers.host);
 
 		req.flash(
 			'success',

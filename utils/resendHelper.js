@@ -1,9 +1,9 @@
 //! utils/resendHelper.js
 
-import crypto from 'crypto';
-import transporter from '../config/transporter.js';
 import validator from 'validator';
+
 import User from '../models/User.js';
+import { generateToken, sendEmail } from './authUtilHelper.js';
 
 /**
  * Validates and checks email existence.
@@ -28,26 +28,20 @@ export const validateAndFindUser = async (email, req, res) => {
 };
 
 /**
- * Sends a confirmation email to the user.
- * @param {object} user - The user object.
+ * Resend a confirmation email to the user.
+ * @param {object} user - The user object to process.
  * @param {string} host - The request host for generating the confirmation URL.
  */
 export const resendConfirmationEmail = async (user, host) => {
-	const token = crypto.randomBytes(32).toString('hex');
-	const tokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24-hour expiry
-
+	const { token, tokenExpiry } = generateToken();
 	await User.updateToken(user.id, token, tokenExpiry);
 
 	const confirmUrl = `http://${host}/auth/confirm-email?token=${token}`;
-	const mailOptions = {
-		to: user.email,
-		subject: 'Confirm Your Email',
-		html: `
-            <h1>Email Confirmation</h1>
-            <p>Please click the link below to confirm your email:</p>
-            <a href="${confirmUrl}">Confirm Email</a>
-        `,
-	};
+	const emailContent = `
+        <h1>Email Confirmation</h1>
+        <p>Please click the link below to confirm your email:</p>
+        <a href="${confirmUrl}">Confirm Email</a>
+    `;
 
-	return transporter.sendMail(mailOptions);
+	await sendEmail(user.email, 'Confirm Your Email', emailContent);
 };
