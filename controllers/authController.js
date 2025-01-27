@@ -12,6 +12,7 @@ import {
 	validateAndFindUser,
 	resendConfirmationEmail,
 } from '../utils/resendHelper.js';
+import { generateToken, sendEmail } from '../utils/authUtilHelper.js';
 
 // Handle local login
 export const login = passport.authenticate('local', {
@@ -198,6 +199,93 @@ export const resendConfirmation = async (req, res) => {
 		res.redirect('/?auth=true');
 	} catch (error) {
 		console.error('Error resending confirmation email:', error);
+		req.flash('error', 'Something went wrong. Please try again later.');
+		res.redirect('/?auth=true');
+	}
+};
+
+export const requestResetPassword = async (req, res) => {
+	const message =
+		'If this email is registered, we have sent a password reset link.';
+	try {
+		const { email } = req.body;
+
+		// Validate email and find user
+		const user = await validateAndFindUser(message, email, req, res);
+
+		if (!user) {
+			req.flash('success', message);
+			return res.redirect('/?auth=true');
+		}
+
+		// Generate token and save it
+		const { token, tokenExpiry } = generateToken();
+		await User.updateToken(user.id, token, tokenExpiry);
+
+		// Send reset email
+		const resetUrl = `http://${req.headers.host}/auth/reset-password/${token}`;
+		const emailContent = `
+            <h1>Reset Your Password</h1>
+            <p>Please click the link below to reset your password:</p>
+            <a href="${resetUrl}">Reset Password</a>
+        `;
+		await sendEmail(user.email, 'Reset Your Password', emailContent);
+
+		req.flash('success', message);
+		res.redirect('/');
+	} catch (error) {
+		console.error('Error requesting password reset:', error);
+		req.flash('error', 'Something went wrong. Please try again later.');
+		res.redirect('/?auth=true');
+	}
+};
+
+export const renderResetPasswordForm = async (req, res) => {
+	const { token } = req.params;
+
+	try {
+		const user = await User.findByToken(token);
+
+		if (!user || new Date() > new Date(user.token_expiry)) {
+			req.flash('error', 'Invalid or expired reset token.');
+			return res.redirect('/?auth=true');
+		}
+
+		res.redirect(`/?reset=true&token=${token}`);
+	} catch (error) {
+		console.error('Error rendering reset password form:', error);
+		req.flash('error', 'Something went wrong. Please try again later.');
+	}
+};
+
+export const processResetPassword = async (req, res) => {
+	const { token } = req.params;
+	const { password, confirmPassword } = req.body;
+
+	try {
+		if (password !== confirmPassword) {
+			req.flash('error', 'Passwords do not match.');
+			return res.redirect(`/auth/reset-password/${token}`);
+		}
+
+		const user = await User.findByToken(token);
+
+		if (!user || new Date() > new Date(user.token_expiry)) {
+			req.flash('error', 'Invalid or expired reset token.');
+			return res.redirect('/?auth=true');
+		}
+
+		const hashedPassword = await bcrypt.hash(password, 10);
+
+		await User.resetPassword(user.id, hashedPassword);
+
+		req.flash(
+			'success',
+			'Your password has been reset successfully. Please log in.'
+		);
+		res.redirect('/?auth=true');
+	} catch (error) {
+		console.error('Error processing password reset:', error);
 		req.flash('error', 'Something went wrong. Please try again later.');
 		res.redirect('/?auth=true');
 	}

@@ -10,6 +10,7 @@ import { sanitizeInput } from '../middlewares/sanitizeForm.js';
 // Handle Get Index Page
 export const getIndex = (req, res) => {
 	try {
+		const token = req.query.token;
 		res.render('index', {
 			title: 'Home - Dakermanji Web Dev',
 			navBar: navBar.index,
@@ -18,9 +19,11 @@ export const getIndex = (req, res) => {
 			projects,
 			success_msg: res.locals.success,
 			error_msg: res.locals.error,
+			resetToken: token,
 			styles: ['index/main', 'index/login', 'index/forgot_resend'],
 			scripts: [
-				'index/index_selectors',
+				'helpers/modalHelper',
+				'index/selectors',
 				'index/main',
 				'index/login',
 				'index/forgot_resend',

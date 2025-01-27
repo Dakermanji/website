@@ -1,18 +1,16 @@
 //! public/js/index/forgot_resend.js
 
-// Open Modal
-openUtilityModalBtn.addEventListener('click', () => {
-	authUtilityModal.classList.add('active');
-});
+// Event Listeners
+openUtilityModalBtn?.addEventListener('click', () =>
+	openModal(authUtilityModal)
+);
+closeUtilityModalBtn?.addEventListener('click', () =>
+	closeModal(authUtilityModal)
+);
 
-// Close Modal
-closeUtilityModalBtn.addEventListener('click', () => {
-	authUtilityModal.classList.remove('active');
-});
-
-// Close modal when clicking outside of content
-authUtilityModal.addEventListener('click', (e) => {
+// Close modal when clicking outside
+authUtilityModal?.addEventListener('click', (e) => {
 	if (e.target === authUtilityModal) {
-		authUtilityModal.classList.remove('active');
+		closeModal(authUtilityModal);
 	}
 });

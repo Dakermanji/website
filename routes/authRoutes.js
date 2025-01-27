@@ -10,6 +10,9 @@ import {
 	githubCallback,
 	logout,
 	confirmEmail,
+	requestResetPassword,
+	renderResetPasswordForm,
+	processResetPassword,
 } from '../controllers/authController.js';
 import {
 	sanitizeLoginForm,
@@ -39,5 +42,10 @@ router.get('/confirm-email', confirmEmail);
 
 // Resend confirmation email
 router.post('/resend-confirmation', resendConfirmation);
+
+// Reset Password
+router.post('/reset-password', requestResetPassword);
+router.get('/reset-password/:token', renderResetPasswordForm);
+router.post('/reset-password/:token', processResetPassword);
 
 export default router;

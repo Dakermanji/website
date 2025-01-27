@@ -171,6 +171,21 @@ class User {
 		const [result] = await promisePool.execute(query, [userId]);
 		return result;
 	}
+
+	static async findByToken(token) {
+		const query = 'SELECT * FROM users WHERE token = ?';
+		const [rows] = await promisePool.query(query, [token]);
+		return rows[0];
+	}
+
+	static async resetPassword(userId, hashedPassword) {
+		const query = `
+        UPDATE users
+        SET hashed_password = ?, token = NULL, token_expiry = NULL
+        WHERE id = ?
+    `;
+		await promisePool.execute(query, [hashedPassword, userId]);
+	}
 }
 
 export default User;
