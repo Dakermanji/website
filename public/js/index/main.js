@@ -95,34 +95,79 @@ window.addEventListener('resize', () => {
 	}, 200); // Adjust debounce delay as needed
 });
 
-// Colorize Password Requirements
-const passwordInput = document.getElementById('register-password');
+// Password strength validation
+const passwordInputs = document.querySelectorAll('.password-input');
+
+// Password Requirements Patterns
 const requirements = {
 	lower: /[a-z]/,
 	upper: /[A-Z]/,
 	digit: /\d/,
-	symbol: /[!@$%^&*()\[\]{}\-_=<>.,:;'"\~`#\\|\/+]/,
+	symbol: /[!@$%^&*()?\[\]{}\-_=<>.,:;'"\~`#\\|\/+]/,
 	length: /.{8,}/,
 };
 
-const updateRequirementState = (input, pattern, elementId) => {
-	const requirementElement = document.getElementById(elementId);
+// Update Requirement State
+const updateRequirementState = (input, pattern, element) => {
 	if (pattern.test(input)) {
-		requirementElement.classList.add('valid');
-		requirementElement.classList.remove('invalid');
+		element.classList.add('valid');
+		element.classList.remove('invalid');
 	} else {
-		requirementElement.classList.remove('valid');
-		requirementElement.classList.add('invalid');
+		element.classList.remove('valid');
+		element.classList.add('invalid');
 	}
 };
 
-passwordInput.addEventListener('input', () => {
-	const passwordValue = passwordInput.value;
+// Attach Password Validation to Inputs
+const attachPasswordValidation = () => {
+	const passwordInputs = document.querySelectorAll(
+		'input[data-requirements]'
+	);
 
-	// Check each requirement
-	updateRequirementState(passwordValue, requirements.lower, 'lower');
-	updateRequirementState(passwordValue, requirements.upper, 'upper');
-	updateRequirementState(passwordValue, requirements.digit, 'digit');
-	updateRequirementState(passwordValue, requirements.symbol, 'symbol');
-	updateRequirementState(passwordValue, requirements.length, 'psw-length');
-});
+	passwordInputs.forEach((input) => {
+		const requirementsList = document.querySelector(
+			input.dataset.requirements
+		);
+		const requirementItems = {
+			lower: requirementsList.querySelector('.lower'),
+			upper: requirementsList.querySelector('.upper'),
+			digit: requirementsList.querySelector('.digit'),
+			symbol: requirementsList.querySelector('.symbol'),
+			length: requirementsList.querySelector('.psw-length'),
+		};
+
+		input.addEventListener('input', () => {
+			const value = input.value;
+
+			// Update each requirement state
+			updateRequirementState(
+				value,
+				requirements.lower,
+				requirementItems.lower
+			);
+			updateRequirementState(
+				value,
+				requirements.upper,
+				requirementItems.upper
+			);
+			updateRequirementState(
+				value,
+				requirements.digit,
+				requirementItems.digit
+			);
+			updateRequirementState(
+				value,
+				requirements.symbol,
+				requirementItems.symbol
+			);
+			updateRequirementState(
+				value,
+				requirements.length,
+				requirementItems.length
+			);
+		});
+	});
+};
+
+// Initialize Validation on DOM Load
+document.addEventListener('DOMContentLoaded', attachPasswordValidation);

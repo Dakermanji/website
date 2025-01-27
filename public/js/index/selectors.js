@@ -17,9 +17,6 @@ const openModalBtn = document.getElementById('openAuthModal');
 const closeModalBtn = document.getElementById('closeModal');
 const openUtilityModalBtn = document.getElementById('openAuthUtility');
 const closeUtilityModalBtn = document.getElementById('closeUtilityModal');
-const closeResetPasswordModalBtn = document.getElementById(
-	'closeResetPasswordModal'
-);
 
 // Login/Register Tabs
 const tabs = document.querySelectorAll('#authTabs .nav-link');

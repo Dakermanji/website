@@ -4,15 +4,33 @@
   <div class="container">
     <a class="navbar-brand" href="/"><%- include('company_name') %></a>
     <% if (navBar.length > 0) { %>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
-        <% navBar.forEach(nav => {%>
+        <% navBar.forEach(nav => { %>
         <li class="nav-item">
-          <a class="nav-link <%= currentRoute === `${nav.link}` ? 'active' : '' %>" <%= nav.id ? `id=${nav.id}` : '' %> href="<%= nav.link %>">
-            <span class="nav-icon" data-bs-toggle="tooltip" title="<%= nav.text %>"><%- nav.icon %></span>
+          <a
+            class="nav-link <%= currentRoute === `${nav.link}` ? 'active' : '' %>"
+            <%= nav.id ? `id="${nav.id}"` : '' %>
+            href="<%= nav.link %>"
+          >
+            <span
+              class="nav-icon"
+              data-bs-toggle="tooltip"
+              title="<%= nav.text %>"
+            >
+              <%- nav.icon %>
+            </span>
             <span class="nav-text"><%= nav.text %></span>
           </a>
         </li>
@@ -21,18 +39,25 @@
           <% if (!user) { %>
           <!-- If the user is not logged in -->
           <a class="nav-link" id="openAuthModal">
-            <span class="bi bi-box-arrow-in-right nav-icon" data-bs-toggle="tooltip" title="Login / Register"></span>
+            <span
+              class="bi bi-box-arrow-in-right nav-icon"
+              data-bs-toggle="tooltip"
+              title="Login / Register"
+            ></span>
             <span class="nav-text">Login / Register</span>
           </a>
           <% } else { %>
           <!-- If the user is logged in -->
           <a class="nav-link" href="/logout">
-            <span class="bi bi-box-arrow-left nav-icon" data-bs-toggle="tooltip" title="Logout"></span>
+            <span
+              class="bi bi-box-arrow-left nav-icon"
+              data-bs-toggle="tooltip"
+              title="Logout"
+            ></span>
             <span class="nav-text">Logout</span>
           </a>
           <% } %>
         </li>
-
       </ul>
     </div>
     <% } %>

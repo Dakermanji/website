@@ -2,158 +2,232 @@
 
 <!-- Display Flash Messages -->
 <% if (success_msg && success_msg.length > 0) { %>
-<div id='flash-message' class="flash-message alert alert-success alert-dismissible fade show text-center" role="alert">
-  <%= success_msg %>
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<div
+	id="flash-message"
+	class="flash-message alert alert-success alert-dismissible fade show text-center"
+	role="alert"
+>
+	<%= success_msg %>
+	<button
+		type="button"
+		class="btn-close"
+		data-bs-dismiss="alert"
+		aria-label="Close"
+	></button>
 </div>
 <% } else if (error_msg && error_msg.length > 0) { %>
-<div id='flash-message' class="flash-message alert alert-danger alert-dismissible fade show text-center" role="alert">
-  <%- error_msg %>
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<div
+	id="flash-message"
+	class="flash-message alert alert-danger alert-dismissible fade show text-center"
+	role="alert"
+>
+	<%- error_msg %>
+	<button
+		type="button"
+		class="btn-close"
+		data-bs-dismiss="alert"
+		aria-label="Close"
+	></button>
 </div>
 <% } %>
 
 <!-- Overlay -->
 <div class="background-overlay"></div>
 
-
 <!-- Hero Section -->
 <section class="hero-section">
-  <div class="hero-content">
-    <small class="role">Full Stack <span class='orange'>W</span>eb <span class='orange'>D</span>eveloper</small>
-    <h1>Hi, I'm Behnam <span class='orange'>D</span>akermanji from Canada <img src="/images/index/canada-flag.png" alt="Canada Flag" class="flag-icon" loading='lazy'></h1>
-  </div>
+	<div class="hero-content">
+		<small class="role"
+			>Full Stack <span class="orange">W</span>eb
+			<span class="orange">D</span>eveloper</small
+		>
+		<h1>
+			Hi, I'm Behnam <span class="orange">D</span>akermanji from Canada
+			<img
+				src="/images/index/canada-flag.png"
+				alt="Canada Flag"
+				class="flag-icon"
+				loading="lazy"
+			/>
+		</h1>
+	</div>
 </section>
 
 <!-- About Section -->
 <section id="about">
-  <div class="container">
-    <h2 class="sub-title"><%= about.title %></h2>
-    <div class="row">
-      <!-- About Image Column -->
-      <div class="about-col-1 text-center">
-        <img src="<%= about.image %>" alt="Humanoid robot working on PC" loading='lazy' />
-      </div>
+	<div class="container">
+		<h2 class="sub-title"><%= about.title %></h2>
+		<div class="row">
+			<!-- About Image Column -->
+			<div class="about-col-1 text-center">
+				<img
+					src="<%= about.image %>"
+					alt="Humanoid robot working on PC"
+					loading="lazy"
+				/>
+			</div>
 
-      <!-- About Content Column with Background -->
-      <div class="about-col-2 about-background">
-        <% about.description.forEach(paragraph => { %>
-        <p><%= paragraph %></p>
-        <% }) %>
+			<!-- About Content Column with Background -->
+			<div class="about-col-2 about-background">
+				<% about.description.forEach(paragraph => { %>
+				<p><%= paragraph %></p>
+				<% }) %>
 
-        <!-- Tab Titles -->
-        <div class="tab-titles" role="tablist">
-          <% Object.keys(about.tabs).forEach(tab => { %>
-          <p class="tab-links <%= tab === 'experience' ? 'active' : '' %>" data-tab="<%= tab %>" role="tab" aria-selected="<%= tab === 'experience' ? 'true' : 'false' %>"><%= tab.charAt(0).toUpperCase() + tab.slice(1) %></p>
-          <% }) %>
-        </div>
+				<!-- Tab Titles -->
+				<div class="tab-titles" role="tablist">
+					<% Object.keys(about.tabs).forEach(tab => { %>
+					<p
+						class="tab-links <%= tab === 'experience' ? 'active' : '' %>"
+						data-tab="<%= tab %>"
+						role="tab"
+						aria-selected="<%= tab === 'experience' ? 'true' : 'false' %>"
+					>
+						<%= tab.charAt(0).toUpperCase() + tab.slice(1) %>
+					</p>
+					<% }) %>
+				</div>
 
-        <!-- Tab Contents -->
-        <% Object.entries(about.tabs).forEach(([tab, contents]) => { %>
-        <div id="<%= tab %>" class="tab-contents <%= tab === 'experience' ? 'active-tab' : '' %>">
-          <% if (tab === 'experience') { %>
-          <ul>
-            <% contents.forEach(item => { %>
-            <li>
-              <span><%= item.period %></span><br />
-              <%= item.role %> for "<strong><em><%= item.company || '' %></em></strong>"<br />
-              <address><%= item.location || '' %></address>
-            </li>
-            <% }) %>
-          </ul>
-          <% } else if (tab === 'skills') { %>
-          <ul>
-            <% contents.forEach(skill => { %>
-            <li>
-              <span><%= skill.name %></span><br />
-              <%= skill.description %>
-            </li>
-            <% }) %>
-          </ul>
-          <% } else if (tab === 'education') { %>
-          <ul>
-            <% contents.forEach(edu => { %>
-            <li>
-              <span><%= edu.year %></span><br />
-              <%= edu.title %><br />
-              <address><%= edu.institution %></address>
-            </li>
-            <% }) %>
-          </ul>
-          <% } %>
-        </div>
-        <% }) %>
-      </div>
-    </div>
-  </div>
+				<!-- Tab Contents -->
+				<% Object.entries(about.tabs).forEach(([tab, contents]) => { %>
+				<div
+					id="<%= tab %>"
+					class="tab-contents <%= tab === 'experience' ? 'active-tab' : '' %>"
+				>
+					<% if (tab === 'experience') { %>
+					<ul>
+						<% contents.forEach(item => { %>
+						<li>
+							<span><%= item.period %></span><br />
+							<%= item.role %> for "<strong
+								><em><%= item.company || '' %></em></strong
+							>"<br />
+							<address><%= item.location || '' %></address>
+						</li>
+						<% }) %>
+					</ul>
+					<% } else if (tab === 'skills') { %>
+					<ul>
+						<% contents.forEach(skill => { %>
+						<li>
+							<span><%= skill.name %></span><br />
+							<%= skill.description %>
+						</li>
+						<% }) %>
+					</ul>
+					<% } else if (tab === 'education') { %>
+					<ul>
+						<% contents.forEach(edu => { %>
+						<li>
+							<span><%= edu.year %></span><br />
+							<%= edu.title %><br />
+							<address><%= edu.institution %></address>
+						</li>
+						<% }) %>
+					</ul>
+					<% } %>
+				</div>
+				<% }) %>
+			</div>
+		</div>
+	</div>
 </section>
 
 <!-- Services Section -->
 <section id="services">
-  <div class="container">
-    <h2 class="text-center mb-5"><%= services.title %></h2>
-    <div class="row">
-      <% services.services.forEach(service => { %>
-      <div class="service-card col-md-4 mb-4">
-        <div class="card shadow-sm text-center">
-          <div class="card-body">
-            <i class="bi <%= service.icon %> display-4 mb-5"></i>
-            <h3 class="card-title"><%= service.title %></h3>
-            <p class="card-text"><%= service.description %></p>
-          </div>
-        </div>
-      </div>
-      <% }) %>
-    </div>
-  </div>
+	<div class="container">
+		<h2 class="text-center mb-5"><%= services.title %></h2>
+		<div class="row">
+			<% services.services.forEach(service => { %>
+			<div class="service-card col-md-4 mb-4">
+				<div class="card shadow-sm text-center">
+					<div class="card-body">
+						<i class="bi <%= service.icon %> display-4 mb-5"></i>
+						<h3 class="card-title"><%= service.title %></h3>
+						<p class="card-text"><%= service.description %></p>
+					</div>
+				</div>
+			</div>
+			<% }) %>
+		</div>
+	</div>
 </section>
 
 <!-- My Work / Portfolio Section -->
 <section id="portfolio">
-  <div class="container">
-    <h2 class="text-center mb-5">My Work</h2>
-    <div class="work-list">
-      <% projects.forEach(project => { %>
-      <div class="work text-center">
-        <a href="/<%= project.link %>">
-          <h4 class='mb-4 mt-3'><%= project.title %></h4>
-          <img src="/images/index/<%= project.img %>" alt="<%= project.title %>" loading="lazy">
-        </a>
-      </div>
-      <% }) %>
-    </div>
-  </div>
-  <div class="text-center mt-4">
-    <button id="see-more-btn" class="btn" aria-label="See More Projects">See More</button>
-  </div>
-  </div>
+	<div class="container">
+		<h2 class="text-center mb-5">My Work</h2>
+		<div class="work-list">
+			<% projects.forEach(project => { %>
+			<div class="work text-center">
+				<a href="/<%= project.link %>">
+					<h4 class="mb-4 mt-3"><%= project.title %></h4>
+					<img
+						src="/images/index/<%= project.img %>"
+						alt="<%= project.title %>"
+						loading="lazy"
+					/>
+				</a>
+			</div>
+			<% }) %>
+		</div>
+
+		<div class="text-center mt-4">
+			<button
+				id="see-more-btn"
+				class="btn"
+				aria-label="See More Projects"
+			>
+				See More
+			</button>
+		</div>
+	</div>
 </section>
 
 <!-- Contact Me Section -->
 <section id="contact" class="py-5">
-  <div class="container">
-    <h2 class="mb-5">Contact Me</h2>
-    <div class="row justify-content-center">
-      <div class="col-md-6">
-        <!-- Contact Form -->
-        <form action="/send-message" method="POST" class="needs-validation" novalidate>
-          <div class="form-group mb-3">
-            <label for="subject">Subject</label>
-            <input type="text" id="subject" name="subject" class="form-control" maxlength="100" required>
-          </div>
-          <div class="form-group mb-3">
-            <label for="message">Your Message</label>
-            <textarea id="message" name="message" class="form-control" maxlength="1000" rows="5" required></textarea>
-          </div>
-          <div class="text-center">
-            <button type="submit" class="btn btn-primary">Send Message</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
+	<div class="container">
+		<h2 class="mb-5">Contact Me</h2>
+		<div class="row justify-content-center">
+			<div class="col-md-6">
+				<!-- Contact Form -->
+				<form
+					action="/send-message"
+					method="POST"
+					class="needs-validation"
+					novalidate
+				>
+					<div class="form-group mb-3">
+						<label for="subject">Subject</label>
+						<input
+							type="text"
+							id="subject"
+							name="subject"
+							class="form-control"
+							maxlength="100"
+							required
+						/>
+					</div>
+					<div class="form-group mb-3">
+						<label for="message">Your Message</label>
+						<textarea
+							id="message"
+							name="message"
+							class="form-control"
+							maxlength="1000"
+							rows="5"
+							required
+						></textarea>
+					</div>
+					<div class="text-center">
+						<button type="submit" class="btn btn-primary">
+							Send Message
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </section>
-
 
 <!-- Login / Register -->
 <%- include('partials/login') %>
@@ -162,6 +236,4 @@
 <%- include('partials/forgot_resend') %>
 
 <!-- Reset Password -->
-<% if (resetToken) { %>
-<%- include('partials/reset_password') %>
-<% } %>
+<% if (resetToken) { %> <%- include('partials/reset_password') %> <% } %>
