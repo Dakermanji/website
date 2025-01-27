@@ -28,4 +28,32 @@ export const navBar = {
 			icon: '<i class="bi bi-view-list"></i>',
 		},
 	],
+	projects: [
+		{
+			link: '#',
+			text: 'Friends',
+			icon: '<i class="bi bi-people"></i>',
+			id: 'trigger-friends-modal',
+		},
+		{
+			link: '/weather',
+			icon: '<i class="bi bi-thermometer-half"></i>',
+			text: 'Weather',
+		},
+		{
+			link: '/chat',
+			icon: '<i class="bi bi-chat-dots"></i>',
+			text: 'Chat',
+		},
+		{
+			link: '/visited',
+			icon: '<i class="bi bi-map"></i>',
+			text: 'Visited Countries',
+		},
+		{
+			link: '/books',
+			icon: '<i class="bi bi-book"></i>',
+			text: 'Books Reviews',
+		},
+	],
 };
