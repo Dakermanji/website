@@ -2,7 +2,7 @@
 
 .friends-modal {
     position: fixed;
-    top: 0;
+    top: 2rem;
     left: -100%;
     width: 300px;
     height: 100%;
@@ -12,6 +12,10 @@
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
     transition: left var(--transition-duration);
     overflow-y: auto;
+}
+
+.friends-modal h2 {
+    color: var(--color-primary);
 }
 
 .friends-modal.active {

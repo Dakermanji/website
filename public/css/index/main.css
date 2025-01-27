@@ -6,10 +6,6 @@ h2 {
     text-align: center;
 }
 
-.container {
-    max-width: 100%;
-}
-
 main {
     background: url('/images/index/background-image.webp') no-repeat center center fixed;
     background-size: cover;
