@@ -5,6 +5,7 @@ import express from 'express';
 import indexRouter from '../routes/indexRoutes.js';
 import authRoutes from '../routes/authRoutes.js';
 import projectsRoutes from '../routes/projectsRoutes.js';
+import friendsRoutes from '../routes/friendsRoutes.js';
 
 const router = express.Router();
 
@@ -15,6 +16,7 @@ const router = express.Router();
 router.use('/', indexRouter);
 router.use('/auth', authRoutes);
 router.use('/projects', projectsRoutes);
+router.use('/friends', friendsRoutes);
 
 // Step 3: Handle 404 errors
 // Catch-all route for unmatched paths
