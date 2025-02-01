@@ -1,5 +1,4 @@
---! sql/users.sql
-
+-- ! sql/users.sql
 CREATE TABLE users (
     id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
     username VARCHAR(50) NOT NULL UNIQUE,
