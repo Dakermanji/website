@@ -41,3 +41,13 @@
 .close-button:hover {
     color: var(--color-primary);
 }
+
+#friends-modal .btn {
+    background-color: var(--color-primary);
+    color: white;
+    transition: background-color var(--transition-duration);
+}
+
+#friends-modal .btn:hover {
+    background-color: var(--color-primary-dark);
+}
