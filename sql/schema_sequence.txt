@@ -6,3 +6,4 @@
 4. follow_requests
 5. follows
 6. follows_notifications
+7. blocks
