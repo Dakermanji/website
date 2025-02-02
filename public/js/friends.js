@@ -37,17 +37,18 @@ addFriendButton.addEventListener('click', async () => {
 			body: JSON.stringify({ email }),
 		});
 
+		const result = await response.json();
+
 		if (response.ok) {
 			followMessage.textContent =
-				'If email is in our database, your request was sent successfully!';
+				result.message || 'Request sent successfully!';
 			followMessage.className = 'alert alert-success';
-			friendEmailInput.value = '';
 		} else {
-			followMessage.textContent =
-				'If email is in our database, your request was sent successfully!';
-			followMessage.className = 'alert alert-success';
-			friendEmailInput.value = '';
+			followMessage.textContent = result.error || 'An error occurred.';
+			followMessage.className = 'alert alert-danger';
 		}
+
+		friendEmailInput.value = '';
 	} catch (error) {
 		followMessage.textContent =
 			'Failed to send friend request. Please try again later.';

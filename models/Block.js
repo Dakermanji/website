@@ -12,7 +12,7 @@ class Blocks {
 
 	// Create a block entry
 	static async blockUser(blockerId, blockedId) {
-		const query = `INSERT INTO blocks (id, blocker_id, blocked_id) VALUES (UUID(), ?, ?)`;
+		const query = `INSERT INTO blocks (blocker_id, blocked_id) VALUES (?, ?)`;
 		return promisePool.execute(query, [blockerId, blockedId]);
 	}
 

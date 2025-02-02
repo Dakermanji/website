@@ -37,6 +37,12 @@ export const addFriend = async (req, res) => {
 
 		const recipientId = recipient.id;
 
+		if (requesterId === recipientId) {
+			return res
+				.status(400)
+				.json({ error: 'You cannot follow yourself.' });
+		}
+
 		// Check if the recipient has blocked the requester
 		const isBlockedByRecipient = await Block.checkBlockStatus(
 			recipientId,
@@ -52,20 +58,18 @@ export const addFriend = async (req, res) => {
 			recipientId
 		);
 		if (hasBlockedRecipient) {
-			return res
-				.status(403)
-				.json({
-					error: 'You have blocked this user. Unblock them first.',
-				});
+			return res.status(403).json({
+				error: 'You have blocked this user. Unblock them first.',
+			});
 		}
 
 		// Check current follow status
-		const followStatus = await FollowRequest.checkFollowStatus(
+		const followStatus = await Follow.checkFollowStatus(
 			requesterId,
 			recipientId
 		);
 
-		if (followStatus === 'mutual request') {
+		if (followStatus === 'mutual') {
 			return res
 				.status(400)
 				.json({ error: 'You are already following each other.' });
@@ -75,17 +79,35 @@ export const addFriend = async (req, res) => {
 				.status(400)
 				.json({ error: 'You are already following this user.' });
 		}
-		if (followStatus === 'followed') {
+
+		const recipientFollowStatus = await FollowRequest.checkFollowStatus(
+			recipientId,
+			requesterId
+		);
+
+		if (recipientFollowStatus === 'following') {
 			return res
 				.status(400)
 				.json({ error: 'This user is already following you.' });
 		}
-		if (followStatus === 'requested') {
+
+		const alreadyRequestedFollow = await FollowRequest.checkFollowStatus(
+			requesterId,
+			recipientId
+		);
+
+		if (alreadyRequestedFollow === 'pending') {
 			return res.status(400).json({
 				error: 'You have already sent a request to this user.',
 			});
 		}
-		if (followStatus === 'pending_from_recipient') {
+
+		const alreadyAPendingFollow = await FollowRequest.checkFollowStatus(
+			recipientId,
+			requesterId
+		);
+
+		if (alreadyAPendingFollow === 'pending') {
 			// Convert to mutual follow
 			await Follow.createMutualFollow(requesterId, recipientId);
 			await FollowRequest.updateFollowRequestStatus(
@@ -93,9 +115,10 @@ export const addFriend = async (req, res) => {
 				requesterId,
 				'mutual request'
 			);
-			await FollowNotification.createMutualFollowNotification(
+			await FollowNotification.createFollowNotification(
 				recipientId,
-				requesterId
+				requesterId,
+				'follow_back'
 			);
 
 			return res.status(200).json({

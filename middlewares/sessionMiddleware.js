@@ -10,7 +10,7 @@ export const initializeSession = (app) => {
 			resave: false, // Prevent saving session if nothing changes
 			saveUninitialized: false, // Don't create session until something is stored
 			cookie: {
-				maxAge: 60000, // Set session expiration time (adjust as needed)
+				maxAge: 1000 * 60 * 60 * 24, // Set session expiration time (adjust as needed)
 				secure: false, // Set true if using HTTPS
 				httpOnly: true, // Prevent client-side JavaScript access to cookies
 			},

@@ -11,7 +11,7 @@ class Follow {
 			followedId,
 		]);
 		return rows.length > 0
-			? rows[0].mutual_follow
+			? rows[0].mutual_follow === 1
 				? 'mutual'
 				: 'following'
 			: 'not_following';
@@ -26,8 +26,8 @@ class Follow {
 	// Create mutual follow relationship (update existing or insert if needed)
 	static async createMutualFollow(userAId, userBId) {
 		const updateQuery = `UPDATE follows SET mutual_follow = TRUE
-                             WHERE (follower_id = ? AND followed_id = ?)
-                             OR (follower_id = ? AND followed_id = ?)`;
+                     WHERE (follower_id = ? AND followed_id = ?)
+                     OR (follower_id = ? AND followed_id = ?)`;
 		await promisePool.execute(updateQuery, [
 			userAId,
 			userBId,

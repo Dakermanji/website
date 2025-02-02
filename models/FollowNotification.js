@@ -3,16 +3,10 @@
 import { promisePool } from '../config/database.js';
 
 class FollowNotification {
-	// Create a notification for a follow request
-	static async createFollowRequestNotification(userId, senderId) {
-		const query = `INSERT INTO follows_notifications (user_id, sender_id, type) VALUES (?, ?, 'follow_request')`;
-		return promisePool.execute(query, [userId, senderId]);
-	}
-
-	// Create a notification for mutual follow
-	static async createMutualFollowNotification(userId, senderId) {
-		const query = `INSERT INTO follows_notifications (user_id, sender_id, type) VALUES (?, ?, 'mutual_request')`;
-		return promisePool.execute(query, [userId, senderId]);
+	// Create a notification
+	static async createFollowNotification(userId, senderId, type) {
+		const query = `INSERT INTO follows_notifications (user_id, sender_id, type) VALUES (?, ?, ?)`;
+		return promisePool.execute(query, [userId, senderId, type]);
 	}
 
 	// Mark a notification as read
