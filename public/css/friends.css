@@ -1,10 +1,12 @@
 /*! public/css/friends.css */
 
+/* Friends Modal */
 .friends-modal {
     position: fixed;
     top: 2rem;
     left: -100%;
-    width: 300px;
+    width: 320px;
+    padding: 10px;
     height: 100%;
     background: var(--color-dark);
     color: white;
@@ -14,18 +16,28 @@
     overflow-y: auto;
 }
 
-.friends-modal h2 {
-    color: var(--color-primary);
-}
-
 .friends-modal.active {
     left: 0;
 }
 
-.friends-content {
-    padding: 1rem;
+.friends-modal .dropdown-item {
+    white-space: normal;
+    word-break: break-word;
 }
 
+.friends-modal ul {
+    padding-left: 0;
+}
+
+.friends-modal h2 {
+    color: var(--color-primary);
+}
+
+.friends-modal p {
+    margin: 0;
+}
+
+/* Close Button */
 .close-button {
     position: absolute;
     top: 10px;
@@ -42,12 +54,64 @@
     color: var(--color-primary);
 }
 
-#friends-modal .btn {
+/* Add Friend Button */
+#add-friend-btn {
     background-color: var(--color-primary);
     color: white;
     transition: background-color var(--transition-duration);
 }
 
-#friends-modal .btn:hover {
+#add-friend-btn:hover {
     background-color: var(--color-primary-dark);
+}
+
+/* Notifications */
+.notification-buttons {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 3px;
+}
+
+.notification-buttons button {
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+}
+
+/* Dropdown Item */
+.dropdown-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    padding: 10px;
+    border-bottom: 0.5px solid var(--color-primary);
+    position: relative;
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+/* Notification Dismiss Button */
+.dismiss-btn {
+    position: absolute;
+    top: -3px;
+    right: 0;
+    margin-right: 2px;
+    background: none;
+    border: none;
+    color: red;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.dismiss-btn:hover {
+    color: darkred;
+}
+
+/* Tooltip Styling */
+[data-bs-toggle="tooltip"] {
+    cursor: pointer;
 }

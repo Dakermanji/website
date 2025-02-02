@@ -17,8 +17,15 @@ class FollowNotification {
 
 	// Get unread notifications for a user
 	static async getUnreadNotifications(userId) {
-		const query = `SELECT * FROM follows_notifications WHERE user_id = ? AND status = 'unread' ORDER BY created_at DESC`;
-		return promisePool.execute(query, [userId]);
+		const query = `
+        SELECT fn.*, u.username, u.email
+        FROM follows_notifications fn
+        JOIN users u ON fn.sender_id = u.id
+        WHERE fn.user_id = ? AND fn.status = 'unread'
+        ORDER BY fn.created_at DESC`;
+
+		const [rows] = await promisePool.execute(query, [userId]);
+		return rows;
 	}
 }
 

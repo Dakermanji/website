@@ -1,12 +1,5 @@
 //! controllers/friendsController.js
 
-import User from '../models/User.js';
-import FollowRequest from '../models/FollowRequest.js';
-import Block from '../models/Block.js';
-import Follow from '../models/Follow.js';
-import FollowNotification from '../models/FollowNotification.js';
-
-import validator from 'validator';
 import {
 	validateEmail,
 	getRecipient,
@@ -19,7 +12,7 @@ import {
 const GENERIC_MESSAGE =
 	'If email is in our database, your request was sent successfully!';
 
-export const addFriend = async (req, res) => {
+export const addFriend = async (req, res, next) => {
 	try {
 		const { email } = req.body;
 		const requesterId = req.user.id;
@@ -66,9 +59,6 @@ export const addFriend = async (req, res) => {
 		await createFollowRequest(requesterId, recipientId);
 		return res.status(200).json({ message: GENERIC_MESSAGE });
 	} catch (error) {
-		console.error('Error processing friend request:', error);
-		return res.status(500).json({
-			error: 'An error occurred while processing your request.',
-		});
+		next(errorHandler(error, req, res, next));
 	}
 };

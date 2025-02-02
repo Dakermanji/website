@@ -18,8 +18,26 @@
 		<!-- Display follow request message (success or error) -->
 		<div id="follow-message" class="mt-3" aria-live="polite"></div>
 		<div class="friends-list">
-			<!-- Placeholder for future content -->
-			<h4>Notifications</h4>
+			<div class="dropdown">
+				<h4
+					class="btn-secondary dropdown-toggle"
+					type="button"
+					id="notificationsDropdown"
+					data-bs-toggle="dropdown"
+					aria-expanded="false"
+				>
+					Notifications
+				</h4>
+				<ul
+					class="dropdown-menu"
+					aria-labelledby="notificationsDropdown"
+					id="notifications-list"
+				>
+					<!-- Notifications Dropdown -->
+					<%- include('friends/notifications') %>
+				</ul>
+			</div>
+
 			<h4>Followers</h4>
 			<h4>Follows</h4>
 			<h4>Blocked</h4>

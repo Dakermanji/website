@@ -56,3 +56,14 @@ addFriendButton.addEventListener('click', async () => {
 		console.error('Error sending friend request:', error);
 	}
 });
+
+function markAsRead(notificationId) {
+	fetch(`/notifications/mark-as-read/${notificationId}`, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+	})
+		.then(() => location.reload())
+		.catch((err) =>
+			console.error('Error marking notification as read:', err)
+		);
+}
