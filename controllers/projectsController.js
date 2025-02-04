@@ -18,6 +18,7 @@ export const renderProjects = async (req, res, next) => {
 			styles: ['friends'],
 			scripts: ['helpers/modalHelper', 'friends'],
 			notifications,
+			follows: [],
 		});
 	} catch (error) {
 		next(errorHandler(error, req, res, next));
