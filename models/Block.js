@@ -21,6 +21,17 @@ class Blocks {
 		const query = `DELETE FROM blocks WHERE blocker_id = ? AND blocked_id = ?`;
 		return promisePool.execute(query, [blockerId, blockedId]);
 	}
+
+	// Get all users that a user has blocked
+	static async getBlocked(userId) {
+		const query = `
+            SELECT b.blocked_id, u.username, u.email
+            FROM blocks b
+            JOIN users u ON b.blocked_id = u.id
+            WHERE b.blocker_id = ?`;
+		const [rows] = await promisePool.execute(query, [userId]);
+		return rows;
+	}
 }
 
 export default Blocks;
