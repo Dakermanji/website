@@ -13,6 +13,7 @@ export const renderProjects = async (req, res, next) => {
 			? await FollowNotification.getUnreadNotifications(userId)
 			: [];
 		const follows = userId ? await Follow.getFollows(userId) : [];
+		const followers = userId ? await Follow.getFollowers(userId) : [];
 
 		res.render('projects', {
 			title: 'Projects - Dakermanji Web Dev',
@@ -21,6 +22,7 @@ export const renderProjects = async (req, res, next) => {
 			scripts: ['helpers/modalHelper', 'friends'],
 			notifications,
 			follows,
+			followers,
 		});
 	} catch (error) {
 		next(errorHandler(error, req, res, next));
