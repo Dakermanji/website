@@ -3,6 +3,7 @@
 import { navBar } from '../data/navBar.js';
 import FollowNotification from '../models/FollowNotification.js';
 import Follow from '../models/Follow.js';
+import Block from '../models/Block.js';
 import errorHandler from '../middlewares/errorHandler.js';
 
 export const renderProjects = async (req, res, next) => {
@@ -14,6 +15,7 @@ export const renderProjects = async (req, res, next) => {
 			: [];
 		const follows = userId ? await Follow.getFollows(userId) : [];
 		const followers = userId ? await Follow.getFollowers(userId) : [];
+		const blocks = userId ? await Block.getBlocked(userId) : [];
 
 		res.render('projects', {
 			title: 'Projects - Dakermanji Web Dev',
@@ -23,6 +25,7 @@ export const renderProjects = async (req, res, next) => {
 			notifications,
 			follows,
 			followers,
+			blocks,
 		});
 	} catch (error) {
 		next(errorHandler(error, req, res, next));
