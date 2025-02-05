@@ -68,6 +68,17 @@ class Follow {
 		const [rows] = await promisePool.execute(query, [userId]);
 		return rows;
 	}
+
+	// Get all followers of a user
+	static async getFollowers(userId) {
+		const query = `
+			SELECT f.follower_id, u.username, u.email, f.mutual_follow
+			FROM follows f
+			JOIN users u ON f.follower_id = u.id
+			WHERE f.followed_id = ?`;
+		const [rows] = await promisePool.execute(query, [userId]);
+		return rows;
+	}
 }
 
 export default Follow;
