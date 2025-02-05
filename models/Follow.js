@@ -57,6 +57,17 @@ class Follow {
 		const query = `DELETE FROM follows WHERE follower_id = ? AND followed_id = ?`;
 		return promisePool.execute(query, [followerId, followedId]);
 	}
+
+	// Get all follows for a user
+	static async getFollows(userId) {
+		const query = `
+			SELECT f.followed_id, u.username, u.email, f.mutual_follow
+			FROM follows f
+			JOIN users u ON f.followed_id = u.id
+			WHERE f.follower_id = ?`;
+		const [rows] = await promisePool.execute(query, [userId]);
+		return rows;
+	}
 }
 
 export default Follow;

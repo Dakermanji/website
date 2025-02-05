@@ -5,6 +5,7 @@ import FollowRequest from '../models/FollowRequest.js';
 import Block from '../models/Block.js';
 import Follow from '../models/Follow.js';
 import FollowNotification from '../models/FollowNotification.js';
+import validator from 'validator';
 
 // Validate email format
 export const validateEmail = (email) => {
@@ -83,4 +84,9 @@ export const handleMutualFollow = async (requesterId, recipientId) => {
 // Create a new follow request
 export const createFollowRequest = async (requesterId, recipientId) => {
 	await FollowRequest.createFollowRequest(requesterId, recipientId);
+	await FollowNotification.createFollowNotification(
+		recipientId,
+		requesterId,
+		'follow_request'
+	);
 };

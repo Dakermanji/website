@@ -8,6 +8,7 @@ import {
 	handleMutualFollow,
 	createFollowRequest,
 } from '../utils/friendsHelper.js';
+import errorHandler from '../middlewares/errorHandler.js';
 
 const GENERIC_MESSAGE =
 	'If email is in our database, your request was sent successfully!';

@@ -2,6 +2,7 @@
 
 import { navBar } from '../data/navBar.js';
 import FollowNotification from '../models/FollowNotification.js';
+import Follow from '../models/Follow.js';
 import errorHandler from '../middlewares/errorHandler.js';
 
 export const renderProjects = async (req, res, next) => {
@@ -11,6 +12,7 @@ export const renderProjects = async (req, res, next) => {
 		const notifications = userId
 			? await FollowNotification.getUnreadNotifications(userId)
 			: [];
+		const follows = userId ? await Follow.getFollows(userId) : [];
 
 		res.render('projects', {
 			title: 'Projects - Dakermanji Web Dev',
@@ -18,7 +20,7 @@ export const renderProjects = async (req, res, next) => {
 			styles: ['friends'],
 			scripts: ['helpers/modalHelper', 'friends'],
 			notifications,
-			follows: [],
+			follows,
 		});
 	} catch (error) {
 		next(errorHandler(error, req, res, next));
