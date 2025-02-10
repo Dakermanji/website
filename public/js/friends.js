@@ -79,20 +79,23 @@ async function removeNotification(notificationId) {
 				notificationElement.remove();
 			}
 
-			// Check if there are any remaining notifications
-			const notificationsList =
-				document.getElementById('notifications-list');
-			if (notificationsList.children.length === 0) {
-				// If no notifications remain, insert "No new notifications"
-				const emptyNotification = document.createElement('li');
-				emptyNotification.classList.add('dropdown-item', 'text-center');
-				emptyNotification.textContent = 'No new notifications';
-				notificationsList.appendChild(emptyNotification);
-			}
+			// Check if notifications list is empty
+			checkEmptyNotifications();
 		} else {
 			console.error('Failed to remove notification');
 		}
 	} catch (error) {
 		console.error('Error removing notification:', error);
+	}
+}
+
+// Function to check if notifications list is empty and insert placeholder
+function checkEmptyNotifications() {
+	const notificationsList = document.getElementById('notifications-list');
+	if (notificationsList.children.length === 0) {
+		const emptyNotification = document.createElement('li');
+		emptyNotification.classList.add('dropdown-item', 'text-center');
+		emptyNotification.textContent = 'No new notifications';
+		notificationsList.appendChild(emptyNotification);
 	}
 }
