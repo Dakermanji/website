@@ -21,6 +21,15 @@ class FollowNotification {
 		return result.affectedRows > 0;
 	}
 
+	// Get notification by ID
+	static async getNotificationById(notificationId) {
+		const query = `
+        SELECT * FROM follows_notifications
+        WHERE id = ?`;
+		const [rows] = await promisePool.execute(query, [notificationId]);
+		return rows[0];
+	}
+
 	// Get unread notifications for a user
 	static async getNotifications(userId) {
 		const query = `

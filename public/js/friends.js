@@ -57,13 +57,42 @@ addFriendButton.addEventListener('click', async () => {
 	}
 });
 
-function removeNotification(notificationId) {
-	fetch(`/notifications/remove/${notificationId}`, {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-	})
-		.then(() => location.reload())
-		.catch((err) =>
-			console.error('Error marking notification as read:', err)
+async function removeNotification(notificationId) {
+	try {
+		// Send DELETE request to backend
+		const response = await fetch(
+			`/notifications/remove/${notificationId}`,
+			{
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			}
 		);
+
+		if (response.ok) {
+			// Remove the notification from the DOM
+			const notificationElement = document.getElementById(
+				`notif-${notificationId}`
+			);
+			if (notificationElement) {
+				notificationElement.remove();
+			}
+
+			// Check if there are any remaining notifications
+			const notificationsList =
+				document.getElementById('notifications-list');
+			if (notificationsList.children.length === 0) {
+				// If no notifications remain, insert "No new notifications"
+				const emptyNotification = document.createElement('li');
+				emptyNotification.classList.add('dropdown-item', 'text-center');
+				emptyNotification.textContent = 'No new notifications';
+				notificationsList.appendChild(emptyNotification);
+			}
+		} else {
+			console.error('Failed to remove notification');
+		}
+	} catch (error) {
+		console.error('Error removing notification:', error);
+	}
 }

@@ -6,6 +6,7 @@ import indexRouter from '../routes/indexRoutes.js';
 import authRoutes from '../routes/authRoutes.js';
 import projectsRoutes from '../routes/projectsRoutes.js';
 import friendsRoutes from '../routes/friendsRoutes.js';
+import followNotifications from '../routes/followNotifications.js';
 
 const router = express.Router();
 
@@ -17,6 +18,7 @@ router.use('/', indexRouter);
 router.use('/auth', authRoutes);
 router.use('/projects', projectsRoutes);
 router.use('/friends', friendsRoutes);
+router.use('/followNotifications', followNotifications);
 
 // Step 3: Handle 404 errors
 // Catch-all route for unmatched paths

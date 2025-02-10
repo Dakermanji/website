@@ -3,7 +3,7 @@
 <ul>
 	<% if (notifications.length > 0) { %> <%
 	notifications.forEach(function(notification) { %>
-	<li class="dropdown-item d-flex">
+	<li id="notif-<%= notification.id %>" class="dropdown-item d-flex">
 		<span
 			class="dismiss-btn text-danger"
 			style="cursor: pointer"
