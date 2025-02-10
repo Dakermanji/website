@@ -23,6 +23,7 @@ notifications.forEach(function(notification) { %>
 			class="btn btn-sm btn-primary"
 			data-bs-toggle="tooltip"
 			title="Accept"
+			onclick="acceptFollow('<%= notification.id %>')"
 		>
 			<i class="bi bi-check-lg"></i>
 		</button>

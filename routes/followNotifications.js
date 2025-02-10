@@ -1,10 +1,14 @@
 //! routes/followNotifications.js
 
 import express from 'express';
-import { deleteNotification } from '../controllers/followNotificationsController.js';
+import {
+	acceptFollowNotification,
+	deleteFollowNotification,
+} from '../controllers/followNotificationsController.js';
 
 const router = express.Router();
 
-router.delete('/remove/:id', deleteNotification);
+router.post('/accept/:id', acceptFollowNotification);
+router.delete('/remove/:id', deleteFollowNotification);
 
 export default router;

@@ -1,28 +1,36 @@
 //! controllers/followNotificationsController.js
 
-import FollowNotification from '../models/FollowNotification.js';
+import { handleFollowNotificationAction } from '../utils/followNotificationsHelper.js';
 import errorHandler from '../middlewares/errorHandler.js';
-import FollowRequest from '../models/FollowRequest.js';
 
-export const deleteNotification = async (req, res, next) => {
+// Delete Follow Notification
+export const deleteFollowNotification = async (req, res, next) => {
 	try {
-		const notificationId = req.params.id;
-
-		const notification = await FollowNotification.getNotificationById(
-			notificationId
+		await handleFollowNotificationAction(
+			req.params.id,
+			req.user.id,
+			'delete'
 		);
-
-		if (notification.type === 'follow_request') {
-			await FollowRequest.deleteFollowRequest(
-				notification.sender_id,
-				notification.user_id
-			);
-		}
-
-		await FollowNotification.deleteNotification(notificationId);
-		res.status(200).json({ message: 'Notification removed successfully.' });
+		res.status(200).json({
+			message: 'Follow notification removed successfully.',
+		});
 	} catch (error) {
 		next(errorHandler(error, req, res, next));
-		res.status(500).json({ error: 'Error deleting notification.' });
+	}
+};
+
+// Accept Follow Request
+export const acceptFollowNotification = async (req, res, next) => {
+	try {
+		await handleFollowNotificationAction(
+			req.params.id,
+			req.user.id,
+			'accept'
+		);
+		res.status(200).json({
+			message: 'Follow request accepted successfully.',
+		});
+	} catch (error) {
+		next(errorHandler(error, req, res, next));
 	}
 };
