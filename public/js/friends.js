@@ -61,7 +61,7 @@ async function removeNotification(notificationId) {
 	try {
 		// Send DELETE request to backend
 		const response = await fetch(
-			`/notifications/remove/${notificationId}`,
+			`/followNotifications/remove/${notificationId}`,
 			{
 				method: 'DELETE',
 				headers: {

@@ -1,102 +1,101 @@
 <!-- views/partials/friends/notifications.ejs -->
 
-<ul>
-	<% if (notifications.length > 0) { %> <%
-	notifications.forEach(function(notification) { %>
-	<li id="notif-<%= notification.id %>" class="dropdown-item d-flex">
-		<span
-			class="dismiss-btn text-danger"
-			style="cursor: pointer"
-			onclick="removeNotification('<%= notification.id %>')"
+<% if (notifications.length > 0) { %> <%
+notifications.forEach(function(notification) { %>
+<li id="notif-<%= notification.id %>" class="dropdown-item d-flex">
+	<span
+		class="dismiss-btn text-danger"
+		style="cursor: pointer"
+		onclick="removeNotification('<%= notification.id %>')"
+		data-bs-toggle="tooltip"
+		title="Dismiss"
+	>
+		<i class="bi bi-x-lg"></i>
+	</span>
+	<p class="mb-0">
+		<strong><%= notification.username %></strong>
+		(<%= notification.email %>) <% if (notification.type ===
+		'follow_request') { %> has sent you a
+		<strong class="text-info">follow request</strong>
+	</p>
+	<div class="notification-buttons d-flex gap-2">
+		<button
+			class="btn btn-sm btn-primary"
 			data-bs-toggle="tooltip"
-			title="Dismiss"
+			title="Accept"
 		>
-			<i class="bi bi-x-lg"></i>
-		</span>
-		<p class="mb-0">
-			<strong><%= notification.username %></strong>
-			(<%= notification.email %>) <% if (notification.type ===
-			'follow_request') { %> has sent you a
-			<strong class="text-info">follow request</strong>
-		</p>
-		<div class="notification-buttons d-flex gap-2">
-			<button
-				class="btn btn-sm btn-primary"
-				data-bs-toggle="tooltip"
-				title="Accept"
-			>
-				<i class="bi bi-check-lg"></i>
-			</button>
-			<button
-				class="btn btn-sm btn-success"
-				data-bs-toggle="tooltip"
-				title="Follow Back"
-			>
-				<i class="bi bi-person-check-fill"></i>
-			</button>
-			<button
-				class="btn btn-sm btn-danger"
-				data-bs-toggle="tooltip"
-				title="Decline"
-			>
-				<i class="bi bi-x-circle-fill"></i>
-			</button>
-			<button
-				class="btn btn-sm btn-dark"
-				data-bs-toggle="tooltip"
-				title="Block"
-			>
-				<i class="bi bi-ban"></i>
-			</button>
-		</div>
-		<% } else if (notification.type === 'follow_accepted') { %>
-		<p>
-			has
-			<strong class="text-success">accepted</strong>
-			your follow request
-		</p>
-		<div class="notification-buttons d-flex gap-2">
-			<button
-				class="btn btn-sm btn-secondary"
-				data-bs-toggle="tooltip"
-				title="Unfollow"
-			>
-				<i class="bi bi-person-dash-fill"></i>
-			</button>
-			<button
-				class="btn btn-sm btn-dark"
-				data-bs-toggle="tooltip"
-				title="Block"
-			>
-				<i class="bi bi-ban"></i>
-			</button>
-		</div>
-		<% } else if (notification.type === 'follow_back') { %>
-		<p>
-			has
-			<strong class="text-success">accepted</strong>
-			your follow request and
-			<strong class="text-info">followed you back</strong>
-		</p>
-		<div class="notification-buttons d-flex gap-2">
-			<button
-				class="btn btn-sm btn-secondary"
-				data-bs-toggle="tooltip"
-				title="Unfollow Both"
-			>
-				<i class="bi bi-person-dash-fill"></i>
-			</button>
-			<button
-				class="btn btn-sm btn-dark"
-				data-bs-toggle="tooltip"
-				title="Block"
-			>
-				<i class="bi bi-ban"></i>
-			</button>
-		</div>
-		<% } %>
-	</li>
-	<% }); %> <% } else { %>
-	<li class="dropdown-item text-center">No new notifications</li>
+			<i class="bi bi-check-lg"></i>
+		</button>
+		<button
+			class="btn btn-sm btn-success"
+			data-bs-toggle="tooltip"
+			title="Follow Back"
+		>
+			<i class="bi bi-person-check-fill"></i>
+		</button>
+		<button
+			class="btn btn-sm btn-danger"
+			data-bs-toggle="tooltip"
+			title="Decline"
+			onclick="removeNotification('<%= notification.id %>')"
+		>
+			<i class="bi bi-x-circle-fill"></i>
+		</button>
+		<button
+			class="btn btn-sm btn-dark"
+			data-bs-toggle="tooltip"
+			title="Block"
+		>
+			<i class="bi bi-ban"></i>
+		</button>
+	</div>
+	<% } else if (notification.type === 'follow_accepted') { %>
+	<p>
+		has
+		<strong class="text-success">accepted</strong>
+		your follow request
+	</p>
+	<div class="notification-buttons d-flex gap-2">
+		<button
+			class="btn btn-sm btn-secondary"
+			data-bs-toggle="tooltip"
+			title="Unfollow"
+		>
+			<i class="bi bi-person-dash-fill"></i>
+		</button>
+		<button
+			class="btn btn-sm btn-dark"
+			data-bs-toggle="tooltip"
+			title="Block"
+		>
+			<i class="bi bi-ban"></i>
+		</button>
+	</div>
+	<% } else if (notification.type === 'follow_back') { %>
+	<p>
+		has
+		<strong class="text-success">accepted</strong>
+		your follow request and
+		<strong class="text-info">followed you back</strong>
+	</p>
+	<div class="notification-buttons d-flex gap-2">
+		<button
+			class="btn btn-sm btn-secondary"
+			data-bs-toggle="tooltip"
+			title="Unfollow Both"
+		>
+			<i class="bi bi-person-dash-fill"></i>
+		</button>
+		<button
+			class="btn btn-sm btn-dark"
+			data-bs-toggle="tooltip"
+			title="Block"
+		>
+			<i class="bi bi-ban"></i>
+		</button>
+	</div>
 	<% } %>
-</ul>
+</li>
+<% }); %> <% } else { %>
+<li class="dropdown-item text-center">No new notifications</li>
+<% } %>

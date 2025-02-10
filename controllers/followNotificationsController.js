@@ -14,7 +14,7 @@ export const deleteNotification = async (req, res, next) => {
 
 		if (notification.type === 'follow_request') {
 			await FollowRequest.deleteFollowRequest(
-				notification.snder_id,
+				notification.sender_id,
 				notification.user_id
 			);
 		}
