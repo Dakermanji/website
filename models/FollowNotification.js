@@ -10,20 +10,19 @@ class FollowNotification {
 	}
 
 	// Mark a notification as read
-	static async markAsRead(notificationId) {
-		const query = `UPDATE follows_notifications SET status = 'read' WHERE id = ?`;
+	static async deleteNotification(notificationId) {
+		const query = `DELETE FROM follows_notifications WHERE id = ?`;
 		return promisePool.execute(query, [notificationId]);
 	}
 
 	// Get unread notifications for a user
-	static async getUnreadNotifications(userId) {
+	static async getNotifications(userId) {
 		const query = `
         SELECT fn.*, u.username, u.email
         FROM follows_notifications fn
         JOIN users u ON fn.sender_id = u.id
-        WHERE fn.user_id = ? AND fn.status = 'unread'
+        WHERE fn.user_id = ?
         ORDER BY fn.created_at DESC`;
-
 		const [rows] = await promisePool.execute(query, [userId]);
 		return rows;
 	}

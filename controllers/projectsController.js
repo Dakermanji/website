@@ -11,7 +11,7 @@ export const renderProjects = async (req, res, next) => {
 		// Ensure user is logged in before fetching notifications
 		const userId = req.user?.id;
 		const notifications = userId
-			? await FollowNotification.getUnreadNotifications(userId)
+			? await FollowNotification.getNotifications(userId)
 			: [];
 		const follows = userId ? await Follow.getFollows(userId) : [];
 		const followers = userId ? await Follow.getFollowers(userId) : [];

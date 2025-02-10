@@ -10,7 +10,6 @@ CREATE TABLE follows_notifications (
         'follow_accepted',
         'follow_back'
     ) NOT NULL,
-    status ENUM('unread', 'read') DEFAULT 'unread',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,

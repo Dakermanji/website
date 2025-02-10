@@ -57,8 +57,8 @@ addFriendButton.addEventListener('click', async () => {
 	}
 });
 
-function markAsRead(notificationId) {
-	fetch(`/notifications/mark-as-read/${notificationId}`, {
+function removeNotification(notificationId) {
+	fetch(`/notifications/remove/${notificationId}`, {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 	})

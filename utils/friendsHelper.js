@@ -32,45 +32,42 @@ export const checkBlockStatus = async (blockerId, blockedId) => {
 
 // Check follow status and return an error message if applicable
 export const checkFollowStatus = async (requesterId, recipientId) => {
+	// Check if the requester is already following the recipient
 	const followStatus = await Follow.checkFollowStatus(
 		requesterId,
 		recipientId
 	);
+
 	if (followStatus === 'mutual')
+		// If both users follow each other, return mutual status
 		return 'You are already following each other.';
+
 	if (followStatus === 'following')
+		// If requester is already following the recipient, return message
 		return 'You are already following this user.';
 
-	const recipientFollowStatus = await FollowRequest.checkFollowStatus(
-		recipientId,
-		requesterId
-	);
-	if (recipientFollowStatus === 'following')
-		return 'This user is already following you.';
-
-	const alreadyRequestedFollow = await FollowRequest.checkFollowStatus(
+	// Check if requester has already sent a follow request to the recipient
+	const alreadyRequestedFollow = await FollowRequest.isRequestExists(
 		requesterId,
 		recipientId
 	);
-	if (alreadyRequestedFollow === 'pending')
+	if (alreadyRequestedFollow)
+		// If there's an there is an existing follow request, notify the user
 		return 'You have already sent a request to this user.';
 
+	// If no relationship exists, return null (meaning the request can proceed)
 	return null;
 };
 
 // Handle mutual follow scenario
 export const handleMutualFollow = async (requesterId, recipientId) => {
-	const alreadyAPendingFollow = await FollowRequest.checkFollowStatus(
+	const alreadyAPendingFollow = await FollowRequest.isRequestExists(
 		recipientId,
 		requesterId
 	);
-	if (alreadyAPendingFollow === 'pending') {
+	if (alreadyAPendingFollow) {
 		await Follow.createMutualFollow(requesterId, recipientId);
-		await FollowRequest.updateFollowRequestStatus(
-			recipientId,
-			requesterId,
-			'mutual request'
-		);
+		await FollowRequest.deleteFollowRequest(recipientId, requesterId);
 		await FollowNotification.createFollowNotification(
 			recipientId,
 			requesterId,

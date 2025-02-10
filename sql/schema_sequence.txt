@@ -2,8 +2,7 @@
 
 1. messages
 2. users
-3. follow_request_status
-4. follow_requests
-5. follows
-6. follows_notifications
-7. blocks
+3. follow_requests
+4. follows
+5. follows_notifications
+6. blocks

@@ -1,4 +1,5 @@
 <!-- views/partials/friends/notifications.ejs -->
+
 <ul>
 	<% if (notifications.length > 0) { %> <%
 	notifications.forEach(function(notification) { %>
@@ -6,7 +7,7 @@
 		<span
 			class="dismiss-btn text-danger"
 			style="cursor: pointer"
-			onclick="markAsRead('<%= notification.id %>')"
+			onclick="removeNotification('<%= notification.id %>')"
 			data-bs-toggle="tooltip"
 			title="Dismiss"
 		>
