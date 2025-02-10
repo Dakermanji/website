@@ -15,6 +15,12 @@ class FollowNotification {
 		return promisePool.execute(query, [notificationId]);
 	}
 
+	static async deleteNotificationByUserAndSenderIds(user_id, sender_id) {
+		const query = `DELETE FROM follows_notifications WHERE user_id = ? AND sender_id = ?`;
+		const [result] = await promisePool.execute(query, [user_id, sender_id]);
+		return result.affectedRows > 0;
+	}
+
 	// Get unread notifications for a user
 	static async getNotifications(userId) {
 		const query = `

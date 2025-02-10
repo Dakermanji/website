@@ -68,6 +68,10 @@ export const handleMutualFollow = async (requesterId, recipientId) => {
 	if (alreadyAPendingFollow) {
 		await Follow.createMutualFollow(requesterId, recipientId);
 		await FollowRequest.deleteFollowRequest(recipientId, requesterId);
+		await FollowNotification.deleteNotificationByUserAndSenderIds(
+			requesterId,
+			recipientId
+		);
 		await FollowNotification.createFollowNotification(
 			recipientId,
 			requesterId,
