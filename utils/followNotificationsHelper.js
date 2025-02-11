@@ -59,4 +59,12 @@ export const handleFollowNotificationAction = async (
 	if (action === 'block') {
 		await blockUser(notification.user_id, notification.sender_id);
 	}
+
+	if (action === 'unfollow' || action === 'unfollow_both') {
+		await Follow.removeFollow(notification.user_id, notification.sender_id);
+	}
+
+	if (action === 'unfollow_both') {
+		await Follow.removeFollow(notification.sender_id, notification.user_id);
+	}
 };

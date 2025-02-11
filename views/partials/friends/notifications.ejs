@@ -63,6 +63,7 @@ notifications.forEach(function(notification) { %>
 			class="btn btn-sm btn-secondary"
 			data-bs-toggle="tooltip"
 			title="Unfollow"
+			onclick="unfollowFromNotification('<%= notification.id %>')"
 		>
 			<i class="bi bi-person-dash-fill"></i>
 		</button>
@@ -87,6 +88,7 @@ notifications.forEach(function(notification) { %>
 			class="btn btn-sm btn-secondary"
 			data-bs-toggle="tooltip"
 			title="Unfollow Both"
+			onclick="unfollowBothFromNotification('<%= notification.id %>')"
 		>
 			<i class="bi bi-person-dash-fill"></i>
 		</button>

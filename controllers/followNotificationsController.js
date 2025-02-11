@@ -66,3 +66,35 @@ export const blockFollowNotification = async (req, res, next) => {
 		next(errorHandler(error, req, res, next));
 	}
 };
+
+// Unfollow User From Follow Notification
+export const unfollowFollowNotification = async (req, res, next) => {
+	try {
+		await handleFollowNotificationAction(
+			req.params.id,
+			req.user.id,
+			'unfollow'
+		);
+		res.status(200).json({
+			message: 'Unfollow user has been handled successfully.',
+		});
+	} catch (error) {
+		next(errorHandler(error, req, res, next));
+	}
+};
+
+// Unfollow for Both Users From Follow Notification
+export const unfollowBothFollowNotification = async (req, res, next) => {
+	try {
+		await handleFollowNotificationAction(
+			req.params.id,
+			req.user.id,
+			'unfollow_both'
+		);
+		res.status(200).json({
+			message: 'Unfollow for both users has been handled successfully.',
+		});
+	} catch (error) {
+		next(errorHandler(error, req, res, next));
+	}
+};

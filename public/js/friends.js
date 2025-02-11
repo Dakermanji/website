@@ -150,3 +150,31 @@ async function blockFromNotification(notificationId) {
 		console.error('Failed to block user.');
 	}
 }
+
+// Function to unfollow user from notification
+async function unfollowFromNotification(notificationId) {
+	if (
+		await handleRequest(
+			`/followNotifications/unfollow/${notificationId}`,
+			'POST'
+		)
+	) {
+		removeNotificationElement(notificationId);
+	} else {
+		console.error('Failed to unfollow user.');
+	}
+}
+
+// Function to unfollow user from notification
+async function unfollowBothFromNotification(notificationId) {
+	if (
+		await handleRequest(
+			`/followNotifications/unfollowBoth/${notificationId}`,
+			'POST'
+		)
+	) {
+		removeNotificationElement(notificationId);
+	} else {
+		console.error('Failed to unfollow user.');
+	}
+}
