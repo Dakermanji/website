@@ -57,38 +57,6 @@ addFriendButton.addEventListener('click', async () => {
 	}
 });
 
-async function removeNotification(notificationId) {
-	try {
-		// Send DELETE request to backend
-		const response = await fetch(
-			`/followNotifications/remove/${notificationId}`,
-			{
-				method: 'DELETE',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			}
-		);
-
-		if (response.ok) {
-			// Remove the notification from the DOM
-			const notificationElement = document.getElementById(
-				`notif-${notificationId}`
-			);
-			if (notificationElement) {
-				notificationElement.remove();
-			}
-
-			// Check if notifications list is empty
-			checkEmptyNotifications();
-		} else {
-			console.error('Failed to remove notification');
-		}
-	} catch (error) {
-		console.error('Error removing notification:', error);
-	}
-}
-
 // Function to check if notifications list is empty and insert placeholder
 function checkEmptyNotifications() {
 	const notificationsList = document.getElementById('notifications-list');
@@ -100,34 +68,58 @@ function checkEmptyNotifications() {
 	}
 }
 
-// Function to accept a follow request
-async function acceptFollow(notificationId) {
+// Generic function to handle API requests
+async function handleRequest(url, method, body = null) {
 	try {
-		const response = await fetch(
-			`/followNotifications/accept/${notificationId}`,
-			{
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			}
-		);
-
-		if (response.ok) {
-			// Remove the accepted follow request notification from the DOM
-			const notificationElement = document.getElementById(
-				`notif-${notificationId}`
-			);
-			if (notificationElement) {
-				notificationElement.remove();
-			}
-
-			// Check if notifications list is empty
-			checkEmptyNotifications();
-		} else {
-			console.error('Failed to accept follow request');
-		}
+		const options = {
+			method,
+			headers: { 'Content-Type': 'application/json' },
+		};
+		if (body) options.body = JSON.stringify(body);
+		const response = await fetch(url, options);
+		return response.ok;
 	} catch (error) {
-		console.error('Error accepting follow request:', error);
+		console.error(`Error with request to ${url}:`, error);
+		return false;
+	}
+}
+
+// Function to remove a notification from the DOM
+function removeNotificationElement(notificationId) {
+	const notificationElement = document.getElementById(
+		`notif-${notificationId}`
+	);
+	if (notificationElement) {
+		notificationElement.remove();
+		checkEmptyNotifications();
+	}
+}
+
+// Function to remove a notification
+async function removeNotification(notificationId) {
+	if (
+		await handleRequest(
+			`/followNotifications/remove/${notificationId}`,
+			'DELETE'
+		)
+	) {
+		removeNotificationElement(notificationId);
+	} else {
+		console.error('Failed to remove notification');
+	}
+}
+
+// Function to accept a follow request
+async function acceptFollow(notificationId, senderId) {
+	if (
+		await handleRequest(
+			`/followNotifications/accept/${notificationId}`,
+			'POST',
+			{ senderId }
+		)
+	) {
+		removeNotificationElement(notificationId);
+	} else {
+		console.error('Failed to accept follow request');
 	}
 }
