@@ -91,3 +91,23 @@ export const createFollowRequest = async (requesterId, recipientId) => {
 		'follow_request'
 	);
 };
+
+// Create a new follow request
+export const blockUser = async (blockerId, blockedId) => {
+	// Ddlete follows
+	await Follow.removeFollow(blockerId, blockedId);
+	await Follow.removeFollow(blockedId, blockerId);
+
+	// Delete notifications
+	await FollowNotification.deleteNotificationByUserAndSenderIds(
+		blockedId,
+		blockerId
+	);
+	await FollowNotification.deleteNotificationByUserAndSenderIds(
+		blockerId,
+		blockedId
+	);
+
+	// Create a block
+	await Block.blockUser(blockerId, blockedId);
+};

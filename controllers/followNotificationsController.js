@@ -50,3 +50,19 @@ export const acceptAndFollowBackFollowNotification = async (req, res, next) => {
 		next(errorHandler(error, req, res, next));
 	}
 };
+
+// Block User From Follow Notification
+export const blockFollowNotification = async (req, res, next) => {
+	try {
+		await handleFollowNotificationAction(
+			req.params.id,
+			req.user.id,
+			'block'
+		);
+		res.status(200).json({
+			message: 'Follow request accepted and followed back successfully.',
+		});
+	} catch (error) {
+		next(errorHandler(error, req, res, next));
+	}
+};

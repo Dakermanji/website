@@ -133,6 +133,20 @@ async function acceptAndFollowBack(notificationId) {
 	) {
 		removeNotificationElement(notificationId);
 	} else {
-		console.error('Failed to accept follow request');
+		console.error('Failed to accept follow request and follow back');
+	}
+}
+
+// Function to block user from notification
+async function blockFromNotification(notificationId) {
+	if (
+		await handleRequest(
+			`/followNotifications/block/${notificationId}`,
+			'POST'
+		)
+	) {
+		removeNotificationElement(notificationId);
+	} else {
+		console.error('Failed to block user.');
 	}
 }

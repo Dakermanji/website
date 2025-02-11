@@ -3,7 +3,7 @@
 import FollowNotification from '../models/FollowNotification.js';
 import FollowRequest from '../models/FollowRequest.js';
 import Follow from '../models/Follow.js';
-
+import { blockUser } from './friendsHelper.js';
 // General function to handle notification actions
 export const handleFollowNotificationAction = async (
 	notificationId,
@@ -54,5 +54,9 @@ export const handleFollowNotificationAction = async (
 			notification.user_id,
 			'follow_back'
 		);
+	}
+
+	if (action === 'block') {
+		await blockUser(notification.user_id, notification.sender_id);
 	}
 };
