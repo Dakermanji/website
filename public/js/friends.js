@@ -110,12 +110,25 @@ async function removeNotification(notificationId) {
 }
 
 // Function to accept a follow request
-async function acceptFollow(notificationId, senderId) {
+async function acceptFollow(notificationId) {
 	if (
 		await handleRequest(
 			`/followNotifications/accept/${notificationId}`,
-			'POST',
-			{ senderId }
+			'POST'
+		)
+	) {
+		removeNotificationElement(notificationId);
+	} else {
+		console.error('Failed to accept follow request');
+	}
+}
+
+// Function to accept follow request and follow back
+async function acceptAndFollowBack(notificationId) {
+	if (
+		await handleRequest(
+			`/followNotifications/acceptAndFollow/${notificationId}`,
+			'POST'
 		)
 	) {
 		removeNotificationElement(notificationId);

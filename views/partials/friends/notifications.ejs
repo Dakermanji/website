@@ -31,6 +31,7 @@ notifications.forEach(function(notification) { %>
 			class="btn btn-sm btn-success"
 			data-bs-toggle="tooltip"
 			title="Follow Back"
+			onclick="acceptAndFollowBack('<%= notification.id %>')"
 		>
 			<i class="bi bi-person-check-fill"></i>
 		</button>

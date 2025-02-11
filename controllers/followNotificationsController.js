@@ -34,3 +34,19 @@ export const acceptFollowNotification = async (req, res, next) => {
 		next(errorHandler(error, req, res, next));
 	}
 };
+
+// Accept And Follow Back Follow Request
+export const acceptAndFollowBackFollowNotification = async (req, res, next) => {
+	try {
+		await handleFollowNotificationAction(
+			req.params.id,
+			req.user.id,
+			'follow_back'
+		);
+		res.status(200).json({
+			message: 'Follow request accepted and followed back successfully.',
+		});
+	} catch (error) {
+		next(errorHandler(error, req, res, next));
+	}
+};

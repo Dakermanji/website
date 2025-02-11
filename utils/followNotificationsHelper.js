@@ -43,4 +43,16 @@ export const handleFollowNotificationAction = async (
 			'follow_accepted'
 		);
 	}
+
+	if (action === 'follow_back') {
+		await Follow.createMutualFollow(
+			notification.sender_id,
+			notification.user_id
+		);
+		await FollowNotification.createFollowNotification(
+			notification.sender_id,
+			notification.user_id,
+			'follow_back'
+		);
+	}
 };
