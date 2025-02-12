@@ -41,6 +41,17 @@ class FollowNotification {
 		const [rows] = await promisePool.execute(query, [userId]);
 		return rows;
 	}
+
+	// Update notification by id
+	static async updateNotificationType(senderId, userId, type) {
+		const query = `UPDATE follows_notifications SET type = ? WHERE sender_id = ? AND user_id = ?`;
+		const [result] = await promisePool.execute(query, [
+			type,
+			senderId,
+			userId,
+		]);
+		return result.affectedRows > 0; // Return true if an update happened
+	}
 }
 
 export default FollowNotification;

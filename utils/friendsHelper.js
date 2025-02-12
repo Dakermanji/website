@@ -108,6 +108,11 @@ export const blockUser = async (blockerId, blockedId) => {
 export const unfollowUser = async (followerId, followedId) => {
 	await Follow.removeFollow(followerId, followedId);
 	await Follow.updateMutualFollow(followerId, followedId, false);
+	await FollowNotification.updateNotificationType(
+		followedId,
+		followerId,
+		'follow_accepted'
+	);
 };
 
 // Unfollow User
