@@ -67,26 +67,18 @@ addFriendButton.addEventListener('click', async () => {
 	}
 });
 
-// Function to check if notifications list is empty and insert placeholder
-function checkEmptyNotifications() {
-	const notificationsList = document.getElementById('notifications-list');
-	if (notificationsList.children.length === 0) {
-		const emptyNotification = document.createElement('li');
-		emptyNotification.classList.add('dropdown-item', 'text-center');
-		emptyNotification.textContent = 'No new notifications';
-		notificationsList.appendChild(emptyNotification);
+// Function to restore the friends panel state on page load
+document.addEventListener('DOMContentLoaded', () => {
+	if (sessionStorage.getItem('friendsPanelOpen') === 'true') {
+		document.getElementById('friends-modal').classList.add('active');
+		sessionStorage.removeItem('friendsPanelOpen'); // Reset state after applying
 	}
-}
+});
 
-// Function to check if follows list is empty and insert placeholder
-function checkEmptyFollows() {
-	const followsList = document.getElementById('follows-list');
-	if (followsList.children.length === 0) {
-		const emptyFollow = document.createElement('li');
-		emptyFollow.classList.add('dropdown-item', 'text-center');
-		emptyFollow.textContent = 'No Follows.';
-		followsList.appendChild(emptyFollow);
-	}
+// Function to reload the page while keeping the friends panel open
+function refreshWithFriendsPanel() {
+	sessionStorage.setItem('friendsPanelOpen', 'true');
+	location.reload();
 }
 
 // Generic function to handle API requests
@@ -112,7 +104,7 @@ function removeNotificationElement(notificationId) {
 	);
 	if (notificationElement) {
 		notificationElement.remove();
-		checkEmptyNotifications();
+		refreshWithFriendsPanel();
 	}
 }
 
@@ -121,7 +113,7 @@ function removeFollowElement(followId) {
 	const followElement = document.getElementById(`follow-${followId}`);
 	if (followElement) {
 		followElement.remove();
-		checkEmptyFollows();
+		refreshWithFriendsPanel();
 	}
 }
 
@@ -133,7 +125,7 @@ async function removeNotification(notificationId) {
 			'DELETE'
 		)
 	) {
-		removeNotificationElement(notificationId);
+		refreshWithFriendsPanel();
 	} else {
 		console.error(errorMessages.removeNotification);
 	}
@@ -155,7 +147,7 @@ async function followNotificationsAction(action, notificationId) {
 				'POST'
 			)
 		) {
-			removeFollowElement(notificationId);
+			refreshWithFriendsPanel();
 		} else {
 			console.log(errorMessages[action] || errorMessages.notsure);
 		}
@@ -167,7 +159,7 @@ async function followNotificationsAction(action, notificationId) {
 async function followsAction(action, followId) {
 	if (['unfollow', 'unfollowBoth', 'block'].includes(action)) {
 		if (await handleRequest(`/follows/${action}/${followId}`, 'POST')) {
-			removeFollowElement(followId);
+			refreshWithFriendsPanel();
 		} else {
 			console.log(errorMessages[action] || errorMessages.notsure);
 		}
