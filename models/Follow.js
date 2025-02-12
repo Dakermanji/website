@@ -45,11 +45,20 @@ class Follow {
 	}
 
 	// Update mutual follow status
-	static async markAsMutualFollow(userAId, userBId) {
-		const query = `UPDATE follows SET mutual_follow = TRUE
-                       WHERE (follower_id = ? AND followed_id = ?)
-                       OR (follower_id = ? AND followed_id = ?)`;
-		return promisePool.execute(query, [userAId, userBId, userBId, userAId]);
+	static async updateMutualFollow(userAId, userBId, mutual = true) {
+		const query = `UPDATE follows SET mutual_follow = ?
+                   WHERE (follower_id = ? AND followed_id = ?)
+                      OR (follower_id = ? AND followed_id = ?)`;
+
+		const [result] = await promisePool.execute(query, [
+			mutual,
+			userAId,
+			userBId,
+			userBId,
+			userAId,
+		]);
+
+		return result.affectedRows > 0;
 	}
 
 	// Remove a follow entry (unfollow a user)
@@ -61,7 +70,7 @@ class Follow {
 	// Get all follows for a user
 	static async getFollows(userId) {
 		const query = `
-			SELECT f.followed_id, u.username, u.email, f.mutual_follow
+			SELECT f.id, f.followed_id, u.username, u.email, f.mutual_follow
 			FROM follows f
 			JOIN users u ON f.followed_id = u.id
 			WHERE f.follower_id = ?`;
@@ -72,12 +81,20 @@ class Follow {
 	// Get all followers of a user
 	static async getFollowers(userId) {
 		const query = `
-			SELECT f.follower_id, u.username, u.email, f.mutual_follow
+			SELECT f.id, f.follower_id, u.username, u.email, f.mutual_follow
 			FROM follows f
 			JOIN users u ON f.follower_id = u.id
 			WHERE f.followed_id = ?`;
 		const [rows] = await promisePool.execute(query, [userId]);
 		return rows;
+	}
+
+	// Get all followers of a user
+	static async getFollowerById(followId) {
+		const query = `
+			SELECT * FROM follows WHERE id = ?`;
+		const [rows] = await promisePool.execute(query, [followId]);
+		return rows[0];
 	}
 }
 

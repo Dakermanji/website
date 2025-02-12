@@ -5,6 +5,16 @@ const triggerButton = document.getElementById('trigger-friends-modal');
 const addFriendButton = document.getElementById('add-friend-btn');
 const friendEmailInput = document.getElementById('friend-email');
 const followMessage = document.getElementById('follow-message');
+const errorMessages = {
+	removeNotification: 'Failed to remove notification',
+	acceptFollowRequest: 'Failed to accept follow request',
+	acceptRequestAndFollowFollowBack:
+		'Failed to accept follow request and follow back',
+	block: 'Failed to block user',
+	unfollow: 'Failed to unfollow user',
+	unfollowBoth: 'Failed to unfollow both users',
+	notsure: 'Sorry, something went wrong.',
+};
 
 // Toggle modal visibility
 triggerButton.addEventListener('click', () => {
@@ -68,6 +78,17 @@ function checkEmptyNotifications() {
 	}
 }
 
+// Function to check if follows list is empty and insert placeholder
+function checkEmptyFollows() {
+	const followsList = document.getElementById('follows-list');
+	if (followsList.children.length === 0) {
+		const emptyFollow = document.createElement('li');
+		emptyFollow.classList.add('dropdown-item', 'text-center');
+		emptyFollow.textContent = 'No Follows.';
+		followsList.appendChild(emptyFollow);
+	}
+}
+
 // Generic function to handle API requests
 async function handleRequest(url, method, body = null) {
 	try {
@@ -95,6 +116,15 @@ function removeNotificationElement(notificationId) {
 	}
 }
 
+// Function to remove a notification from the DOM
+function removeFollowElement(followId) {
+	const followElement = document.getElementById(`follow-${followId}`);
+	if (followElement) {
+		followElement.remove();
+		checkEmptyFollows();
+	}
+}
+
 // Function to remove a notification
 async function removeNotification(notificationId) {
 	if (
@@ -105,76 +135,43 @@ async function removeNotification(notificationId) {
 	) {
 		removeNotificationElement(notificationId);
 	} else {
-		console.error('Failed to remove notification');
+		console.error(errorMessages.removeNotification);
 	}
 }
 
-// Function to accept a follow request
-async function acceptFollow(notificationId) {
+async function followNotificationsAction(action, notificationId) {
 	if (
-		await handleRequest(
-			`/followNotifications/accept/${notificationId}`,
-			'POST'
-		)
+		[
+			'accept',
+			'acceptAndFollow',
+			'block',
+			'unfollow',
+			'unfollowBoth',
+		].includes(action)
 	) {
-		removeNotificationElement(notificationId);
+		if (
+			await handleRequest(
+				`/followNotifications/${action}/${notificationId}`,
+				'POST'
+			)
+		) {
+			removeFollowElement(notificationId);
+		} else {
+			console.log(errorMessages[action] || errorMessages.notsure);
+		}
 	} else {
-		console.error('Failed to accept follow request');
+		console.error(errorMessages.notsure);
 	}
 }
 
-// Function to accept follow request and follow back
-async function acceptAndFollowBack(notificationId) {
-	if (
-		await handleRequest(
-			`/followNotifications/acceptAndFollow/${notificationId}`,
-			'POST'
-		)
-	) {
-		removeNotificationElement(notificationId);
+async function followsAction(action, followId) {
+	if (['unfollow', 'unfollowBoth', 'block'].includes(action)) {
+		if (await handleRequest(`/follows/${action}/${followId}`, 'POST')) {
+			removeFollowElement(followId);
+		} else {
+			console.log(errorMessages[action] || errorMessages.notsure);
+		}
 	} else {
-		console.error('Failed to accept follow request and follow back');
-	}
-}
-
-// Function to block user from notification
-async function blockFromNotification(notificationId) {
-	if (
-		await handleRequest(
-			`/followNotifications/block/${notificationId}`,
-			'POST'
-		)
-	) {
-		removeNotificationElement(notificationId);
-	} else {
-		console.error('Failed to block user.');
-	}
-}
-
-// Function to unfollow user from notification
-async function unfollowFromNotification(notificationId) {
-	if (
-		await handleRequest(
-			`/followNotifications/unfollow/${notificationId}`,
-			'POST'
-		)
-	) {
-		removeNotificationElement(notificationId);
-	} else {
-		console.error('Failed to unfollow user.');
-	}
-}
-
-// Function to unfollow user from notification
-async function unfollowBothFromNotification(notificationId) {
-	if (
-		await handleRequest(
-			`/followNotifications/unfollowBoth/${notificationId}`,
-			'POST'
-		)
-	) {
-		removeNotificationElement(notificationId);
-	} else {
-		console.error('Failed to unfollow user.');
+		console.error(errorMessages.notsure);
 	}
 }

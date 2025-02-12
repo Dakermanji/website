@@ -1,7 +1,7 @@
 <!-- views/partials/friends/follows.ejs -->
 
 <% if (follows.length > 0) { %> <% follows.forEach(follow => { %>
-<li class="dropdown-item d-flex flex-column gap-2">
+<li id="follow-<%= follow.id %>" class="dropdown-item d-flex flex-column gap-2">
 	<div>
 		<strong><%= follow.username %></strong>
 		(<%= follow.email %>)
@@ -11,6 +11,7 @@
 			class="btn btn-sm btn-danger"
 			data-bs-toggle="tooltip"
 			title="Unfollow"
+			onclick="followsAction('unfollow','<%= follow.id %>')"
 		>
 			<i class="bi bi-person-dash-fill"></i>
 		</button>
@@ -19,6 +20,7 @@
 			class="btn btn-sm btn-warning"
 			data-bs-toggle="tooltip"
 			title="Unfollow Both"
+			onclick="followsAction('unfollowBoth','<%= follow.id %>')"
 		>
 			<i class="bi bi-person-x-fill"></i>
 		</button>
@@ -27,6 +29,7 @@
 			class="btn btn-sm btn-dark"
 			data-bs-toggle="tooltip"
 			title="Block"
+			onclick="followsAction('block','<%= follow.id %>')"
 		>
 			<i class="bi bi-ban"></i>
 		</button>

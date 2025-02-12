@@ -60,7 +60,7 @@ export const blockFollowNotification = async (req, res, next) => {
 			'block'
 		);
 		res.status(200).json({
-			message: 'Follow request accepted and followed back successfully.',
+			message: 'Block user has beend has been handled successfully.',
 		});
 	} catch (error) {
 		next(errorHandler(error, req, res, next));

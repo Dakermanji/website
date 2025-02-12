@@ -3,7 +3,7 @@
 import FollowNotification from '../models/FollowNotification.js';
 import FollowRequest from '../models/FollowRequest.js';
 import Follow from '../models/Follow.js';
-import { blockUser } from './friendsHelper.js';
+import { blockUser, unfollowUser, unfollowBothUsers } from './friendsHelper.js';
 // General function to handle notification actions
 export const handleFollowNotificationAction = async (
 	notificationId,
@@ -60,11 +60,11 @@ export const handleFollowNotificationAction = async (
 		await blockUser(notification.user_id, notification.sender_id);
 	}
 
-	if (action === 'unfollow' || action === 'unfollow_both') {
-		await Follow.removeFollow(notification.user_id, notification.sender_id);
+	if (action === 'unfollow') {
+		await unfollowUser(notification.user_id, notification.sender_id);
 	}
 
 	if (action === 'unfollow_both') {
-		await Follow.removeFollow(notification.sender_id, notification.user_id);
+		await unfollowBothUsers(notification.user_id, notification.sender_id);
 	}
 };

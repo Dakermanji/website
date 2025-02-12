@@ -1,4 +1,4 @@
-//! routes/followNotifications.js
+//! routes/followNotificationsRoutes.js
 
 import express from 'express';
 import {

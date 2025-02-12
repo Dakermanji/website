@@ -23,7 +23,7 @@ notifications.forEach(function(notification) { %>
 			class="btn btn-sm btn-primary"
 			data-bs-toggle="tooltip"
 			title="Accept"
-			onclick="acceptFollow('<%= notification.id %>')"
+			onclick="followNotificationsAction('accept','<%= notification.id %>')"
 		>
 			<i class="bi bi-check-lg"></i>
 		</button>
@@ -31,7 +31,7 @@ notifications.forEach(function(notification) { %>
 			class="btn btn-sm btn-success"
 			data-bs-toggle="tooltip"
 			title="Follow Back"
-			onclick="acceptAndFollowBack('<%= notification.id %>')"
+			onclick="followNotificationsAction('acceptAndFollow','<%= notification.id %>')"
 		>
 			<i class="bi bi-person-check-fill"></i>
 		</button>
@@ -47,7 +47,7 @@ notifications.forEach(function(notification) { %>
 			class="btn btn-sm btn-dark"
 			data-bs-toggle="tooltip"
 			title="Block"
-			onclick="blockFromNotification('<%= notification.id %>')"
+			onclick="followNotificationsAction('block','<%= notification.id %>')"
 		>
 			<i class="bi bi-ban"></i>
 		</button>
@@ -63,7 +63,7 @@ notifications.forEach(function(notification) { %>
 			class="btn btn-sm btn-secondary"
 			data-bs-toggle="tooltip"
 			title="Unfollow"
-			onclick="unfollowFromNotification('<%= notification.id %>')"
+			onclick="followNotificationsAction('unfollow','<%= notification.id %>')"
 		>
 			<i class="bi bi-person-dash-fill"></i>
 		</button>
@@ -71,7 +71,7 @@ notifications.forEach(function(notification) { %>
 			class="btn btn-sm btn-dark"
 			data-bs-toggle="tooltip"
 			title="Block"
-			onclick="blockFromNotification('<%= notification.id %>')"
+			onclick="followNotificationsAction('block','<%= notification.id %>')"
 		>
 			<i class="bi bi-ban"></i>
 		</button>
@@ -88,7 +88,7 @@ notifications.forEach(function(notification) { %>
 			class="btn btn-sm btn-secondary"
 			data-bs-toggle="tooltip"
 			title="Unfollow Both"
-			onclick="unfollowBothFromNotification('<%= notification.id %>')"
+			onclick="followNotificationsAction('unfollowBoth','<%= notification.id %>')"
 		>
 			<i class="bi bi-person-dash-fill"></i>
 		</button>
@@ -96,7 +96,7 @@ notifications.forEach(function(notification) { %>
 			class="btn btn-sm btn-dark"
 			data-bs-toggle="tooltip"
 			title="Block"
-			onclick="blockFromNotification('<%= notification.id %>')"
+			onclick="followNotificationsAction('block','<%= notification.id %>')"
 		>
 			<i class="bi bi-ban"></i>
 		</button>

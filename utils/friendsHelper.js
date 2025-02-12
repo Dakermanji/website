@@ -92,22 +92,32 @@ export const createFollowRequest = async (requesterId, recipientId) => {
 	);
 };
 
-// Create a new follow request
+// Block User
 export const blockUser = async (blockerId, blockedId) => {
-	// Ddlete follows
-	await Follow.removeFollow(blockerId, blockedId);
-	await Follow.removeFollow(blockedId, blockerId);
+	// Delete follows
+	await unfollowBothUsers(blockerId, blockedId);
 
 	// Delete notifications
-	await FollowNotification.deleteNotificationByUserAndSenderIds(
-		blockedId,
-		blockerId
-	);
-	await FollowNotification.deleteNotificationByUserAndSenderIds(
-		blockerId,
-		blockedId
-	);
+	await deleteNotifications(blockedId, blockerId);
 
 	// Create a block
 	await Block.blockUser(blockerId, blockedId);
+};
+
+// Unfollow User
+export const unfollowUser = async (followerId, followedId) => {
+	await Follow.removeFollow(followerId, followedId);
+	await Follow.updateMutualFollow(followerId, followedId, false);
+};
+
+// Unfollow User
+export const unfollowBothUsers = async (userA, userB) => {
+	await Follow.removeFollow(userA, userB);
+	await Follow.removeFollow(userB, userA);
+	await deleteNotifications(userA, userB);
+};
+
+const deleteNotifications = async (userA, userB) => {
+	await FollowNotification.deleteNotificationByUserAndSenderIds(userA, userB);
+	await FollowNotification.deleteNotificationByUserAndSenderIds(userB, userA);
 };
