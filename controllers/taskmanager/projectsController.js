@@ -1,5 +1,6 @@
 //! controllers/taskmanager/projectsController.js
 import Project from '../../models/Project.js';
+import { navBar } from '../../data/navBar.js';
 
 // Create a new project
 export const createProject = async (req, res) => {
@@ -22,7 +23,12 @@ export const getProjects = async (req, res) => {
 	try {
 		const ownerId = req.user.id;
 		const projects = await Project.getProjectsByOwner(ownerId);
-		res.status(200).json({ projects });
+		res.render('taskmanager/index', {
+			title: 'Task Manager - DWD',
+			projects,
+			navBar: navBar.index,
+		});
+		// res.status(200).json({ projects });
 	} catch (error) {
 		res.status(500).json({ error: 'Error fetching projects' });
 	}
