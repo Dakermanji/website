@@ -1,10 +1,10 @@
-//! utils/friendsHelper.js
+//! utils/friends/friendsHelper.js
 
-import User from '../models/User.js';
-import FollowRequest from '../models/FollowRequest.js';
-import Block from '../models/Block.js';
-import Follow from '../models/Follow.js';
-import FollowNotification from '../models/FollowNotification.js';
+import User from '../../models/User.js';
+import FollowRequest from '../../models/FollowRequest.js';
+import Block from '../../models/Block.js';
+import Follow from '../../models/Follow.js';
+import FollowNotification from '../../models/FollowNotification.js';
 import validator from 'validator';
 
 // Validate email format

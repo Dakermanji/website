@@ -1,7 +1,7 @@
-//! controllers/followsController.js
+//! controllers/friends/followsController.js
 
-import { handleFollowsAction } from '../utils/followsHelper.js';
-import errorHandler from '../middlewares/errorHandler.js';
+import { handleFollowsAction } from '../../utils/friends/followsHelper.js';
+import errorHandler from '../../middlewares/errorHandler.js';
 
 // Block User From Follow Notification
 export const blockFollow = async (req, res, next) => {

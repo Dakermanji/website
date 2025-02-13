@@ -1,4 +1,4 @@
-//! routes/followNotificationsRoutes.js
+//! routes/friends/followNotificationsRoutes.js
 
 import express from 'express';
 import {
@@ -8,7 +8,7 @@ import {
 	blockFollowNotification,
 	unfollowFollowNotification,
 	unfollowBothFollowNotification,
-} from '../controllers/followNotificationsController.js';
+} from '../../controllers/friends/followNotificationsController.js';
 
 const router = express.Router();
 

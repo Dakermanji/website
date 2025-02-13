@@ -5,11 +5,11 @@ import express from 'express';
 import indexRouter from '../routes/indexRoutes.js';
 import authRoutes from '../routes/authRoutes.js';
 import projectsRoutes from '../routes/projectsRoutes.js';
-import friendsRoutes from '../routes/friendsRoutes.js';
-import followNotificationsRoutes from '../routes/followNotificationsRoutes.js';
-import followsRoutes from '../routes/followsRoutes.js';
-import followersRoutes from '../routes/followersRoutes.js';
-import blocksRoutes from '../routes/blocksRoutes.js';
+import friendsRoutes from '../routes/friends/friendsRoutes.js';
+import followNotificationsRoutes from '../routes/friends/followNotificationsRoutes.js';
+import followsRoutes from '../routes/friends/followsRoutes.js';
+import followersRoutes from '../routes/friends/followersRoutes.js';
+import blocksRoutes from '../routes/friends/blocksRoutes.js';
 
 const router = express.Router();
 

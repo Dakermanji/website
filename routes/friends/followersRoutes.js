@@ -1,11 +1,11 @@
-//! routes/followersRoutes.js
+//! routes/friends/followersRoutes.js
 
 import express from 'express';
 import {
 	blockFollower,
 	followBackFollower,
 	unfollowBothFollower,
-} from '../controllers/followersController.js';
+} from '../../controllers/friends/followersController.js';
 
 const router = express.Router();
 

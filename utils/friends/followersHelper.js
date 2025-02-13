@@ -1,6 +1,6 @@
-//! utils/followersHelper.js
+//! utils/friends/followersHelper.js
 
-import Follow from '../models/Follow.js';
+import Follow from '../../models/Follow.js';
 import {
 	blockUser,
 	followBackUser,

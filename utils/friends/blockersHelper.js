@@ -1,6 +1,6 @@
-//! utils/blockersHelper.js
+//! utils/friends/blockersHelper.js
 
-import Blocks from '../models/Block.js';
+import Blocks from '../../models/Block.js';
 import { createFollowRequest } from './friendsHelper.js';
 
 // General function to handle notification actions

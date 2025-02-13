@@ -1,7 +1,7 @@
-//! routes/friendsRoutes.js
+//! routes/friends/friendsRoutes.js
 
 import express from 'express';
-import { addFriend } from '../controllers/friendsController.js';
+import { addFriend } from '../../controllers/friends/friendsController.js';
 
 const router = express.Router();
 

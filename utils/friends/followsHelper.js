@@ -1,6 +1,6 @@
-//! utils/followsHelper.js
+//! utils/friends/followsHelper.js
 
-import Follow from '../models/Follow.js';
+import Follow from '../../models/Follow.js';
 import { blockUser, unfollowUser, unfollowBothUsers } from './friendsHelper.js';
 
 // General function to handle notification actions

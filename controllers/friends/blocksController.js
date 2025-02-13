@@ -1,7 +1,7 @@
-//! controllers/blocksController.js
+//! controllers/friends/blocksController.js
 
-import { handleBlockersAction } from '../utils/blockersHelper.js';
-import errorHandler from '../middlewares/errorHandler.js';
+import { handleBlockersAction } from '../../utils/friends/blockersHelper.js';
+import errorHandler from '../../middlewares/errorHandler.js';
 
 // Unblock User
 export const unblockBlocked = async (req, res, next) => {

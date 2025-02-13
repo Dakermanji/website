@@ -1,10 +1,10 @@
-//! routes/blocksRoutes.js
+//! routes/friends/blocksRoutes.js
 
 import express from 'express';
 import {
 	unblockBlocked,
 	unblockAndFollowBlocked,
-} from '../controllers/blocksController.js';
+} from '../../controllers/friends/blocksController.js';
 
 const router = express.Router();
 

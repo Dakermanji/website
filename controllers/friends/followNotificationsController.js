@@ -1,7 +1,7 @@
-//! controllers/followNotificationsController.js
+//! controllers/friends/followNotificationsController.js
 
-import { handleFollowNotificationAction } from '../utils/followNotificationsHelper.js';
-import errorHandler from '../middlewares/errorHandler.js';
+import { handleFollowNotificationAction } from '../../utils/friends/followNotificationsHelper.js';
+import errorHandler from '../../middlewares/errorHandler.js';
 
 // Delete Follow Notification
 export const deleteFollowNotification = async (req, res, next) => {
