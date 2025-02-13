@@ -1,0 +1,30 @@
+<!-- views/taskmanager/partials/task_board.ejs -->
+
+<div class="row mt-3">
+	<% ['todo', 'in_progress', 'done'].forEach(status => { %>
+	<div class="col-md-4">
+		<h4 class="text-center">
+			<% if (status === 'todo') { %>To Do<% } %> <% if (status ===
+			'in_progress') { %>In Progress<% } %> <% if (status === 'done') {
+			%>Done<% } %>
+		</h4>
+		<div class="task-column" id="<%= status %>">
+			<% tasks.filter(task => task.status === status).forEach(task => { %>
+			<div
+				class="task-card"
+				draggable="true"
+				data-task-id="<%= task.id %>"
+			>
+				<p><strong><%= task.name %></strong></p>
+				<p class="text-muted">
+					Assigned to: <%= task.assigned_to || 'Unassigned' %>
+				</p>
+				<p class="text-muted">
+					Due: <%= task.due_date || 'No deadline' %>
+				</p>
+			</div>
+			<% }); %>
+		</div>
+	</div>
+	<% }); %>
+</div>

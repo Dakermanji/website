@@ -1,0 +1,13 @@
+<!-- views/taskmanager/index.ejs -->
+
+<!-- Header -->
+<%- include('../partials/header') %>
+
+<div class="container mt-4">
+	<h2>Task Manager</h2>
+	<a href="/projects/create" class="btn btn-primary">Create New Project</a>
+
+	<%- include('./partials/project_list', { projects }) %>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,18 @@
+<!-- views/taskmanager/board.ejs -->
+
+<%- include('../partials/header') %>
+
+<div class="container mt-4">
+	<h2><%= project.name %> - Kanban Board</h2>
+	<button
+		class="btn btn-success"
+		data-bs-toggle="modal"
+		data-bs-target="#taskModal"
+	>
+		Add Task
+	</button>
+
+	<%- include('./partials/task_board', { tasks }) %>
+</div>
+
+<%- include('../partials/modals') %> <%- include('../partials/footer') %>

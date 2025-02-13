@@ -1,0 +1,14 @@
+<!-- views/taskmanager/partials/project_list.ejs -->
+
+<div class="list-group mt-3">
+	<% if (projects.length > 0) { %> <% projects.forEach(project => { %>
+	<a
+		href="/projects/<%= project.id %>"
+		class="list-group-item list-group-item-action"
+	>
+		<%= project.name %>
+	</a>
+	<% }); %> <% } else { %>
+	<p class="text-muted">No projects found. Create one to get started.</p>
+	<% } %>
+</div>
