@@ -2,6 +2,7 @@
 
 /node_modules
 .env
+expected_projects.txt
 
 # Sentry Config File
 .sentryclirc

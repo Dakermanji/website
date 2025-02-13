@@ -6,3 +6,7 @@
 4. follows
 5. follows_notifications
 6. blocks
+7. projects
+8. tasks
+9. collaborations
+
