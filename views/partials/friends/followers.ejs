@@ -1,7 +1,10 @@
 <!-- views/partials/friends/followers.ejs -->
 
 <% if (followers.length > 0) { %> <% followers.forEach(follower => { %>
-<li class="dropdown-item d-flex flex-column gap-2">
+<li
+	id="follower-<%= follower.id %>"
+	class="dropdown-item d-flex flex-column gap-2"
+>
 	<div>
 		<strong><%= follower.username %></strong>
 		(<%= follower.email %>)
@@ -12,6 +15,7 @@
 			class="btn btn-sm btn-warning"
 			data-bs-toggle="tooltip"
 			title="Unfollow Both"
+			onclick="followersAction('unfollowBoth','<%= follower.id %>')"
 		>
 			<i class="bi bi-person-x-fill"></i>
 		</button>
@@ -20,6 +24,7 @@
 			class="btn btn-sm btn-success"
 			data-bs-toggle="tooltip"
 			title="Follow Back"
+			onclick="followersAction('followBack','<%= follower.id %>')"
 		>
 			<i class="bi bi-person-check-fill"></i>
 		</button>
@@ -28,6 +33,7 @@
 			class="btn btn-sm btn-danger"
 			data-bs-toggle="tooltip"
 			title="Remove"
+			onclick="followersAction('unfollowBoth','<%= follower.id %>')"
 		>
 			<i class="bi bi-person-dash-fill"></i>
 		</button>
@@ -36,6 +42,7 @@
 			class="btn btn-sm btn-dark"
 			data-bs-toggle="tooltip"
 			title="Block"
+			onclick="followersAction('block','<%= follower.id %>')"
 		>
 			<i class="bi bi-ban"></i>
 		</button>

@@ -3,9 +3,13 @@
 import { promisePool } from '../config/database.js';
 
 class FollowNotification {
-	// Create a notification
+	// Create or update a follow notification
 	static async createFollowNotification(userId, senderId, type) {
-		const query = `INSERT INTO follows_notifications (user_id, sender_id, type) VALUES (?, ?, ?)`;
+		const query = `
+        INSERT INTO follows_notifications (user_id, sender_id, type)
+        VALUES (?, ?, ?)
+        ON DUPLICATE KEY UPDATE type = VALUES(type), created_at = CURRENT_TIMESTAMP;
+    `;
 		return promisePool.execute(query, [userId, senderId, type]);
 	}
 
@@ -50,7 +54,7 @@ class FollowNotification {
 			senderId,
 			userId,
 		]);
-		return result.affectedRows > 0; // Return true if an update happened
+		return result.affectedRows > 0;
 	}
 }
 

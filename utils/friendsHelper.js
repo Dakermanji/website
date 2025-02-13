@@ -122,6 +122,18 @@ export const unfollowBothUsers = async (userA, userB) => {
 	await deleteNotifications(userA, userB);
 };
 
+// Follow Back User
+export const followBackUser = async (userA, userB) => {
+	await Follow.createFollow(userA, userB);
+	await FollowNotification.createFollowNotification(
+		userB,
+		userA,
+		'follow_back'
+	);
+	await Follow.updateMutualFollow(userA, userB, true);
+};
+
+// Delete Follow Notifications Between the Two Users
 const deleteNotifications = async (userA, userB) => {
 	await FollowNotification.deleteNotificationByUserAndSenderIds(userA, userB);
 	await FollowNotification.deleteNotificationByUserAndSenderIds(userB, userA);

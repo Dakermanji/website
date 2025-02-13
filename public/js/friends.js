@@ -97,26 +97,6 @@ async function handleRequest(url, method, body = null) {
 	}
 }
 
-// Function to remove a notification from the DOM
-function removeNotificationElement(notificationId) {
-	const notificationElement = document.getElementById(
-		`notif-${notificationId}`
-	);
-	if (notificationElement) {
-		notificationElement.remove();
-		refreshWithFriendsPanel();
-	}
-}
-
-// Function to remove a notification from the DOM
-function removeFollowElement(followId) {
-	const followElement = document.getElementById(`follow-${followId}`);
-	if (followElement) {
-		followElement.remove();
-		refreshWithFriendsPanel();
-	}
-}
-
 // Function to remove a notification
 async function removeNotification(notificationId) {
 	if (
@@ -159,6 +139,18 @@ async function followNotificationsAction(action, notificationId) {
 async function followsAction(action, followId) {
 	if (['unfollow', 'unfollowBoth', 'block'].includes(action)) {
 		if (await handleRequest(`/follows/${action}/${followId}`, 'POST')) {
+			refreshWithFriendsPanel();
+		} else {
+			console.log(errorMessages[action] || errorMessages.notsure);
+		}
+	} else {
+		console.error(errorMessages.notsure);
+	}
+}
+
+async function followersAction(action, followId) {
+	if (['followBack', 'unfollowBoth', 'block'].includes(action)) {
+		if (await handleRequest(`/followers/${action}/${followId}`, 'POST')) {
 			refreshWithFriendsPanel();
 		} else {
 			console.log(errorMessages[action] || errorMessages.notsure);

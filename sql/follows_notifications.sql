@@ -10,8 +10,9 @@ CREATE TABLE follows_notifications (
         'follow_accepted',
         'follow_back'
     ) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE KEY unique_user_sender (user_id, sender_id),
     INDEX idx_user_id (user_id)
 );

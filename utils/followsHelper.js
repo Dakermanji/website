@@ -5,7 +5,7 @@ import { blockUser, unfollowUser, unfollowBothUsers } from './friendsHelper.js';
 
 // General function to handle notification actions
 export const handleFollowsAction = async (followId, userId, action) => {
-	const follow = await Follow.getFollowerById(followId);
+	const follow = await Follow.getFollowById(followId);
 
 	if (!follow) {
 		throw { status: 404, message: 'This follow not found.' };

@@ -90,7 +90,7 @@ class Follow {
 	}
 
 	// Get all followers of a user
-	static async getFollowerById(followId) {
+	static async getFollowById(followId) {
 		const query = `
 			SELECT * FROM follows WHERE id = ?`;
 		const [rows] = await promisePool.execute(query, [followId]);
