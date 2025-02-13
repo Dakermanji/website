@@ -1,4 +1,4 @@
-//! routes/taskmanager/projectRoutes.js
+//! routes/taskmanager/projectsRoutes.js
 
 import express from 'express';
 import {

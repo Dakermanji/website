@@ -5,14 +5,18 @@ import express from 'express';
 import indexRouter from '../routes/indexRoutes.js';
 import authRoutes from '../routes/authRoutes.js';
 import projectsRoutes from '../routes/projectsRoutes.js';
+
+// import friends rounds
 import friendsRoutes from '../routes/friends/friendsRoutes.js';
 import followNotificationsRoutes from '../routes/friends/followNotificationsRoutes.js';
 import followsRoutes from '../routes/friends/followsRoutes.js';
 import followersRoutes from '../routes/friends/followersRoutes.js';
 import blocksRoutes from '../routes/friends/blocksRoutes.js';
-import projectsRoutes from '../routes/taskmanager/projectRoutes.js';
-import tasksRoutes from '../routes/taskmanager/taskRoutes.js';
-import collaborationsRoutes from '../routes/taskmanager/collaborationRoutes.js';
+
+// import taskmanager routes
+import projectsTMRoutes from '../routes/taskmanager/projectsRoutes.js';
+import tasksTMRoutes from '../routes/taskmanager/tasksRoutes.js';
+import collaborationsTMRoutes from '../routes/taskmanager/collaborationsRoutes.js';
 
 const router = express.Router();
 
@@ -32,9 +36,9 @@ router.use('/followers', followersRoutes);
 router.use('/blocks', blocksRoutes);
 
 // Task Manager
-router.use('/projects', projectsRoutes);
-router.use('/tasks', tasksRoutes);
-router.use('/collaborations', collaborationsRoutes);
+router.use('/taskmanager/projects', projectsTMRoutes);
+router.use('/taskmanager/tasks', tasksTMRoutes);
+router.use('/taskmanager/collaborations', collaborationsTMRoutes);
 
 // Step 3: Handle 404 errors
 // Catch-all route for unmatched paths

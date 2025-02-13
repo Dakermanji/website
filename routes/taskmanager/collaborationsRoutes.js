@@ -1,4 +1,4 @@
-//! routes/taskmanager/collaborationRoutes.js
+//! routes/taskmanager/collaborationsRoutes.js
 
 import express from 'express';
 import {
