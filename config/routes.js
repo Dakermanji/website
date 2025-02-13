@@ -9,6 +9,7 @@ import friendsRoutes from '../routes/friendsRoutes.js';
 import followNotificationsRoutes from '../routes/followNotificationsRoutes.js';
 import followsRoutes from '../routes/followsRoutes.js';
 import followersRoutes from '../routes/followersRoutes.js';
+import blocksRoutes from '../routes/blocksRoutes.js';
 
 const router = express.Router();
 
@@ -19,10 +20,13 @@ const router = express.Router();
 router.use('/', indexRouter);
 router.use('/auth', authRoutes);
 router.use('/projects', projectsRoutes);
+
+// Friends routes
 router.use('/friends', friendsRoutes);
 router.use('/followNotifications', followNotificationsRoutes);
 router.use('/follows', followsRoutes);
 router.use('/followers', followersRoutes);
+router.use('/blocks', blocksRoutes);
 
 // Step 3: Handle 404 errors
 // Catch-all route for unmatched paths

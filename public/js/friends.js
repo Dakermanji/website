@@ -14,6 +14,8 @@ const errorMessages = {
 	unfollow: 'Failed to unfollow user',
 	unfollowBoth: 'Failed to unfollow both users',
 	notsure: 'Sorry, something went wrong.',
+	unblock: 'Failed to unblock user',
+	unblockFollow: 'Failed to unblock user and send a follow request',
 };
 
 // Toggle modal visibility
@@ -151,6 +153,18 @@ async function followsAction(action, followId) {
 async function followersAction(action, followId) {
 	if (['followBack', 'unfollowBoth', 'block'].includes(action)) {
 		if (await handleRequest(`/followers/${action}/${followId}`, 'POST')) {
+			refreshWithFriendsPanel();
+		} else {
+			console.log(errorMessages[action] || errorMessages.notsure);
+		}
+	} else {
+		console.error(errorMessages.notsure);
+	}
+}
+
+async function blocksAction(action, blockId) {
+	if (['unblock', 'unblockFollow'].includes(action)) {
+		if (await handleRequest(`/blocks/${action}/${blockId}`, 'POST')) {
 			refreshWithFriendsPanel();
 		} else {
 			console.log(errorMessages[action] || errorMessages.notsure);

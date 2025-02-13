@@ -25,12 +25,20 @@ class Blocks {
 	// Get all users that a user has blocked
 	static async getBlocked(userId) {
 		const query = `
-            SELECT b.blocked_id, u.username, u.email
+            SELECT b.id, b.blocked_id, u.username, u.email
             FROM blocks b
             JOIN users u ON b.blocked_id = u.id
             WHERE b.blocker_id = ?`;
 		const [rows] = await promisePool.execute(query, [userId]);
 		return rows;
+	}
+
+	// Get a Block row by ID
+	static async getBlockById(blockId) {
+		const query = `
+            SELECT * FROM blocks WHERE id = ?`;
+		const [rows] = await promisePool.execute(query, [blockId]);
+		return rows[0];
 	}
 }
 
