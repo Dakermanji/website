@@ -10,6 +10,9 @@ import followNotificationsRoutes from '../routes/friends/followNotificationsRout
 import followsRoutes from '../routes/friends/followsRoutes.js';
 import followersRoutes from '../routes/friends/followersRoutes.js';
 import blocksRoutes from '../routes/friends/blocksRoutes.js';
+import projectsRoutes from '../routes/taskmanager/projectRoutes.js';
+import tasksRoutes from '../routes/taskmanager/taskRoutes.js';
+import collaborationsRoutes from '../routes/taskmanager/collaborationRoutes.js';
 
 const router = express.Router();
 
@@ -27,6 +30,11 @@ router.use('/followNotifications', followNotificationsRoutes);
 router.use('/follows', followsRoutes);
 router.use('/followers', followersRoutes);
 router.use('/blocks', blocksRoutes);
+
+// Task Manager
+router.use('/projects', projectsRoutes);
+router.use('/tasks', tasksRoutes);
+router.use('/collaborations', collaborationsRoutes);
 
 // Step 3: Handle 404 errors
 // Catch-all route for unmatched paths
