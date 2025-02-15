@@ -3,11 +3,20 @@
 <!-- Header -->
 <%- include('../partials/header') %>
 
+<!-- Projects -->
 <div class="container mt-4">
 	<h2>Task Manager</h2>
-	<a href="/projects/create" class="btn btn-primary">Create New Project</a>
+	<button
+		class="btn btn-primary"
+		data-bs-toggle="modal"
+		data-bs-target="#createProjectModal"
+	>
+		Create New Project
+	</button>
 
 	<%- include('./partials/project_list', { projects }) %>
 </div>
 
-<%- include('../partials/footer') %>
+<!-- Modals -->
+<%- include('./partials/project_modal') %> <%- include('./partials/task_modal')
+%> <%- include('../partials/footer') %>

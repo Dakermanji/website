@@ -27,6 +27,8 @@ export const getProjects = async (req, res) => {
 			title: 'Task Manager - DWD',
 			projects,
 			navBar: navBar.index,
+			scripts: ['helpers/modalHelper'],
+			styles: ['taskmanager/modals'],
 		});
 		// res.status(200).json({ projects });
 	} catch (error) {
