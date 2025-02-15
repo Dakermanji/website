@@ -2,6 +2,7 @@
 
 import Project from '../../models/Project.js';
 import Task from '../../models/Task.js';
+import Collaboration from '../../models/Collaboration.js';
 import { navBar } from '../../data/navBar.js';
 
 // Create a new project
@@ -53,6 +54,7 @@ export const getBoard = async (req, res) => {
 		const { id } = req.params;
 		const project = await Project.getProjectById(id);
 		const tasks = await Task.getTasksByProjectId(id);
+		const collaborators = await Collaboration.getProjectCollaborators(id);
 
 		if (!project) {
 			return res.status(404).json({ error: 'Project not found' });
@@ -63,6 +65,7 @@ export const getBoard = async (req, res) => {
 			project,
 			tasks,
 			navBar: navBar.index,
+			collaborators,
 			scripts: ['helpers/modalHelper', 'taskmanager'],
 			styles: ['taskmanager/modals'],
 		});

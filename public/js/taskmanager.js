@@ -36,6 +36,8 @@ const createProjectForm = document.getElementById('createProjectForm');
 
 const createTaskForm = document.getElementById('taskForm');
 
+const addCollaboratorForm = document.getElementById('addCollaboratorForm');
+
 createProjectForm?.addEventListener('submit', async (e) => {
 	e.preventDefault();
 
@@ -88,5 +90,67 @@ createTaskForm?.addEventListener('submit', async (e) => {
 		}
 	} catch (error) {
 		console.error('Error creating task:', error);
+	}
+});
+
+async function addCollaborator(projectId, userId, role) {
+	try {
+		const response = await fetch('/taskmanager/collaborations/add', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ projectId, userId, role }),
+		});
+
+		if (response.ok) {
+			location.reload(); // Refresh UI after adding
+		} else {
+			console.error('Failed to add collaborator');
+		}
+	} catch (error) {
+		console.error('Error adding collaborator:', error);
+	}
+}
+
+async function removeCollaborator(userId, projectId) {
+	try {
+		const response = await fetch(
+			`/taskmanager/collaborations/remove/${userId}/${projectId}`,
+			{
+				method: 'DELETE',
+			}
+		);
+
+		if (response.ok) {
+			location.reload(); // Refresh UI after removal
+		} else {
+			console.error('Failed to remove collaborator');
+		}
+	} catch (error) {
+		console.error('Error removing collaborator:', error);
+	}
+}
+
+addCollaboratorForm?.addEventListener('submit', async (e) => {
+	e.preventDefault();
+
+	const formData = new FormData(addCollaboratorForm);
+	const projectId = formData.get('projectId');
+	const email = formData.get('email');
+	const role = formData.get('role');
+
+	try {
+		const response = await fetch('/taskmanager/collaborations/add', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ projectId, email, role }),
+		});
+
+		if (response.ok) {
+			location.reload(); // Refresh to show the new collaborator
+		} else {
+			console.error('Failed to add collaborator');
+		}
+	} catch (error) {
+		console.error('Error adding collaborator:', error);
 	}
 });

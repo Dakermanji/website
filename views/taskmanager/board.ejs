@@ -4,6 +4,30 @@
 
 <div class="container mt-4">
 	<h2><%= project.name %> - Kanban Board</h2>
+	<p>Team Members:</p>
+	<ul>
+		<% collaborators.forEach(collaborator => { %>
+		<li>
+			<%= collaborator.username %> - <%= collaborator.role %> <% if
+			(collaborator.role !== 'admin') { %>
+			<button
+				class="btn btn-danger btn-sm"
+				onclick="removeCollaborator('<%= collaborator.user_id %>', '<%= project.id %>')"
+			>
+				Remove
+			</button>
+			<% } %>
+		</li>
+		<% }); %>
+	</ul>
+	<button
+		class="btn btn-primary"
+		data-bs-toggle="modal"
+		data-bs-target="#addCollaboratorModal"
+	>
+		Add Collaborator
+	</button>
+
 	<button
 		class="btn btn-primary"
 		data-bs-toggle="modal"
@@ -15,4 +39,5 @@
 	<%- include('./partials/task_board', { tasks }) %>
 </div>
 
-<%- include('./partials/task_modal') %> <%- include('../partials/footer') %>
+<%- include('./partials/collaborator_modal') %> <%-
+include('./partials/task_modal') %> <%- include('../partials/footer') %>
