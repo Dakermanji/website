@@ -1,5 +1,7 @@
 //! controllers/taskmanager/projectsController.js
+
 import Project from '../../models/Project.js';
+import Task from '../../models/Task.js';
 import { navBar } from '../../data/navBar.js';
 
 // Create a new project
@@ -27,10 +29,9 @@ export const getProjects = async (req, res) => {
 			title: 'Task Manager - DWD',
 			projects,
 			navBar: navBar.index,
-			scripts: ['helpers/modalHelper'],
+			scripts: ['helpers/modalHelper', 'taskmanager'],
 			styles: ['taskmanager/modals'],
 		});
-		// res.status(200).json({ projects });
 	} catch (error) {
 		res.status(500).json({ error: 'Error fetching projects' });
 	}
@@ -44,5 +45,27 @@ export const deleteProject = async (req, res) => {
 		res.status(200).json({ message: 'Project deleted successfully' });
 	} catch (error) {
 		res.status(500).json({ error: 'Error deleting project' });
+	}
+};
+
+export const getBoard = async (req, res) => {
+	try {
+		const { id } = req.params;
+		const project = await Project.getProjectById(id);
+		const tasks = await Task.getTasksByProjectId(id);
+
+		if (!project) {
+			return res.status(404).json({ error: 'Project not found' });
+		}
+
+		res.render('taskmanager/board', {
+			title: `${project.name} - Kanban Board`,
+			project,
+			tasks,
+			navBar: navBar.taskmanager,
+			scripts: ['taskmanager'],
+		});
+	} catch (error) {
+		res.status(500).json({ error: 'Error fetching project board' });
 	}
 };

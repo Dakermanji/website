@@ -8,11 +8,17 @@
 			'in_progress') { %>In Progress<% } %> <% if (status === 'done') {
 			%>Done<% } %>
 		</h4>
-		<div class="task-column" id="<%= status %>">
+		<div
+			class="task-column"
+			id="<%= status %>"
+			ondragover="allowDrop(event)"
+			ondrop="drop(event, '<%= status %>')"
+		>
 			<% tasks.filter(task => task.status === status).forEach(task => { %>
 			<div
 				class="task-card"
 				draggable="true"
+				ondragstart="drag(event, '<%= task.id %>')"
 				data-task-id="<%= task.id %>"
 			>
 				<p><strong><%= task.name %></strong></p>
