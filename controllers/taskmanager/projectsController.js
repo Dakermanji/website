@@ -62,8 +62,9 @@ export const getBoard = async (req, res) => {
 			title: `${project.name} - Kanban Board`,
 			project,
 			tasks,
-			navBar: navBar.taskmanager,
-			scripts: ['taskmanager'],
+			navBar: navBar.index,
+			scripts: ['helpers/modalHelper', 'taskmanager'],
+			styles: ['taskmanager/modals'],
 		});
 	} catch (error) {
 		res.status(500).json({ error: 'Error fetching project board' });

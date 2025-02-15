@@ -6,10 +6,12 @@ import Task from '../../models/Task.js';
 export const createTask = async (req, res) => {
 	try {
 		const { projectId, name, assignedTo, dueDate } = req.body;
+		let assigned_to;
+		if (!assignedTo) assigned_to = req.user.id;
 		const task = await Task.createTask(
 			projectId,
 			name,
-			assignedTo,
+			assigned_to,
 			dueDate
 		);
 		res.status(201).json({ message: 'Task created successfully', task });

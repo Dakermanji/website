@@ -29,6 +29,12 @@ class Task {
 		const query = `DELETE FROM tasks WHERE id = ?`;
 		return promisePool.execute(query, [taskId]);
 	}
+
+	static async getTasksByProjectId(projectId) {
+		const query = `SELECT * FROM tasks WHERE project_id = ?`;
+		const [tasks] = await promisePool.execute(query, [projectId]);
+		return tasks;
+	}
 }
 
 export default Task;

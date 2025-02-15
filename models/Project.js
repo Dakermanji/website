@@ -19,6 +19,12 @@ class Project {
 		const query = `DELETE FROM projects WHERE id = ?`;
 		return promisePool.execute(query, [projectId]);
 	}
+
+	static async getProjectById(projectId) {
+		const query = `SELECT * FROM projects WHERE id = ?`;
+		const [projects] = await promisePool.execute(query, [projectId]);
+		return projects[0];
+	}
 }
 
 export default Project;

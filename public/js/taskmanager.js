@@ -34,6 +34,8 @@ async function drop(event, newStatus) {
 
 const createProjectForm = document.getElementById('createProjectForm');
 
+const createTaskForm = document.getElementById('taskForm');
+
 createProjectForm?.addEventListener('submit', async (e) => {
 	e.preventDefault();
 
@@ -54,5 +56,37 @@ createProjectForm?.addEventListener('submit', async (e) => {
 		}
 	} catch (error) {
 		console.error('Error creating project:', error);
+	}
+});
+
+createTaskForm?.addEventListener('submit', async (e) => {
+	e.preventDefault(); // Prevent default form submission
+
+	const formData = new FormData(createTaskForm);
+	const taskName = formData.get('name');
+	const assignedTo = formData.get('assigned_to');
+	const dueDate = formData.get('due_date');
+
+	const projectId = formData.get('projectId'); // Ensure the modal contains the project ID
+
+	try {
+		const response = await fetch('/taskmanager/tasks/create', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				projectId,
+				name: taskName,
+				assignedTo,
+				dueDate,
+			}),
+		});
+
+		if (response.ok) {
+			location.reload(); // Refresh UI to show the new task
+		} else {
+			console.error('Failed to create task');
+		}
+	} catch (error) {
+		console.error('Error creating task:', error);
 	}
 });
