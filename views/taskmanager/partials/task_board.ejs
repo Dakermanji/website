@@ -23,7 +23,7 @@
 			>
 				<p><strong><%= task.name %></strong></p>
 				<p class="text-muted">
-					Assigned to: <%= task.assigned_to || 'Unassigned' %>
+					Assigned to: <%= task.username || 'Unassigned' %>
 				</p>
 				<p class="text-muted">
 					Due: <%= task.due_date || 'No deadline' %>

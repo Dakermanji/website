@@ -31,7 +31,7 @@ class Task {
 	}
 
 	static async getTasksByProjectId(projectId) {
-		const query = `SELECT * FROM tasks WHERE project_id = ?`;
+		const query = `SELECT t.*, u.id, u.username FROM tasks t JOIN users u ON t.assigned_to = u.id WHERE project_id = ?`;
 		const [tasks] = await promisePool.execute(query, [projectId]);
 		return tasks;
 	}
