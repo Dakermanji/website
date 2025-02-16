@@ -14,7 +14,7 @@ class Collaboration {
 	}
 
 	static async getProjectCollaborators(projectId) {
-		const query = `SELECT c.*, u.username, u.email FROM collaborations c JOIN users u ON c.user_id = u.id WHERE c.project_id = ?`;
+		const query = `SELECT c.user_id, c.role, u.username, u.email FROM collaborations c JOIN users u ON c.user_id = u.id WHERE c.project_id = ?`;
 		const [collaborators] = await promisePool.execute(query, [projectId]);
 		return collaborators;
 	}

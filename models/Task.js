@@ -25,11 +25,12 @@ class Task {
 		]);
 	}
 
-	static async updateValueForATask(taskId, column, value) {
-		if (!['name', 'status', 'assigned_to', 'due_date'].includes(column)) {
-			return null;
+	static async updateValueForATask(taskId, field, value) {
+		const allowedFields = ['status', 'name', 'assigned_to', 'due_date'];
+		if (!allowedFields.includes(field)) {
+			throw new Error('Invalid field update');
 		}
-		const query = `UPDATE tasks SET ${column} = ? WHERE id = ?`;
+		const query = `UPDATE tasks SET ${field} = ? WHERE id = ?`;
 		return promisePool.execute(query, [value, taskId]);
 	}
 
@@ -39,7 +40,12 @@ class Task {
 	}
 
 	static async getTasksByProjectId(projectId) {
-		const query = `SELECT t.*, u.username FROM tasks t JOIN users u ON t.assigned_to = u.id WHERE project_id = ?`;
+		const query = `
+        SELECT t.id, t.name, t.status, t.due_date,
+               u.username
+        FROM tasks t
+        LEFT JOIN users u ON t.assigned_to = u.id
+        WHERE t.project_id = ?`;
 		const [tasks] = await promisePool.execute(query, [projectId]);
 		return tasks;
 	}
