@@ -213,3 +213,27 @@ addCollaboratorForm?.addEventListener('submit', async (e) => {
 		console.error('Error adding collaborator:', error);
 	}
 });
+
+const deleteProjectButton = document.getElementById('confirmDeleteProject');
+
+if (deleteProjectButton) {
+	deleteProjectButton.addEventListener('click', async () => {
+		const projectId =
+			document.getElementById('deleteProjectModal').dataset.projectId;
+
+		try {
+			const response = await axios.delete(
+				`/taskmanager/projects/${projectId}`
+			);
+
+			if (response.status === 200) {
+				console.log('Project deleted successfully');
+				window.location.href = '/taskmanager/projects'; // Redirect to project list
+			} else {
+				console.error('Failed to delete project');
+			}
+		} catch (error) {
+			console.error('Error deleting project:', error);
+		}
+	});
+}

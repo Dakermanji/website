@@ -1,6 +1,6 @@
 <!-- views/taskmanager/board.ejs -->
 
-<p%- include('../partials/header') %>
+<%- include('../partials/header') %>
 
 <div class="container mt-4">
 	<h2 class="mb-4 text-center"><%= project.name %></h2>
@@ -17,7 +17,13 @@
 				</strong>
 				<% if (userRole === 'owner') { %>
 
-				<button class="btn btn-danger btn-sm">DELETE</button>
+				<button
+					class="btn btn-danger btn-sm"
+					data-bs-toggle="modal"
+					data-bs-target="#deleteProjectModal"
+				>
+					DELETE
+				</button>
 				<% } %>
 				<div><%= owner.email %></div>
 			</li>
@@ -66,6 +72,7 @@
 </div>
 
 <%- include('./partials/collaborator_modal') %> <%-
-include('./partials/task_modal') %> <%- include('../partials/footer') %>
+include('./partials/task_modal') %> <%- include('../partials/footer') %> <%-
+include('./partials/delete_project_modal') %>
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

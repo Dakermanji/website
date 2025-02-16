@@ -18,6 +18,12 @@ class Collaboration {
 		const [collaborators] = await promisePool.execute(query, [projectId]);
 		return collaborators;
 	}
+
+	static async removeAllByProjectId(projectId) {
+		const query = `DELETE FROM collaborations WHERE project_id = ?`;
+		const [rows] = await promisePool.execute(query, [projectId]);
+		return rows.length > 0;
+	}
 }
 
 export default Collaboration;

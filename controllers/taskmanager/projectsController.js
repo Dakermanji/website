@@ -43,9 +43,26 @@ export const getProjects = async (req, res) => {
 export const deleteProject = async (req, res) => {
 	try {
 		const { id } = req.params;
+		const userId = req.user.id;
+
+		// Ensure user is the owner
+		const project = await Project.getProjectById(id);
+		if (!project)
+			return res.status(404).json({ error: 'Project not found' });
+		if (project.owner_id !== userId) {
+			return res.status(403).json({
+				error: 'Only the project owner can delete this project.',
+			});
+		}
+
+		// Delete all related tasks and collaborations before removing the project
+		await Task.deleteTasksByProjectId(id);
+		await Collaboration.removeAllByProjectId(id);
 		await Project.deleteProject(id);
+
 		res.status(200).json({ message: 'Project deleted successfully' });
 	} catch (error) {
+		console.error('Error deleting project:', error);
 		res.status(500).json({ error: 'Error deleting project' });
 	}
 };
