@@ -1,6 +1,7 @@
 //! controllers/taskmanager/taskController.js
 
 import Task from '../../models/Task.js';
+import User from '../../models/User.js';
 
 // Create a new task
 export const createTask = async (req, res) => {
@@ -8,6 +9,14 @@ export const createTask = async (req, res) => {
 		const { projectId, name, assignedTo, dueDate } = req.body;
 		let assigned_to;
 		if (!assignedTo) assigned_to = req.user.id;
+		else {
+			const user = await User.findByEmail(assignedTo);
+			if (!user)
+				res.status(404).json({
+					error: 'No user found with this email.',
+				});
+			else assigned_to = user.id;
+		}
 		const task = await Task.createTask(
 			projectId,
 			name,
