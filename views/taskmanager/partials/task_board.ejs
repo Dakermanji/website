@@ -11,10 +11,9 @@
 		<div
 			class="task-column"
 			id="<%= status %>"
-			ondragover="allowDrop(event)"
-			ondragenter="highlightDropZone('<%= status %>')"
-			ondragleave="removeDropHighlight('<%= status %>')"
-			ondrop="drop(event, '<%= status %>')"
+			ondragover="<% if (userRole === 'editor' || userRole === 'owner') { %>allowDrop(event)<% } %>"
+			ondrop="<% if (userRole === 'editor' || userRole === 'owner') { %>drop(event, '<%= status %>')<% } %>"
+			ondragleave="<% if (userRole === 'editor' || userRole === 'owner') { %>removeDropHighlight('<%= status %>')<% } %>"
 		>
 			<!-- Ensure visibility -->
 			<% tasks.filter(task => task.status === status).forEach(task => { %>

@@ -3,6 +3,7 @@
 import Project from '../../models/Project.js';
 import Task from '../../models/Task.js';
 import Collaboration from '../../models/Collaboration.js';
+import User from '../../models/User.js';
 import { navBar } from '../../data/navBar.js';
 
 // Create a new project
@@ -51,21 +52,47 @@ export const deleteProject = async (req, res) => {
 
 export const getBoard = async (req, res) => {
 	try {
+		if (!req.user) {
+			return res.redirect('/?auth=true'); // Redirect to login if not authenticated
+		}
 		const { id } = req.params;
+		const userId = req.user.id;
+
+		// Fetch project details
 		const project = await Project.getProjectById(id);
-		const tasks = await Task.getTasksByProjectId(id);
+		if (!project)
+			return res.status(404).json({ error: 'Project not found' });
+
+		// Check if user is owner or collaborator
+		const isOwner = project.owner_id === userId;
 		const collaborators = await Collaboration.getProjectCollaborators(id);
 
-		if (!project) {
-			return res.status(404).json({ error: 'Project not found' });
+		const owner = await User.findById(project.owner_id);
+
+		let userCollab;
+		if (!isOwner) {
+			userCollab = collaborators.find(
+				(collab) => collab.user_id === userId
+			);
 		}
+
+		if (!isOwner && !userCollab) {
+			return res.status(403).json({
+				error: 'Access denied: You are not part of this project.',
+			});
+		}
+
+		// Fetch tasks
+		const tasks = await Task.getTasksByProjectId(id);
 
 		res.render('taskmanager/board', {
 			title: `${project.name} - Kanban Board`,
 			project,
+			owner,
 			tasks,
 			navBar: navBar.index,
 			collaborators,
+			userRole: isOwner ? 'owner' : userCollab?.role,
 			scripts: ['helpers/modalHelper', 'taskmanager'],
 			styles: ['taskmanager/modals', 'taskmanager/tasks'],
 		});
