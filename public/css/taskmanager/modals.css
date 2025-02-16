@@ -7,3 +7,21 @@
 .modal-backdrop {
     z-index: 1
 }
+
+.modal-dialog {
+    max-width: 500px;
+}
+
+.modal-header {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+}

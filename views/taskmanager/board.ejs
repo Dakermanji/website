@@ -3,40 +3,49 @@
 <%- include('../partials/header') %>
 
 <div class="container mt-4">
-	<h2><%= project.name %> - Kanban Board</h2>
-	<p>Team Members:</p>
-	<ul>
-		<% collaborators.forEach(collaborator => { %>
-		<li>
-			<%= collaborator.username %> - <%= collaborator.role %> <% if
-			(collaborator.role !== 'admin') { %>
-			<button
-				class="btn btn-danger btn-sm"
-				onclick="removeCollaborator('<%= collaborator.user_id %>', '<%= project.id %>')"
+	<h2 class="mb-4 text-center"><%= project.name %> - Kanban Board</h2>
+
+	<!-- Team Members -->
+	<section class="mb-4">
+		<h4>Team Members</h4>
+		<ul class="list-group">
+			<% collaborators.forEach(collaborator => { %>
+			<li
+				class="list-group-item d-flex justify-content-between align-items-center"
 			>
-				Remove
-			</button>
-			<% } %>
-		</li>
-		<% }); %>
-	</ul>
-	<button
-		class="btn btn-primary"
-		data-bs-toggle="modal"
-		data-bs-target="#addCollaboratorModal"
-	>
-		Add Collaborator
-	</button>
+				<%= collaborator.username %> - <%= collaborator.role %> <% if
+				(collaborator.role !== 'admin') { %>
+				<button
+					class="btn btn-danger btn-sm"
+					onclick="removeCollaborator('<%= collaborator.user_id %>', '<%= project.id %>')"
+				>
+					Remove
+				</button>
+				<% } %>
+			</li>
+			<% }); %>
+		</ul>
+		<button
+			class="btn btn-primary mt-3"
+			data-bs-toggle="modal"
+			data-bs-target="#addCollaboratorModal"
+		>
+			Add Collaborator
+		</button>
+	</section>
 
-	<button
-		class="btn btn-primary"
-		data-bs-toggle="modal"
-		data-bs-target="#taskModal"
-	>
-		Add Task
-	</button>
+	<!-- Tasks Section -->
+	<section>
+		<button
+			class="btn btn-primary"
+			data-bs-toggle="modal"
+			data-bs-target="#taskModal"
+		>
+			Add Task
+		</button>
 
-	<%- include('./partials/task_board', { tasks }) %>
+		<%- include('./partials/task_board', { tasks }) %>
+	</section>
 </div>
 
 <%- include('./partials/collaborator_modal') %> <%-
