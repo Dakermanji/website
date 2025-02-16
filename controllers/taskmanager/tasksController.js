@@ -42,8 +42,11 @@ export const updateTaskStatus = async (req, res) => {
 		}
 
 		await Task.updateValueForATask(id, 'status', status);
-
-		res.status(200).json({ message: 'Task updated successfully' });
+		res.status(200).json({
+			message: 'Task updated successfully',
+			taskId: id,
+			newStatus: status,
+		});
 	} catch (error) {
 		console.error('Error updating task:', error);
 		res.status(500).json({ error: 'Error updating task' });

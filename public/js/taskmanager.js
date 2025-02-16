@@ -46,14 +46,14 @@ async function drop(event, newStatus) {
 	}
 
 	try {
-		const response = await fetch(`/taskmanager/tasks/${taskId}`, {
-			method: 'PUT',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ status: newStatus }),
+		const response = await axios.put(`/taskmanager/tasks/${taskId}`, {
+			status: newStatus,
 		});
 
-		if (response.ok) {
-			// Update UI without full reload
+		if (response.status === 200) {
+			console.log('Task status updated successfully');
+
+			// Move the task to the new column without reloading
 			const taskElement = document.querySelector(
 				`[data-task-id="${taskId}"]`
 			);
