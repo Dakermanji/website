@@ -1,0 +1,11 @@
+/*! public/css/taskmanager/tasks.css */
+
+.drop-highlight {
+    background-color: rgba(0, 123, 255, 0.1);
+    border: 2px dashed #007bff;
+}
+
+.task-column {
+    min-height: 200px;
+    border: 1px dashed #ccc
+}

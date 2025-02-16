@@ -67,7 +67,7 @@ export const getBoard = async (req, res) => {
 			navBar: navBar.index,
 			collaborators,
 			scripts: ['helpers/modalHelper', 'taskmanager'],
-			styles: ['taskmanager/modals'],
+			styles: ['taskmanager/modals', 'taskmanager/tasks'],
 		});
 	} catch (error) {
 		res.status(500).json({ error: 'Error fetching project board' });

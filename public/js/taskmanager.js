@@ -1,5 +1,28 @@
 //! public/js/taskmanager.js
 
+document.querySelectorAll('.task-card').forEach((task) => {
+	task.setAttribute('draggable', 'true');
+	task.addEventListener('dragstart', (event) => {
+		drag(event, task.dataset.taskId);
+	});
+});
+
+// Highlight full column when dragging over
+function highlightDropZone(status) {
+	const column = document.getElementById(status);
+	if (column) {
+		column.classList.add('drop-highlight');
+	}
+}
+
+// Remove highlight when leaving drop zone
+function removeDropHighlight(status) {
+	const column = document.getElementById(status);
+	if (column) {
+		column.classList.remove('drop-highlight');
+	}
+}
+
 // Dragging logic
 function drag(event, taskId) {
 	event.dataTransfer.setData('taskId', taskId);
@@ -13,6 +36,8 @@ function allowDrop(event) {
 // Handle drop and update task status
 async function drop(event, newStatus) {
 	event.preventDefault();
+	event.target.classList.remove('drop-highlight');
+
 	const taskId = event.dataTransfer.getData('taskId');
 
 	if (!taskId) {
@@ -28,7 +53,11 @@ async function drop(event, newStatus) {
 		});
 
 		if (response.ok) {
-			location.reload();
+			// Update UI without full reload
+			const taskElement = document.querySelector(
+				`[data-task-id="${taskId}"]`
+			);
+			document.getElementById(newStatus).appendChild(taskElement);
 		} else {
 			console.error('Failed to update task status');
 		}

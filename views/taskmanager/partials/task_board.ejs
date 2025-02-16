@@ -12,8 +12,9 @@
 			class="task-column"
 			id="<%= status %>"
 			ondragover="allowDrop(event)"
+			ondragenter="highlightDropZone('<%= status %>')"
+			ondragleave="removeDropHighlight('<%= status %>')"
 			ondrop="drop(event, '<%= status %>')"
-			style="min-height: 200px; border: 1px dashed #ccc"
 		>
 			<!-- Ensure visibility -->
 			<% tasks.filter(task => task.status === status).forEach(task => { %>
