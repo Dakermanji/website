@@ -32,6 +32,24 @@ export const updateTask = async (req, res) => {
 	}
 };
 
+export const updateTaskStatus = async (req, res) => {
+	try {
+		const { id } = req.params;
+		const { status } = req.body;
+
+		if (!['todo', 'in_progress', 'done'].includes(status)) {
+			return res.status(400).json({ error: 'Invalid task status' });
+		}
+
+		await Task.updateValueForATask(id, 'status', status);
+
+		res.status(200).json({ message: 'Task updated successfully' });
+	} catch (error) {
+		console.error('Error updating task:', error);
+		res.status(500).json({ error: 'Error updating task' });
+	}
+};
+
 // Delete a task
 export const deleteTask = async (req, res) => {
 	try {

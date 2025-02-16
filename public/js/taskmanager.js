@@ -15,6 +15,11 @@ async function drop(event, newStatus) {
 	event.preventDefault();
 	const taskId = event.dataTransfer.getData('taskId');
 
+	if (!taskId) {
+		console.error('Task ID is missing');
+		return;
+	}
+
 	try {
 		const response = await fetch(`/taskmanager/tasks/${taskId}`, {
 			method: 'PUT',
@@ -23,7 +28,7 @@ async function drop(event, newStatus) {
 		});
 
 		if (response.ok) {
-			location.reload(); // Refresh UI after update
+			location.reload();
 		} else {
 			console.error('Failed to update task status');
 		}

@@ -13,7 +13,9 @@
 			id="<%= status %>"
 			ondragover="allowDrop(event)"
 			ondrop="drop(event, '<%= status %>')"
+			style="min-height: 200px; border: 1px dashed #ccc"
 		>
+			<!-- Ensure visibility -->
 			<% tasks.filter(task => task.status === status).forEach(task => { %>
 			<div
 				class="task-card"
