@@ -45,6 +45,13 @@ async function drop(event, newStatus) {
 		return;
 	}
 
+	const taskElement = document.querySelector(`[data-task-id="${taskId}"]`);
+	const oldColumn = taskElement.parentElement; // Save old column in case rollback is needed
+
+	// Add transition effect before moving
+	taskElement.style.opacity = '0.5';
+	taskElement.style.transform = 'scale(0.95)';
+
 	try {
 		const response = await axios.put(`/taskmanager/tasks/${taskId}`, {
 			status: newStatus,
@@ -53,17 +60,29 @@ async function drop(event, newStatus) {
 		if (response.status === 200) {
 			console.log('Task status updated successfully');
 
-			// Move the task to the new column without reloading
-			const taskElement = document.querySelector(
-				`[data-task-id="${taskId}"]`
-			);
-			document.getElementById(newStatus).appendChild(taskElement);
+			// Move task visually to the new column
+			setTimeout(() => {
+				document.getElementById(newStatus).appendChild(taskElement);
+				taskElement.style.opacity = '1';
+				taskElement.style.transform = 'scale(1)';
+			}, 200);
 		} else {
 			console.error('Failed to update task status');
+			rollbackTaskMove(taskElement, oldColumn);
 		}
 	} catch (error) {
 		console.error('Error updating task:', error);
+		rollbackTaskMove(taskElement, oldColumn);
 	}
+}
+
+// Rollback task move if request fails
+function rollbackTaskMove(taskElement, oldColumn) {
+	setTimeout(() => {
+		oldColumn.appendChild(taskElement);
+		taskElement.style.opacity = '1';
+		taskElement.style.transform = 'scale(1)';
+	}, 200);
 }
 
 const createProjectForm = document.getElementById('createProjectForm');

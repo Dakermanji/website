@@ -1,11 +1,24 @@
 /*! public/css/taskmanager/tasks.css */
 
-.drop-highlight {
-    background-color: rgba(0, 123, 255, 0.1);
-    border: 2px dashed #007bff;
-}
-
 .task-column {
     min-height: 200px;
     border: 1px dashed #ccc
+}
+
+.drop-highlight {
+    background-color: rgba(0, 123, 255, 0.2);
+    border: 2px dashed #007bff;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.task-card {
+    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+    user-select: none;
+    /* Prevent text selection during drag */
+    touch-action: none;
+    /* Ensure smooth dragging on touch devices */
+}
+
+.task-card:active {
+    transform: scale(1.05);
 }
