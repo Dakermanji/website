@@ -65,6 +65,12 @@ async function drop(event, newStatus) {
 				document.getElementById(newStatus).appendChild(taskElement);
 				taskElement.style.opacity = '1';
 				taskElement.style.transform = 'scale(1)';
+				taskElement.classList.add('task-bounce');
+
+				// Remove bounce class after animation
+				setTimeout(() => {
+					taskElement.classList.remove('task-bounce');
+				}, 200);
 			}, 200);
 		} else {
 			console.error('Failed to update task status');

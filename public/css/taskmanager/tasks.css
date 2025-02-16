@@ -17,8 +17,30 @@
     /* Prevent text selection during drag */
     touch-action: none;
     /* Ensure smooth dragging on touch devices */
+    cursor: grab;
 }
 
 .task-card:active {
     transform: scale(1.05);
+    cursor: grabbing;
+}
+
+/* Smooth bounce effect when a task is dropped */
+@keyframes bounce {
+    0% {
+        transform: scale(1.05);
+    }
+
+    50% {
+        transform: scale(0.98);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Apply bounce when task is dropped */
+.task-bounce {
+    animation: bounce 0.2s ease-in-out;
 }
