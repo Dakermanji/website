@@ -24,6 +24,18 @@ class Collaboration {
 		const [rows] = await promisePool.execute(query, [projectId]);
 		return rows.length > 0;
 	}
+
+	static async getProjectsForUser(userId) {
+		const query = `
+        SELECT p.id, p.name, p.owner_id, u.username AS owner_username, c.role
+        FROM collaborations c
+        JOIN projects p ON c.project_id = p.id
+        JOIN users u ON p.owner_id = u.id
+        WHERE c.user_id = ?
+    `;
+		const [projects] = await promisePool.execute(query, [userId]);
+		return projects;
+	}
 }
 
 export default Collaboration;

@@ -4,7 +4,7 @@
 <%- include('../partials/header') %>
 
 <!-- Projects -->
-<div class="container mt-4">
+<div class="container m-4">
 	<h2>Task Manager</h2>
 	<button
 		class="btn btn-primary"
@@ -13,8 +13,10 @@
 	>
 		Create New Project
 	</button>
-
-	<%- include('./partials/project_list', { projects }) %>
+	<div class="mt-4">
+		<%- include('./partials/project_list', { ownedProjects,
+		collaboratedProjects }) %>
+	</div>
 </div>
 
 <!-- Modals -->

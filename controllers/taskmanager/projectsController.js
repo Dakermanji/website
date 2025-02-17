@@ -24,11 +24,20 @@ export const createProject = async (req, res) => {
 // Get all projects for the logged-in user
 export const getProjects = async (req, res) => {
 	try {
-		const ownerId = req.user.id;
-		const projects = await Project.getProjectsByOwner(ownerId);
+		const userId = req.user.id;
+
+		// Fetch projects the user owns
+		const ownedProjects = await Project.getProjectsByOwner(userId);
+
+		// Fetch projects where the user is a collaborator
+		const collaboratedProjects = await Collaboration.getProjectsForUser(
+			userId
+		);
+
 		res.render('taskmanager/index', {
 			title: 'Task Manager - DWD',
-			projects,
+			ownedProjects,
+			collaboratedProjects,
 			navBar: navBar.index,
 			scripts: ['helpers/modalHelper', 'taskmanager'],
 			styles: ['taskmanager/modals'],
