@@ -90,7 +90,10 @@ export const getBoard = async (req, res) => {
 
 		const isOwner = project.owner_id === userId;
 		const collaborators = await Collaboration.getProjectCollaborators(id);
-		const userCollab = collaborators.find((collab) => collab.id === userId);
+
+		const userCollab = collaborators.find(
+			(collab) => collab.user_id === userId
+		);
 
 		const owner = await User.findById(project.owner_id);
 
