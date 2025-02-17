@@ -1,48 +1,22 @@
 <!-- views/index.ejs -->
 
-<!-- Display Flash Messages -->
-<% if (success_msg && success_msg.length > 0) { %>
-<div
-	id="flash-message"
-	class="flash-message alert alert-success alert-dismissible fade show text-center"
-	role="alert"
->
-	<%= success_msg %>
-	<button
-		type="button"
-		class="btn-close"
-		data-bs-dismiss="alert"
-		aria-label="Close"
-	></button>
-</div>
-<% } else if (error_msg && error_msg.length > 0) { %>
-<div
-	id="flash-message"
-	class="flash-message alert alert-danger alert-dismissible fade show text-center"
-	role="alert"
->
-	<%- error_msg %>
-	<button
-		type="button"
-		class="btn-close"
-		data-bs-dismiss="alert"
-		aria-label="Close"
-	></button>
-</div>
-<% } %>
-
 <!-- Overlay -->
 <div class="background-overlay"></div>
 
 <!-- Hero Section -->
 <section class="hero-section">
 	<div class="hero-content">
-		<small class="role"
-			>Full Stack <span class="orange">W</span>eb
-			<span class="orange">D</span>eveloper</small
-		>
+		<small class="role">
+			Full Stack
+			<span class="orange">W</span>
+			eb
+			<span class="orange">D</span>
+			eveloper
+		</small>
 		<h1>
-			Hi, I'm Behnam <span class="orange">D</span>akermanji from Canada
+			Hi, I'm Behnam
+			<span class="orange">D</span>
+			akermanji from Canada
 			<img
 				src="/images/index/canada-flag.png"
 				alt="Canada Flag"
@@ -97,10 +71,12 @@
 					<ul>
 						<% contents.forEach(item => { %>
 						<li>
-							<span><%= item.period %></span><br />
-							<%= item.role %> for "<strong
-								><em><%= item.company || '' %></em></strong
-							>"<br />
+							<span><%= item.period %></span>
+							<br />
+							<%= item.role %> for "
+							<strong><em><%= item.company || '' %></em></strong>
+							"
+							<br />
 							<address><%= item.location || '' %></address>
 						</li>
 						<% }) %>
@@ -109,7 +85,8 @@
 					<ul>
 						<% contents.forEach(skill => { %>
 						<li>
-							<span><%= skill.name %></span><br />
+							<span><%= skill.name %></span>
+							<br />
 							<%= skill.description %>
 						</li>
 						<% }) %>
@@ -118,8 +95,10 @@
 					<ul>
 						<% contents.forEach(edu => { %>
 						<li>
-							<span><%= edu.year %></span><br />
-							<%= edu.title %><br />
+							<span><%= edu.year %></span>
+							<br />
+							<%= edu.title %>
+							<br />
 							<address><%= edu.institution %></address>
 						</li>
 						<% }) %>
