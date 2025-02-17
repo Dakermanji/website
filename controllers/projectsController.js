@@ -26,6 +26,8 @@ export const renderProjects = async (req, res, next) => {
 			follows,
 			followers,
 			blocks,
+			success_msg: res.locals.success,
+			error_msg: res.locals.error,
 		});
 	} catch (error) {
 		next(errorHandler(error, req, res, next));
