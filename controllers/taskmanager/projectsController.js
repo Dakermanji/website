@@ -13,11 +13,10 @@ export const createProject = async (req, res) => {
 		const ownerId = req.user.id;
 
 		const project = await Project.createProject(name, ownerId);
-		res.status(201).json({
-			message: 'Project created successfully',
-			project,
-		});
+		req.flash('success', 'Project created successfully!');
+		res.status(201).json({ project });
 	} catch (error) {
+		req.flash('error', 'Error creating project.');
 		res.status(500).json({ error: 'Error creating project' });
 	}
 };
@@ -33,9 +32,12 @@ export const getProjects = async (req, res) => {
 			navBar: navBar.index,
 			scripts: ['helpers/modalHelper', 'taskmanager'],
 			styles: ['taskmanager/modals'],
+			success_msg: res.locals.success,
+			error_msg: res.locals.error,
 		});
 	} catch (error) {
-		res.status(500).json({ error: 'Error fetching projects' });
+		req.flash('error', 'Error loading projects.');
+		res.redirect('/projects'); // Redirect to a safe page
 	}
 };
 
@@ -45,24 +47,27 @@ export const deleteProject = async (req, res) => {
 		const { id } = req.params;
 		const userId = req.user.id;
 
-		// Ensure user is the owner
 		const project = await Project.getProjectById(id);
-		if (!project)
+		if (!project) {
+			req.flash('error', 'Project not found.');
 			return res.status(404).json({ error: 'Project not found' });
+		}
 		if (project.owner_id !== userId) {
-			return res.status(403).json({
-				error: 'Only the project owner can delete this project.',
-			});
+			req.flash(
+				'error',
+				'Only the project owner can delete this project.'
+			);
+			return res.status(403).json({ error: 'Unauthorized' });
 		}
 
-		// Delete all related tasks and collaborations before removing the project
 		await Task.deleteTasksByProjectId(id);
 		await Collaboration.removeAllByProjectId(id);
 		await Project.deleteProject(id);
 
+		req.flash('success', 'Project deleted successfully!');
 		res.status(200).json({ message: 'Project deleted successfully' });
 	} catch (error) {
-		console.error('Error deleting project:', error);
+		req.flash('error', 'Error deleting project.');
 		res.status(500).json({ error: 'Error deleting project' });
 	}
 };
@@ -70,50 +75,49 @@ export const deleteProject = async (req, res) => {
 export const getBoard = async (req, res) => {
 	try {
 		if (!req.user) {
-			return res.redirect('/?auth=true'); // Redirect to login if not authenticated
+			req.flash('error', 'Please log in to access projects.');
+			return res.redirect('/?auth=true');
 		}
+
 		const { id } = req.params;
 		const userId = req.user.id;
 
-		// Fetch project details
 		const project = await Project.getProjectById(id);
-		if (!project)
-			return res.status(404).json({ error: 'Project not found' });
+		if (!project) {
+			req.flash('error', 'Project not found.');
+			return res.redirect('/taskmanager/projects');
+		}
 
-		// Check if user is owner or collaborator
 		const isOwner = project.owner_id === userId;
 		const collaborators = await Collaboration.getProjectCollaborators(id);
+		const userCollab = collaborators.find((collab) => collab.id === userId);
 
 		const owner = await User.findById(project.owner_id);
 
-		let userCollab;
-		if (!isOwner) {
-			userCollab = collaborators.find(
-				(collab) => collab.user_id === userId
-			);
-		}
-
 		if (!isOwner && !userCollab) {
-			return res.status(403).json({
-				error: 'Access denied: You are not part of this project.',
-			});
+			req.flash(
+				'error',
+				'Access denied: You are not part of this project.'
+			);
+			return res.redirect('/taskmanager/projects');
 		}
 
-		// Fetch tasks
 		const tasks = await Task.getTasksByProjectId(id);
-
 		res.render('taskmanager/board', {
 			title: `${project.name} - Kanban Board`,
 			project,
-			owner,
-			tasks,
 			navBar: navBar.index,
+			tasks,
+			owner,
 			collaborators,
 			userRole: isOwner ? 'owner' : userCollab?.role,
+			success_msg: res.locals.success,
+			error_msg: res.locals.error,
 			scripts: ['helpers/modalHelper', 'taskmanager'],
 			styles: ['taskmanager/modals', 'taskmanager/tasks'],
 		});
 	} catch (error) {
-		res.status(500).json({ error: 'Error fetching project board' });
+		req.flash('error', 'Error fetching project board.');
+		res.redirect('/taskmanager/projects');
 	}
 };

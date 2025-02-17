@@ -120,15 +120,15 @@ createProjectForm?.addEventListener('submit', async (e) => {
 	}
 });
 
+// Modify create task form to handle errors
 createTaskForm?.addEventListener('submit', async (e) => {
-	e.preventDefault(); // Prevent default form submission
+	e.preventDefault();
 
 	const formData = new FormData(createTaskForm);
 	const taskName = formData.get('name');
 	const assignedTo = formData.get('assigned_to');
 	const dueDate = formData.get('due_date');
-
-	const projectId = formData.get('projectId'); // Ensure the modal contains the project ID
+	const projectId = formData.get('projectId');
 
 	try {
 		const response = await fetch('/taskmanager/tasks/create', {
@@ -142,13 +142,19 @@ createTaskForm?.addEventListener('submit', async (e) => {
 			}),
 		});
 
+		const result = await response.json();
+
 		if (response.ok) {
-			location.reload(); // Refresh UI to show the new task
+			showFlashMessage('success', 'Task created successfully!');
+			location.reload();
 		} else {
-			console.error('Failed to create task');
+			showFlashMessage(
+				'danger',
+				result.error || 'Failed to create task.'
+			);
 		}
 	} catch (error) {
-		console.error('Error creating task:', error);
+		showFlashMessage('danger', 'Error creating task.');
 	}
 });
 
@@ -189,6 +195,7 @@ async function removeCollaborator(userId, projectId) {
 	}
 }
 
+// Modify add collaborator form to handle errors
 addCollaboratorForm?.addEventListener('submit', async (e) => {
 	e.preventDefault();
 
@@ -204,13 +211,19 @@ addCollaboratorForm?.addEventListener('submit', async (e) => {
 			body: JSON.stringify({ projectId, email, role }),
 		});
 
+		const result = await response.json();
+
 		if (response.ok) {
-			location.reload(); // Refresh to show the new collaborator
+			showFlashMessage('success', 'User added to project successfully!');
+			location.reload();
 		} else {
-			console.error('Failed to add collaborator');
+			showFlashMessage(
+				'danger',
+				result.error || 'Failed to add collaborator.'
+			);
 		}
 	} catch (error) {
-		console.error('Error adding collaborator:', error);
+		showFlashMessage('danger', 'Error adding collaborator.');
 	}
 });
 
@@ -236,4 +249,37 @@ if (deleteProjectButton) {
 			console.error('Error deleting project:', error);
 		}
 	});
+}
+
+async function handleTaskUpdate(taskId, updateData) {
+	try {
+		const response = await axios.put(
+			`/taskmanager/tasks/${taskId}`,
+			updateData
+		);
+
+		if (response.status === 200) {
+			showFlashMessage('success', 'Task updated successfully!');
+		} else {
+			showFlashMessage('danger', 'Failed to update task.');
+		}
+	} catch (error) {
+		showFlashMessage('danger', 'Error updating task.');
+	}
+}
+
+async function showFlashMessage(type, message) {
+	const flashContainer = document.createElement('div');
+	flashContainer.className = `flash-message alert alert-${type} alert-dismissible fade show text-center`;
+
+	flashContainer.innerHTML = `
+        ${message}
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+	document.body.appendChild(flashContainer);
+
+	setTimeout(() => {
+		flashContainer.classList.add('fade');
+		setTimeout(() => flashContainer.remove(), 500);
+	}, 4000);
 }

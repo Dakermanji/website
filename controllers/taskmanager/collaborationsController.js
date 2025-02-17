@@ -10,22 +10,27 @@ export const addCollaborator = async (req, res) => {
 		const { projectId, email, role } = req.body;
 		const userId = req.user.id;
 
-		// Ensure only project owner can add collaborators
 		const project = await Project.getProjectById(projectId);
 		if (!project || project.owner_id !== userId) {
+			req.flash('error', 'Only the project owner can add collaborators.');
 			return res.status(403).json({
 				error: 'Only the project owner can add collaborators.',
 			});
 		}
 
-		// Find user by email
 		const user = await User.findByEmail(email);
-		if (!user) return res.status(404).json({ error: 'User not found.' });
+		if (!user) {
+			req.flash('error', 'User not found.');
+			return res.status(404).json({ error: 'User not found.' });
+		}
 
-		// Add user as collaborator
 		await Collaboration.addUserToProject(projectId, user.id, role);
-		res.status(201).json({ message: 'User added to project successfully' });
+		req.flash('success', 'User added to project successfully!');
+		res.status(201).json({
+			success: 'User added to project successfully!',
+		});
 	} catch (error) {
+		req.flash('error', 'Error adding collaborator.');
 		res.status(500).json({ error: 'Error adding collaborator' });
 	}
 };
@@ -36,18 +41,20 @@ export const removeCollaborator = async (req, res) => {
 		const { userId, projectId } = req.params;
 		const ownerId = req.user.id;
 
-		// Ensure only project owner can remove collaborators
 		const project = await Project.getProjectById(projectId);
 		if (!project || project.owner_id !== ownerId) {
-			return res.status(403).json({
-				error: 'Only the project owner can remove collaborators.',
-			});
+			req.flash(
+				'error',
+				'Only the project owner can remove collaborators.'
+			);
+			return res.status(403).json({ error: 'Unauthorized' });
 		}
 
-		// Remove user as collaborator
 		await Collaboration.removeUserFromProject(projectId, userId);
+		req.flash('success', 'Collaborator removed successfully!');
 		res.status(200).json({ message: 'Collaborator removed successfully' });
 	} catch (error) {
+		req.flash('error', 'Error removing collaborator.');
 		res.status(500).json({ error: 'Error removing collaborator' });
 	}
 };
@@ -59,8 +66,14 @@ export const getCollaborators = async (req, res) => {
 		const collaborators = await Collaboration.getProjectCollaborators(
 			projectId
 		);
+
+		if (collaborators.length === 0) {
+			req.flash('warning', 'No collaborators found.');
+		}
+
 		res.status(200).json({ collaborators });
 	} catch (error) {
+		req.flash('error', 'Error fetching collaborators.');
 		res.status(500).json({ error: 'Error fetching collaborators' });
 	}
 };
