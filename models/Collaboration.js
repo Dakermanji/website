@@ -36,6 +36,17 @@ class Collaboration {
 		const [projects] = await promisePool.execute(query, [userId]);
 		return projects;
 	}
+
+	static async getCollaboration(projectId, userId) {
+		const query = `SELECT * FROM collaborations WHERE project_id = ? AND user_id = ? LIMIT 1`;
+		const [rows] = await promisePool.execute(query, [projectId, userId]);
+		return rows.length ? rows[0] : null;
+	}
+
+	static async updateUserRole(projectId, userId, role) {
+		const query = `UPDATE collaborations SET role = ? WHERE project_id = ? AND user_id = ?`;
+		return promisePool.execute(query, [role, projectId, userId]);
+	}
 }
 
 export default Collaboration;
