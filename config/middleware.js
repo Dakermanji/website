@@ -8,6 +8,7 @@ import { initializeFlash } from '../middlewares/flashMiddleware.js';
 import { customMiddlewares } from '../middlewares/customMiddlewares.js';
 import { initializePassport } from '../middlewares/passportMiddleware.js';
 import { injectUser } from '../middlewares/authMiddleware.js';
+import { ensureAuthenticated } from '../middlewares/authMiddleware.js';
 
 const applyMiddlewares = (app) => {
 	bodyParsers(app);
@@ -18,6 +19,7 @@ const applyMiddlewares = (app) => {
 	initializePassport(app);
 	customMiddlewares(app);
 	app.use(injectUser);
+	app.use(ensureAuthenticated);
 };
 
 export default applyMiddlewares;

@@ -7,6 +7,6 @@ import { ensureAuthenticated } from '../middlewares/authMiddleware.js';
 const router = express.Router();
 
 // Route to render the projects page
-router.get('/', ensureAuthenticated, renderProjects);
+router.get('/', renderProjects);
 
 export default router;

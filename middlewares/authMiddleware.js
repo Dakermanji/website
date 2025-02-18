@@ -1,6 +1,9 @@
 //! middlewares/authMiddleware.js
 
 export const ensureAuthenticated = (req, res, next) => {
+	if (req.path === '/' || req.path.startsWith('/auth')) {
+		return next(); // Skip authentication for these routes
+	}
 	if (req.isAuthenticated()) {
 		return next();
 	}
