@@ -7,6 +7,7 @@ import {
 	deleteProject,
 	getBoard,
 } from '../../controllers/taskmanager/projectsController.js';
+import { checkProjectAccess } from '../../middlewares/taskmanagerMiddleware.js';
 
 const router = express.Router();
 
@@ -15,9 +16,11 @@ router.post('/create', createProject);
 
 // Get all projects for the logged-in user
 router.get('/', getProjects); // Project list
-router.get('/:id', getBoard); // Task Board
+
+// Get a certain project
+router.get('/:id', checkProjectAccess('viewer'), getBoard); // Task Board
 
 // Delete a project
-router.delete('/:id', deleteProject);
+router.delete('/:id', checkProjectAccess('owner'), deleteProject);
 
 export default router;
