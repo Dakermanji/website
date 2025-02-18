@@ -33,9 +33,21 @@
 					"short", day: "numeric", year: "numeric" }) : "No deadline"
 					%>
 				</p>
+				<% if (userRole === 'editor' || userRole === 'owner') { %>
+				<button
+					class="btn btn-sm btn-warning edit-task-btn"
+					data-bs-toggle="modal"
+					data-bs-target="#editTaskModal"
+					onclick="openEditTaskModal('<%= task.id %>', '<%= task.name %>', '<%= task.email %>', '<%= task.due_date %>')"
+				>
+					<i class="bi bi-pencil"></i>
+					Edit
+				</button>
+				<% } %>
 			</div>
 			<% }); %>
 		</div>
 	</div>
 	<% }); %>
 </div>
+<%- include('./edit_task_modal') %>

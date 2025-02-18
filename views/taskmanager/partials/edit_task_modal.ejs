@@ -1,0 +1,57 @@
+<!-- views/taskmanager/partials/edit_task_modal.ejs -->
+
+<!-- Edit Task Modal -->
+<div id="editTaskModal" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header bg-secondary">
+				<h5 class="modal-title">Edit Task</h5>
+				<button
+					type="button"
+					class="btn-close"
+					data-bs-dismiss="modal"
+				></button>
+			</div>
+			<div class="modal-body">
+				<form id="editTaskForm">
+					<input type="hidden" name="taskId" id="edit-task-id" />
+
+					<div class="mb-3">
+						<label class="form-label">Task Name</label>
+						<input
+							type="text"
+							class="form-control"
+							name="name"
+							id="edit-task-name"
+							required
+						/>
+					</div>
+
+					<div class="mb-3">
+						<label class="form-label">Assigned To (Email)</label>
+						<input
+							type="email"
+							class="form-control"
+							name="assigned_to"
+							id="edit-task-assigned-to"
+						/>
+					</div>
+
+					<div class="mb-3">
+						<label class="form-label">Due Date</label>
+						<input
+							type="date"
+							class="form-control"
+							name="due_date"
+							id="edit-task-due-date"
+						/>
+					</div>
+
+					<button type="submit" class="btn btn-warning">
+						Update Task
+					</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

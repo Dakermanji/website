@@ -283,3 +283,56 @@ async function showFlashMessage(type, message) {
 		setTimeout(() => flashContainer.remove(), 500);
 	}, 4000);
 }
+
+// Open the edit task modal and populate it with task details
+function openEditTaskModal(taskId, name, assignedTo, dueDate) {
+	document.getElementById('edit-task-id').value = taskId;
+	document.getElementById('edit-task-name').value = name;
+	document.getElementById('edit-task-assigned-to').value = assignedTo || '';
+	document.getElementById('edit-task-due-date').value = dueDate
+		? new Date(dueDate).toISOString().split('T')[0]
+		: '';
+
+	const editTaskModal = new bootstrap.Modal(
+		document.getElementById('editTaskModal')
+	);
+	editTaskModal.show();
+}
+
+// Handle task update submission
+document
+	.getElementById('editTaskForm')
+	?.addEventListener('submit', async (e) => {
+		e.preventDefault();
+
+		const taskId = document.getElementById('edit-task-id').value;
+		const updatedTask = {
+			name: document.getElementById('edit-task-name').value,
+			assignedTo: document.getElementById('edit-task-assigned-to').value,
+			dueDate: document.getElementById('edit-task-due-date').value,
+		};
+
+		try {
+			const response = await fetch(
+				`/taskmanager/tasks/update/${taskId}`,
+				{
+					method: 'PUT',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(updatedTask),
+				}
+			);
+
+			if (response.ok) {
+				showFlashMessage('success', 'Task updated successfully!');
+				location.reload();
+			} else {
+				const result = await response.json();
+				showFlashMessage(
+					'danger',
+					result.error || 'Failed to update task.'
+				);
+			}
+		} catch (error) {
+			showFlashMessage('danger', 'Error updating task.');
+		}
+	});

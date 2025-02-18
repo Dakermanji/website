@@ -3,6 +3,7 @@
 import express from 'express';
 import {
 	createTask,
+	updateTask,
 	updateTaskStatus,
 	deleteTask,
 } from '../../controllers/taskmanager/tasksController.js';
@@ -14,6 +15,7 @@ router.post('/create', createTask);
 
 // Update a task's status, name, or assignment
 router.put('/:id', updateTaskStatus);
+router.put('/update/:id', updateTask);
 
 // Delete a task
 router.delete('/:id', deleteTask);

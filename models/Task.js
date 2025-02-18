@@ -14,15 +14,9 @@ class Task {
 		return result.insertId;
 	}
 
-	static async updateTask(taskId, { name, status, assignedTo, dueDate }) {
-		const query = `UPDATE tasks SET name = ?, status = ?, assigned_to = ?, due_date = ? WHERE id = ?`;
-		return promisePool.execute(query, [
-			name,
-			status,
-			assignedTo,
-			dueDate,
-			taskId,
-		]);
+	static async updateTask(taskId, { name, assigned_to, dueDate }) {
+		const query = `UPDATE tasks SET name = ?, assigned_to = ?, due_date = ? WHERE id = ?`;
+		return promisePool.execute(query, [name, assigned_to, dueDate, taskId]);
 	}
 
 	static async updateValueForATask(taskId, field, value) {
@@ -42,7 +36,7 @@ class Task {
 	static async getTasksByProjectId(projectId) {
 		const query = `
         SELECT t.id, t.name, t.status, t.due_date,
-               u.username
+               u.username, u.email
         FROM tasks t
         LEFT JOIN users u ON t.assigned_to = u.id
         WHERE t.project_id = ?`;

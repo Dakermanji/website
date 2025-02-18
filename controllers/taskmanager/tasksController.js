@@ -40,10 +40,10 @@ export const updateTask = async (req, res) => {
 		const { name, assignedTo, dueDate } = req.body;
 
 		let assigned_to = assignedTo
-			? await User.findByEmail(assignedTo)?.id
-			: req.user.id;
+			? (await User.findByEmail(assignedTo))?.id
+			: null;
 
-		if (!assigned_to) {
+		if (assignedTo && !assigned_to) {
 			req.flash('error', 'No user found with this email.');
 			return res
 				.status(404)
