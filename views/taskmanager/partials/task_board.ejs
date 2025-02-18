@@ -43,6 +43,13 @@
 					<i class="bi bi-pencil"></i>
 					Edit
 				</button>
+				<button
+					class="btn btn-sm btn-danger"
+					onclick="openDeleteTaskModal('<%= task.id %>')"
+				>
+					<i class="bi bi-trash"></i>
+					Delete
+				</button>
 				<% } %>
 			</div>
 			<% }); %>
@@ -50,4 +57,4 @@
 	</div>
 	<% }); %>
 </div>
-<%- include('./edit_task_modal') %>
+<%- include('./edit_task_modal') %> <%- include('./delete_task_modal') %>
