@@ -7,9 +7,7 @@
 		<% if (ownedProjects.length > 0){ %> <% ownedProjects.forEach(project =>
 		{ %>
 		<li class="list-group-item">
-			<a href="/taskmanager/projects/<%= project.id %>">
-				<%= project.name %>
-			</a>
+			<a href="/taskmanager/<%= project.id %>"><%= project.name %></a>
 			- Owner
 		</li>
 		<% })} else {%>
@@ -26,7 +24,7 @@
 		<% if (collaboratedProjects.length > 0){ %> <%
 		collaboratedProjects.forEach(project => { %>
 		<li class="list-group-item">
-			<a class="text-bold" href="/taskmanager/projects/<%= project.id %>">
+			<a class="text-bold" href="/taskmanager/<%= project.id %>">
 				<%= project.name %>
 			</a>
 			- <%= project.role.charAt(0).toUpperCase() + project.role.slice(1)

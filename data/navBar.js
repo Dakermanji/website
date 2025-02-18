@@ -36,7 +36,7 @@ export const navBar = {
 			id: 'trigger-friends-modal',
 		},
 		{
-			link: '/taskmanager/projects',
+			link: '/taskmanager',
 			icon: '<i class="bi bi-list-task"></i>',
 			text: 'Task Manager',
 		},

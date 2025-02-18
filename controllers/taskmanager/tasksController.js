@@ -36,7 +36,7 @@ export const createTask = async (req, res) => {
 // Update a task
 export const updateTask = async (req, res) => {
 	try {
-		const { id } = req.params;
+		const { taskId } = req.params;
 		const { name, assignedTo, dueDate } = req.body;
 
 		let assigned_to = assignedTo
@@ -50,7 +50,7 @@ export const updateTask = async (req, res) => {
 				.json({ error: 'No user found with this email.' });
 		}
 
-		await Task.updateTask(id, { name, assigned_to, dueDate });
+		await Task.updateTask(taskId, { name, assigned_to, dueDate });
 		req.flash('success', 'Task updated successfully!');
 		res.status(200).json({ message: 'Task updated successfully' });
 	} catch (error) {
@@ -61,7 +61,7 @@ export const updateTask = async (req, res) => {
 
 export const updateTaskStatus = async (req, res) => {
 	try {
-		const { id } = req.params;
+		const { taskId } = req.params;
 		const { status } = req.body;
 
 		if (!['todo', 'in_progress', 'done'].includes(status)) {
@@ -69,11 +69,11 @@ export const updateTaskStatus = async (req, res) => {
 			return res.status(400).json({ error: 'Invalid task status' });
 		}
 
-		await Task.updateValueForATask(id, 'status', status);
+		await Task.updateValueForATask(taskId, 'status', status);
 		req.flash('success', 'Task status updated successfully!');
 		res.status(200).json({
 			message: 'Task status updated successfully',
-			taskId: id,
+			taskId,
 			newStatus: status,
 		});
 	} catch (error) {
@@ -85,8 +85,8 @@ export const updateTaskStatus = async (req, res) => {
 // Delete a task
 export const deleteTask = async (req, res) => {
 	try {
-		const { id } = req.params;
-		await Task.deleteTask(id);
+		const { taskId } = req.params;
+		await Task.deleteTask(taskId);
 		req.flash('success', 'Task deleted successfully!');
 		res.status(200).json({ message: 'Task deleted successfully' });
 	} catch (error) {

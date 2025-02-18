@@ -36,9 +36,9 @@ router.use('/followers', followersRoutes);
 router.use('/blocks', blocksRoutes);
 
 // Task Manager
-router.use('/taskmanager/projects', projectsTMRoutes);
 router.use('/taskmanager/tasks', tasksTMRoutes);
 router.use('/taskmanager/collaborations', collaborationsTMRoutes);
+router.use('/taskmanager', projectsTMRoutes);
 
 // Step 3: Handle 404 errors
 // Catch-all route for unmatched paths

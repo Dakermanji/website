@@ -1,5 +1,10 @@
 //! public/js/taskmanager.js
 
+const createProjectForm = document.getElementById('createProjectForm');
+const createTaskForm = document.getElementById('taskForm');
+const addCollaboratorForm = document.getElementById('addCollaboratorForm');
+const deleteProjectButton = document.getElementById('confirmDeleteProject');
+
 document.querySelectorAll('.task-card').forEach((task) => {
 	task.setAttribute('draggable', 'true');
 	task.addEventListener('dragstart', (event) => {
@@ -91,12 +96,6 @@ function rollbackTaskMove(taskElement, oldColumn) {
 	}, 200);
 }
 
-const createProjectForm = document.getElementById('createProjectForm');
-
-const createTaskForm = document.getElementById('taskForm');
-
-const addCollaboratorForm = document.getElementById('addCollaboratorForm');
-
 createProjectForm?.addEventListener('submit', async (e) => {
 	e.preventDefault();
 
@@ -104,7 +103,7 @@ createProjectForm?.addEventListener('submit', async (e) => {
 	const projectName = formData.get('name');
 
 	try {
-		const response = await fetch('/taskmanager/projects/create', {
+		const response = await fetch('/taskmanager/create', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ name: projectName }),
@@ -227,21 +226,17 @@ addCollaboratorForm?.addEventListener('submit', async (e) => {
 	}
 });
 
-const deleteProjectButton = document.getElementById('confirmDeleteProject');
-
 if (deleteProjectButton) {
 	deleteProjectButton.addEventListener('click', async () => {
 		const projectId =
 			document.getElementById('deleteProjectModal').dataset.projectId;
 
 		try {
-			const response = await axios.delete(
-				`/taskmanager/projects/${projectId}`
-			);
+			const response = await axios.delete(`/taskmanager/${projectId}`);
 
 			if (response.status === 200) {
 				console.log('Project deleted successfully');
-				window.location.href = '/taskmanager/projects'; // Redirect to project list
+				window.location.href = '/taskmanager'; // Redirect to project list
 			} else {
 				console.error('Failed to delete project');
 			}

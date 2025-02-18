@@ -53,25 +53,11 @@ export const getProjects = async (req, res) => {
 // Delete a project
 export const deleteProject = async (req, res) => {
 	try {
-		const { id } = req.params;
-		const userId = req.user.id;
+		const { projectId } = req.params;
 
-		const project = await Project.getProjectById(id);
-		if (!project) {
-			req.flash('error', 'Project not found.');
-			return res.status(404).json({ error: 'Project not found' });
-		}
-		if (project.owner_id !== userId) {
-			req.flash(
-				'error',
-				'Only the project owner can delete this project.'
-			);
-			return res.status(403).json({ error: 'Unauthorized' });
-		}
-
-		await Task.deleteTasksByProjectId(id);
-		await Collaboration.removeAllByProjectId(id);
-		await Project.deleteProject(id);
+		await Task.deleteTasksByProjectId(projectId);
+		await Collaboration.removeAllByProjectId(projectId);
+		await Project.deleteProject(projectId);
 
 		req.flash('success', 'Project deleted successfully!');
 		res.status(200).json({ message: 'Project deleted successfully' });
@@ -83,22 +69,15 @@ export const deleteProject = async (req, res) => {
 
 export const getBoard = async (req, res) => {
 	try {
-		if (!req.user) {
-			req.flash('error', 'Please log in to access projects.');
-			return res.redirect('/?auth=true');
-		}
-
-		const { id } = req.params;
+		const { projectId } = req.params;
 		const userId = req.user.id;
 
-		const project = await Project.getProjectById(id);
-		if (!project) {
-			req.flash('error', 'Project not found.');
-			return res.redirect('/taskmanager/projects');
-		}
+		const project = await Project.getProjectById(projectId);
 
 		const isOwner = project.owner_id === userId;
-		const collaborators = await Collaboration.getProjectCollaborators(id);
+		const collaborators = await Collaboration.getProjectCollaborators(
+			projectId
+		);
 
 		const userCollab = collaborators.find(
 			(collab) => collab.user_id === userId
@@ -106,15 +85,7 @@ export const getBoard = async (req, res) => {
 
 		const owner = await User.findById(project.owner_id);
 
-		if (!isOwner && !userCollab) {
-			req.flash(
-				'error',
-				'Access denied: You are not part of this project.'
-			);
-			return res.redirect('/taskmanager/projects');
-		}
-
-		const tasks = await Task.getTasksByProjectId(id);
+		const tasks = await Task.getTasksByProjectId(projectId);
 		res.render('taskmanager/board', {
 			title: `${project.name} - Kanban Board`,
 			project,
@@ -130,6 +101,6 @@ export const getBoard = async (req, res) => {
 		});
 	} catch (error) {
 		req.flash('error', 'Error fetching project board.');
-		res.redirect('/taskmanager/projects');
+		res.redirect('/taskmanager');
 	}
 };

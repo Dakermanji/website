@@ -71,16 +71,6 @@ export const addCollaborator = async (req, res) => {
 export const removeCollaborator = async (req, res) => {
 	try {
 		const { userId, projectId } = req.params;
-		const ownerId = req.user.id;
-
-		const project = await Project.getProjectById(projectId);
-		if (!project || project.owner_id !== ownerId) {
-			req.flash(
-				'error',
-				'Only the project owner can remove collaborators.'
-			);
-			return res.status(403).json({ error: 'Unauthorized' });
-		}
 
 		await Collaboration.removeUserFromProject(projectId, userId);
 		req.flash('success', 'Collaborator removed successfully!');

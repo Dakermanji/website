@@ -2,6 +2,7 @@
 
 import Project from '../models/Project.js';
 import Collaboration from '../models/Collaboration.js';
+import Task from '../models/Task.js'; // Import Task to retrieve projectId from task
 
 /**
  * Middleware to check user permissions for a project.
@@ -10,14 +11,26 @@ import Collaboration from '../models/Collaboration.js';
 export const checkProjectAccess = (requiredRole) => {
 	return async (req, res, next) => {
 		try {
-			const { projectId } = req.params;
+			let projectId = req.params.projectId || req.body.projectId;
+
+			// If no projectId is provided, check if it's a task route (taskId is provided)
+			if (!projectId && req.params.taskId) {
+				const task = await Task.getTaskById(req.params.taskId);
+				if (task) projectId = task.project_id;
+			}
+
+			if (!projectId) {
+				req.flash('error', 'Invalid request: No project associated.');
+				return res.redirect('/taskmanager');
+			}
+
 			const userId = req.user.id;
 
 			// Fetch project details
 			const project = await Project.getProjectById(projectId);
 			if (!project) {
 				req.flash('error', 'Project not found.');
-				return res.redirect('/taskmanager/projects');
+				return res.redirect('/taskmanager');
 			}
 
 			// Owners have full access
@@ -32,12 +45,12 @@ export const checkProjectAccess = (requiredRole) => {
 			// Access control based on role
 			if (!collab && requiredRole !== 'viewer') {
 				req.flash('error', 'You do not have access to this project.');
-				return res.redirect('/taskmanager/projects');
+				return res.redirect('/taskmanager');
 			}
 
 			if (requiredRole === 'editor' && collab.role !== 'editor') {
 				req.flash('error', 'You do not have editor access.');
-				return res.redirect(`/taskmanager/projects/${projectId}`);
+				return res.redirect(`/taskmanager/${projectId}`);
 			}
 
 			// Allow access if the role requirement is met
