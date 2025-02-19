@@ -1,0 +1,57 @@
+/*! public/css/taskmanager/tasks.css */
+
+.task-column {
+    min-height: 200px;
+    border: 1px dashed #ccc;
+    background-color: #f8f9fa;
+    padding: 10px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.task-column.drop-highlight {
+    background-color: rgba(0, 123, 255, 0.15);
+    border-color: #0056b3;
+}
+
+.drop-highlight {
+    background-color: rgba(0, 123, 255, 0.2);
+    border: 2px dashed #007bff;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.task-card {
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    user-select: none;
+    touch-action: none;
+    cursor: grab;
+    transition: transform 0.2s ease-in-out, opacity 0.2s ease-in-out;
+}
+
+.task-card:active {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: grabbing;
+}
+
+/* Smooth bounce effect when a task is dropped */
+@keyframes bounce {
+    0% {
+        transform: scale(1.05);
+    }
+
+    50% {
+        transform: scale(0.98);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Apply bounce when task is dropped */
+.task-bounce {
+    animation: bounce 0.2s ease-in-out;
+}

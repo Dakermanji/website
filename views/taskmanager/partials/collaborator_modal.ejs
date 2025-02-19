@@ -1,0 +1,46 @@
+<!-- views/taskmanager/partials/collaborator_modal.ejs -->
+
+<!-- Add Collaborator Modal -->
+<div id="addCollaboratorModal" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Add Collaborator</h5>
+				<button
+					type="button"
+					class="btn-close"
+					data-bs-dismiss="modal"
+				></button>
+			</div>
+			<div class="modal-body">
+				<form id="addCollaboratorForm">
+					<input
+						type="hidden"
+						name="projectId"
+						value="<%= project.id %>"
+					/>
+
+					<div class="mb-3">
+						<label class="form-label">User Email</label>
+						<input
+							type="email"
+							class="form-control"
+							name="email"
+							required
+						/>
+					</div>
+
+					<div class="mb-3">
+						<label class="form-label">Role</label>
+						<select class="form-control" name="role">
+							<option value="editor">Editor</option>
+							<option value="viewer">Viewer</option>
+						</select>
+					</div>
+
+					<button type="submit" class="btn btn-primary">Add</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,23 @@
+<!-- views/taskmanager/index.ejs -->
+
+<!-- Header -->
+<%- include('../partials/header') %>
+
+<!-- Projects -->
+<div class="container m-4">
+	<h2>Task Manager</h2>
+	<button
+		class="btn btn-primary"
+		data-bs-toggle="modal"
+		data-bs-target="#createProjectModal"
+	>
+		Create New Project
+	</button>
+	<div class="mt-4">
+		<%- include('./partials/project_list', { ownedProjects,
+		collaboratedProjects }) %>
+	</div>
+</div>
+
+<!-- Modals -->
+<%- include('./partials/project_modal') %> <%- include('../partials/footer') %>

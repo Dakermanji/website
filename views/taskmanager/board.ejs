@@ -1,0 +1,78 @@
+<!-- views/taskmanager/board.ejs -->
+
+<%- include('../partials/header') %>
+
+<div class="container mt-4">
+	<h2 class="mb-4 text-center"><%= project.name %></h2>
+
+	<!-- Team Members -->
+	<section class="mb-4">
+		<h4>Team Members</h4>
+		<ul class="list-group">
+			<li
+				class="list-group-item d-flex justify-content-between align-items-center"
+			>
+				<strong class="text-primary">
+					<%= owner.username %> - owner
+				</strong>
+				<% if (userRole === 'owner') { %>
+
+				<button
+					class="btn btn-danger btn-sm"
+					data-bs-toggle="modal"
+					data-bs-target="#deleteProjectModal"
+				>
+					DELETE
+				</button>
+				<% } %>
+				<div><%= owner.email %></div>
+			</li>
+			<% collaborators.forEach(collaborator => { %>
+			<li
+				class="list-group-item d-flex justify-content-between align-items-center"
+			>
+				<div>
+					<%= collaborator.username %> - <%= collaborator.role %>
+				</div>
+				<% if (userRole === 'owner') { %>
+				<button
+					class="btn btn-danger btn-sm"
+					onclick="removeCollaborator('<%= collaborator.user_id %>', '<%= project.id %>')"
+				>
+					Remove
+				</button>
+				<% } %>
+				<div><%= collaborator.email %></div>
+			</li>
+			<% }); %>
+		</ul>
+		<% if (userRole === 'owner') { %>
+		<button
+			class="btn btn-primary mt-3"
+			data-bs-toggle="modal"
+			data-bs-target="#addCollaboratorModal"
+		>
+			Add Collaborator
+		</button>
+		<% } %>
+	</section>
+
+	<!-- Tasks Section -->
+	<section>
+		<% if (userRole === 'owner' || userRole === 'editor') { %>
+		<button
+			class="btn btn-primary"
+			data-bs-toggle="modal"
+			data-bs-target="#taskModal"
+		>
+			Add Task
+		</button>
+		<% } %> <%- include('./partials/task_board', { tasks }) %>
+	</section>
+</div>
+
+<%- include('./partials/collaborator_modal') %> <%-
+include('./partials/task_modal') %> <%- include('../partials/footer') %> <%-
+include('./partials/delete_project_modal') %>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
