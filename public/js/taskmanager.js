@@ -154,6 +154,7 @@ function drop(event, newStatus) {
 			document.querySelector(`[data-task-id="${taskId}"]`)
 		);
 	}
+	removeDropHighlight(newStatus);
 }
 
 // 📌 Highlight drop zones
