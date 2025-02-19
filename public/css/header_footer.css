@@ -1,8 +1,13 @@
 /*! public/css/header_footer.css */
 
 /* *** Header *** */
+nav .navbar {
+    padding: 0.5rem 1rem;
+}
+
 nav .navbar-brand {
     font-weight: bold;
+    font-size: 1.3rem;
 }
 
 a.nav-link {
@@ -14,7 +19,6 @@ a.nav-link {
 
 a.nav-link:hover {
     color: var(--color-primary);
-    ;
 }
 
 nav .nav-item {
@@ -74,6 +78,7 @@ a.nav-link.active::after {
 /* *** Footer *** */
 
 footer {
+    padding: 10px 0;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -82,6 +87,7 @@ footer {
     color: #fff;
     text-align: center;
     z-index: 3;
+    font-size: 0.9rem;
 }
 
 footer .text-center p {
