@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is a personal portfolio website showcasing my skills, projects, and professional experience as a full-stack web developer. The website includes dynamic sections such as "About Me," "Services," "Portfolio," and "Contact Me," with data stored in a MySQL database. It also features authentication, messaging, and social interactions like follows, blocks, and notifications.
+This is a personal portfolio website showcasing my skills, projects, and professional experience as a full-stack web developer. The website includes dynamic sections such as "About Me," "Services," "Portfolio," and "Contact Me," with data stored in a MySQL database. It also features authentication, messaging, and social interactions like follows, blocks, notifications, and a **Task Management System**.
 
 ## Features
 
@@ -17,6 +17,12 @@ This is a personal portfolio website showcasing my skills, projects, and profess
   - Follow and unfollow users.
   - Block and unblock users.
   - Notifications for follow requests and status updates.
+- **Task Management System**:
+  - Full **CRUD operations for tasks and projects**.
+  - **Drag-and-drop functionality** for easy task status updates.
+  - **Role-based collaboration**: Owners, Editors, and Viewers.
+  - **Real-time UI updates via AJAX**.
+  - **Bootstrap modals** for creating, editing, and deleting tasks.
 - **Messaging**:
   - Allows user-linked messages with timestamped storage.
 - **Contact Form**:
@@ -33,6 +39,10 @@ This is a personal portfolio website showcasing my skills, projects, and profess
 - **Backend**: Node.js, Express.js
 - **Database**: MySQL with MySQL2 package
 - **Frontend**: EJS, Bootstrap, custom CSS
+- **Task Management System**:
+  - **Drag-and-drop** with JavaScript event handling.
+  - **AJAX-based real-time updates**.
+  - **Role-based authentication for collaboration**.
 - **Authentication**: Passport.js (local, Google, GitHub)
 - **Email Service**: Nodemailer
 - **Error Tracking**: Sentry
@@ -111,6 +121,10 @@ This is a personal portfolio website showcasing my skills, projects, and profess
 ### Friends Panel
 
 ![Friends Panel](./screenshots/friends.png)
+
+### Task Manager
+
+![Friends Panel](./screenshots/taskmanager.png)
 
 ## Contribution
 
