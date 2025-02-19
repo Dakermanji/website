@@ -69,6 +69,14 @@ a.nav-link.active::after {
         width: 0;
     }
 
+    #navbarNav a.nav-link.active {
+        color: var(--color-primary);
+    }
+
+    nav a.nav-link::after {
+        display: none;
+    }
+
     .nav-text {
         display: inline-block;
         margin-left: 10px;

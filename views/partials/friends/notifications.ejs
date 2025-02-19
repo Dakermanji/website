@@ -1,7 +1,7 @@
 <!-- views/partials/friends/notifications.ejs -->
 
-<% if (notifications.length > 0) { %> <%
-notifications.forEach(function(notification) { %>
+<% if (userFriends.notifications.length > 0) { %> <%
+userFriends.notifications.forEach(function(notification) { %>
 <li id="notif-<%= notification.id %>" class="dropdown-item d-flex">
 	<span
 		class="dismiss-btn text-danger"

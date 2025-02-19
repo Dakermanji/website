@@ -1,6 +1,7 @@
 <!-- views/partials/friends/follows.ejs -->
 
-<% if (follows.length > 0) { %> <% follows.forEach(follow => { %>
+<% if (userFriends.follows.length > 0) { %> <%
+userFriends.follows.forEach(follow => { %>
 <li id="follow-<%= follow.id %>" class="dropdown-item d-flex flex-column gap-2">
 	<div>
 		<strong><%= follow.username %></strong>

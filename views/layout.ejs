@@ -67,11 +67,21 @@
 		%> <% scriptsArray.forEach(script => { %>
 		<script src="/js/<%= script %>.js" defer></script>
 		<% }) %>
+
+		<!-- Logged In Users -->
+		<% if (locals.user?.id && locals.userFriends) { %>
+		<link rel="stylesheet" href="/css/friends.css" />
+		<script src="/js/friends.js" defer></script>
+		<% } %>
 	</head>
 
 	<body>
 		<!-- Header -->
 		<%- include('partials/header') %>
+
+		<!-- Logged In Users -->
+		<% if (locals.user?.id && locals.userFriends) { %> <%-
+		include('partials/friends') %> <% } %>
 
 		<!-- Main Content -->
 		<main class="container">

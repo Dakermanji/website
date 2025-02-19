@@ -1,6 +1,8 @@
 <!-- views/partials/friends/blocks.ejs -->
 
-<% if (blocks.length > 0) { %> <% blocks.forEach(blocked => { %>
+<% if (userFriends.blocks.length > 0) { %> <%
+userFriends.blocks.forEach((blocked) => { %>
+
 <li id="<%= blocked.id %>" class="dropdown-item d-flex flex-column gap-2">
 	<div>
 		<strong><%= blocked.username %></strong>

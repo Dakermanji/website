@@ -5,6 +5,7 @@ import Task from '../../models/Task.js';
 import Collaboration from '../../models/Collaboration.js';
 import User from '../../models/User.js';
 import { navBar } from '../../data/navBar.js';
+import { getUserFriends } from '../../utils/friends/userFriendsHelper.js';
 
 // Create a new project
 export const createProject = async (req, res) => {
@@ -34,13 +35,16 @@ export const getProjects = async (req, res) => {
 			userId
 		);
 
+		const userFriends = await getUserFriends(userId);
+
 		res.render('taskmanager/index', {
 			title: 'Task Manager - DWD',
 			ownedProjects,
 			collaboratedProjects,
-			navBar: navBar.index,
+			navBar: navBar.projects,
 			scripts: ['helpers/modalHelper', 'taskmanager'],
 			styles: ['taskmanager/modals'],
+			userFriends,
 			success_msg: res.locals.success,
 			error_msg: res.locals.error,
 		});
@@ -72,6 +76,8 @@ export const getBoard = async (req, res) => {
 		const { projectId } = req.params;
 		const userId = req.user.id;
 
+		const userFriends = await getUserFriends(userId);
+
 		const project = await Project.getProjectById(projectId);
 
 		const isOwner = project.owner_id === userId;
@@ -89,11 +95,12 @@ export const getBoard = async (req, res) => {
 		res.render('taskmanager/board', {
 			title: `${project.name} - Kanban Board`,
 			project,
-			navBar: navBar.index,
+			navBar: navBar.projects,
 			tasks,
 			owner,
 			collaborators,
 			userRole: isOwner ? 'owner' : userCollab?.role,
+			userFriends,
 			success_msg: res.locals.success,
 			error_msg: res.locals.error,
 			scripts: ['helpers/modalHelper', 'taskmanager'],
