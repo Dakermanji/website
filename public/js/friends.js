@@ -30,6 +30,17 @@ friendsModal.addEventListener('click', (e) => {
 	}
 });
 
+// Close modal when clicking outside its content
+document.addEventListener('click', (e) => {
+	const isInsidePanel = friendsModal.contains(e.target);
+	const isTriggerButton = triggerButton.contains(e.target);
+
+	// Close friends panel if the click is outside both the panel and trigger button
+	if (!isInsidePanel && !isTriggerButton) {
+		friendsModal.classList.remove('active');
+	}
+});
+
 // Handle Add Friend button click
 addFriendButton.addEventListener('click', async () => {
 	const email = friendEmailInput.value.trim();
