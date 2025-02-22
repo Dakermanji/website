@@ -13,6 +13,7 @@ import {
 	resendConfirmationEmail,
 } from '../utils/resendHelper.js';
 import { generateToken, sendEmail } from '../utils/authUtilHelper.js';
+import errorHandler from '../middlewares/errorHandler.js';
 
 // Handle local login
 export const login = passport.authenticate('local', {
@@ -22,7 +23,7 @@ export const login = passport.authenticate('local', {
 });
 
 // Handle local registration
-export const register = async (req, res) => {
+export const register = async (req, res, next) => {
 	try {
 		const { username, email, password, confirmPassword } = req.body;
 
@@ -61,6 +62,7 @@ export const register = async (req, res) => {
 	} catch (error) {
 		console.error('Error during registration:', error);
 		req.flash('error', 'Something went wrong. Please try again.');
+		next(errorHandler(error, req, res, next));
 		res.redirect('/?auth=true');
 	}
 };

@@ -1,7 +1,7 @@
 #! sql/tables_sequence.txt
 
-1. messages
-2. users
+1. users
+2. messages
 3. follow_requests
 4. follows
 5. follows_notifications

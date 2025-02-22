@@ -4,7 +4,7 @@ import Sentry from '../config/instrument.js';
 import env from '../config/dotenv.js';
 const errorHandler = (err, req, res, next) => {
 	// Send the error to Sentry
-	// Sentry.captureException(err);
+	Sentry.captureException(err);
 	console.log(err);
 
 	const statusCode = err.status || 500;
