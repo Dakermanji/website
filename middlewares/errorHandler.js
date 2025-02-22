@@ -13,6 +13,7 @@ const errorHandler = (err, req, res, next) => {
 			? err.message || 'An unexpected error occurred.'
 			: 'Internal Server Error';
 
+	req.flash('error', message);
 	res.status(statusCode).send(message);
 };
 

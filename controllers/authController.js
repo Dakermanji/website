@@ -13,7 +13,6 @@ import {
 	resendConfirmationEmail,
 } from '../utils/resendHelper.js';
 import { generateToken, sendEmail } from '../utils/authUtilHelper.js';
-import errorHandler from '../middlewares/errorHandler.js';
 
 // Handle local login
 export const login = passport.authenticate('local', {
@@ -45,11 +44,14 @@ export const register = async (req, res, next) => {
 		const hashedPassword = await bcrypt.hash(password, 10);
 
 		// Create the user
-		const user = await User.create({
+		await User.create({
 			username,
 			email,
 			hashedPassword,
 		});
+
+		// Get the user by email
+		const user = await User.findByEmail(email);
 
 		// Handle registration and send confirmation email
 		await handleRegistration(user, req.headers.host);
@@ -62,8 +64,8 @@ export const register = async (req, res, next) => {
 	} catch (error) {
 		console.error('Error during registration:', error);
 		req.flash('error', 'Something went wrong. Please try again.');
-		next(errorHandler(error, req, res, next));
 		res.redirect('/?auth=true');
+		next(error);
 	}
 };
 
@@ -142,13 +144,14 @@ export const githubCallback = async (req, res, next) => {
 };
 
 // Handle logout
-export const logout = (req, res) => {
+export const logout = (req, res, next) => {
 	req.logout((err) => {
 		if (err) {
 			console.error('Error during logout:', err);
 			req.flash('error', 'Error during logout.');
-			return res.redirect('/');
+			return next(err);
 		}
+
 		req.flash('success', 'Logged out successfully.');
 		res.redirect('/');
 	});

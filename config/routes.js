@@ -40,17 +40,23 @@ router.use('/taskmanager/tasks', tasksTMRoutes);
 router.use('/taskmanager/collaborations', collaborationsTMRoutes);
 router.use('/taskmanager', projectsTMRoutes);
 
-// Step 3: Handle 404 errors
-// Catch-all route for unmatched paths
+// Step 3: Handle 404 errors: Catch-all route for unmatched paths
 router.use((req, res, next) => {
 	const error = new Error('Page Not Found');
 	error.status = 404;
+	req.flash('error', 'Page Not Found');
+
+	if (req.xhr || req.headers.accept?.includes('json')) {
+		// API Requests: Send JSON response
+		return res.status(404).json({ error: 'Page Not Found' });
+	}
 
 	if (process.env.NODE_ENV === 'development') {
 		console.error(`[404 Error]: ${req.originalUrl}`);
 	}
 
-	next(error); // Forward error to the global error handler
+	// UI Requests: Redirect and preserve flash messages
+	return res.redirect('/');
 });
 
 export default router;

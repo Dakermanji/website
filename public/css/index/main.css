@@ -394,7 +394,7 @@ h1 {
 }
 
 .work:hover h4 {
-    color: var(--color-secondary-dark);
+    color: var(--color-primary-dark);
 }
 
 /* Responsive Adjustments */
