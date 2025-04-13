@@ -6,13 +6,14 @@ import { servicesData } from '../data/servicesData.js';
 import { projects } from '../data/projectsData.js';
 import Message from '../models/Message.js';
 import { sanitizeInput } from '../middlewares/sanitizeForm.js';
+import env from '../config/dotenv.js';
 
 // Handle Get Index Page
 export const getIndex = (req, res) => {
 	try {
 		const token = req.query.token;
 		res.render('index', {
-			title: 'Home - Dakermanji Web Dev',
+			title: `${env.HOST}`,
 			navBar: navBar.index,
 			about: aboutData,
 			services: servicesData,
