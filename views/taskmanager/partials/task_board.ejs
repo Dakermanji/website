@@ -1,4 +1,5 @@
 <!-- views/taskmanager/partials/task_board.ejs -->
+<div hidden id="user-role" data-user-role="<%= userRole %>"></div>
 
 <div class="row mt-3">
 	<% ['todo', 'in_progress', 'done'].forEach(status => { %>
@@ -8,21 +9,9 @@
 			'in_progress') { %>In Progress<% } %> <% if (status === 'done') {
 			%>Done<% } %>
 		</h4>
-		<div
-			class="task-column"
-			id="<%= status %>"
-			ondragover="<% if (userRole === 'editor' || userRole === 'owner') { %>allowDrop(event)<% } %>"
-			ondrop="<% if (userRole === 'editor' || userRole === 'owner') { %>drop(event, '<%= status %>')<% } %>"
-			ondragleave="<% if (userRole === 'editor' || userRole === 'owner') { %>removeDropHighlight('<%= status %>')<% } %>"
-		>
-			<!-- Ensure visibility -->
+		<div class="task-column" id="<%= status %>" data-status="<%= status %>">
 			<% tasks.filter(task => task.status === status).forEach(task => { %>
-			<div
-				class="task-card"
-				draggable="true"
-				ondragstart="drag(event, '<%= task.id %>')"
-				data-task-id="<%= task.id %>"
-			>
+			<div class="task-card" data-task-id="<%= task.id %>">
 				<p><strong><%= task.name %></strong></p>
 				<p class="text-muted">
 					Assigned to: <%= task.username || 'Unassigned' %>
@@ -33,6 +22,7 @@
 					"short", day: "numeric", year: "numeric" }) : "No deadline"
 					%>
 				</p>
+
 				<% if (userRole === 'editor' || userRole === 'owner') { %>
 				<button
 					class="btn btn-sm btn-warning edit-task-btn"
@@ -57,4 +47,5 @@
 	</div>
 	<% }); %>
 </div>
+
 <%- include('./edit_task_modal') %> <%- include('./delete_task_modal') %>

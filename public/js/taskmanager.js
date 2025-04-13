@@ -136,27 +136,6 @@ async function updateTaskStatus(taskId, newStatus) {
 	}
 }
 
-// 📌 Drag-and-drop functionality
-function allowDrop(event) {
-	event.preventDefault();
-}
-
-function drag(event, taskId) {
-	event.dataTransfer.setData('taskId', taskId);
-}
-
-function drop(event, newStatus) {
-	event.preventDefault();
-	const taskId = event.dataTransfer.getData('taskId');
-	if (taskId) {
-		updateTaskStatus(taskId, newStatus);
-		event.target.appendChild(
-			document.querySelector(`[data-task-id="${taskId}"]`)
-		);
-	}
-	removeDropHighlight(newStatus);
-}
-
 // 📌 Highlight drop zones
 function highlightDropZone(status) {
 	document.getElementById(status)?.classList.add('drop-highlight');
@@ -166,13 +145,35 @@ function removeDropHighlight(status) {
 	document.getElementById(status)?.classList.remove('drop-highlight');
 }
 
-// 📌 Initialize drag-and-drop event listeners
-document.querySelectorAll('.task-column').forEach((column) => {
-	column.addEventListener('dragover', allowDrop);
-	column.addEventListener('drop', (event) => drop(event, column.id));
-	column.addEventListener('dragenter', () => highlightDropZone(column.id));
-	column.addEventListener('dragleave', () => removeDropHighlight(column.id));
-});
+// Get User Role from hidden element
+const userRole = document.getElementById('user-role')?.dataset.userRole;
+
+// Enable SortableJS only for editors and owners
+if (userRole === 'editor' || userRole === 'owner') {
+	document.querySelectorAll('.task-column').forEach((column) => {
+		new Sortable(column, {
+			group: 'tasks',
+			animation: 150,
+			onEnd: function (evt) {
+				const taskId = evt.item.dataset.taskId;
+				const newStatus = evt.to.dataset.status;
+
+				if (!taskId || !newStatus) return;
+
+				axios
+					.put(`/taskmanager/tasks/${taskId}`, {
+						status: newStatus,
+					})
+					.then((res) => {
+						console.log('Task moved:', res.data);
+					})
+					.catch((err) => {
+						console.error('Failed to update task status:', err);
+					});
+			},
+		});
+	});
+}
 
 // 📌 Function to handle collaborator addition
 document
