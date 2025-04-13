@@ -3,8 +3,6 @@
 export const customMiddlewares = (app) => {
 	// 🔐 Redirect HTTP to HTTPS first
 	if (process.env.NODE_ENV === 'production') {
-		console.log('here');
-
 		app.use((req, res, next) => {
 			if (req.headers['x-forwarded-proto'] !== 'https') {
 				return res.redirect(

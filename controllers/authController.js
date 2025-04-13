@@ -228,7 +228,7 @@ export const requestResetPassword = async (req, res) => {
 		await User.updateToken(user.id, token, tokenExpiry);
 
 		// Send reset email
-		const resetUrl = `http://${req.headers.host}/auth/reset-password/${token}`;
+		const resetUrl = `https://${req.headers.host}/auth/reset-password/${token}`;
 		const emailContent = `
             <h1>Reset Your Password</h1>
             <p>Please click the link below to reset your password:</p>

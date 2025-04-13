@@ -12,7 +12,7 @@ export const handleRegistration = async (user, host) => {
 	const { token, tokenExpiry } = generateToken();
 	await User.updateToken(user.id, token, tokenExpiry);
 
-	const confirmUrl = `http://${host}/auth/confirm-email?token=${token}`;
+	const confirmUrl = `https://${host}/auth/confirm-email?token=${token}`;
 	const emailContent = `
         <h1>Welcome to Dakermanji Web Dev</h1>
         <p>Please confirm your email address by clicking the link below:</p>

@@ -36,7 +36,7 @@ export const resendConfirmationEmail = async (user, host) => {
 	const { token, tokenExpiry } = generateToken();
 	await User.updateToken(user.id, token, tokenExpiry);
 
-	const confirmUrl = `http://${host}/auth/confirm-email?token=${token}`;
+	const confirmUrl = `https://${host}/auth/confirm-email?token=${token}`;
 	const emailContent = `
         <h1>Email Confirmation</h1>
         <p>Please click the link below to confirm your email:</p>
