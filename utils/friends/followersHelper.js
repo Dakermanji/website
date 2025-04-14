@@ -7,7 +7,7 @@ import {
 	unfollowBothUsers,
 } from './friendsHelper.js';
 
-// General function to handle notification actions
+// General function to handle follower actions
 export const handleFollowersAction = async (followId, userId, action) => {
 	const follow = await Follow.getFollowById(followId);
 
@@ -22,15 +22,23 @@ export const handleFollowersAction = async (followId, userId, action) => {
 		};
 	}
 
-	if (action === 'block') {
-		await blockUser(follow.followed_id, follow.follower_id);
-	}
+	switch (action) {
+		case 'block':
+			await blockUser(follow.followed_id, follow.follower_id);
+			break;
 
-	if (action === 'followBack') {
-		await followBackUser(follow.followed_id, follow.follower_id);
-	}
+		case 'followBack':
+			await followBackUser(follow.followed_id, follow.follower_id);
+			break;
 
-	if (action === 'unfollow_both') {
-		await unfollowBothUsers(follow.followed_id, follow.follower_id);
+		case 'unfollow_both':
+			await unfollowBothUsers(follow.followed_id, follow.follower_id);
+			break;
+
+		default:
+			throw {
+				status: 400,
+				message: `Unsupported action: ${action}`,
+			};
 	}
 };

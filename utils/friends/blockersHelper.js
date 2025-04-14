@@ -14,7 +14,7 @@ export const handleBlockersAction = async (blockId, userId, action) => {
 	if (userId !== block.blocker_id) {
 		throw {
 			status: 400,
-			message: 'Unauthorized: User does not match the blcoker.',
+			message: 'Unauthorized: User does not match the blocker.',
 		};
 	}
 
