@@ -11,7 +11,7 @@ export const blockFollower = async (req, res, next) => {
 			message: 'The user blocked successfully.',
 		});
 	} catch (error) {
-		next(errorHandler(error, req, res, next));
+		errorHandler(error, req, res, next);
 	}
 };
 
@@ -23,7 +23,7 @@ export const followBackFollower = async (req, res, next) => {
 			message: 'Unfollow user has been handled successfully.',
 		});
 	} catch (error) {
-		next(errorHandler(error, req, res, next));
+		errorHandler(error, req, res, next);
 	}
 };
 
@@ -39,6 +39,6 @@ export const unfollowBothFollower = async (req, res, next) => {
 			message: 'Unfollow for both users has been handled successfully.',
 		});
 	} catch (error) {
-		next(errorHandler(error, req, res, next));
+		errorHandler(error, req, res, next);
 	}
 };

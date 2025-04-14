@@ -60,6 +60,6 @@ export const addFriend = async (req, res, next) => {
 		await createFollowRequest(requesterId, recipientId);
 		return res.status(200).json({ message: GENERIC_MESSAGE });
 	} catch (error) {
-		next(errorHandler(error, req, res, next));
+		errorHandler(error, req, res, next);
 	}
 };

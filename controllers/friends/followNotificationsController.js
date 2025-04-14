@@ -15,7 +15,7 @@ export const deleteFollowNotification = async (req, res, next) => {
 			message: 'Follow notification removed successfully.',
 		});
 	} catch (error) {
-		next(errorHandler(error, req, res, next));
+		errorHandler(error, req, res, next);
 	}
 };
 
@@ -31,7 +31,7 @@ export const acceptFollowNotification = async (req, res, next) => {
 			message: 'Follow request accepted successfully.',
 		});
 	} catch (error) {
-		next(errorHandler(error, req, res, next));
+		errorHandler(error, req, res, next);
 	}
 };
 
@@ -47,7 +47,7 @@ export const acceptAndFollowBackFollowNotification = async (req, res, next) => {
 			message: 'Follow request accepted and followed back successfully.',
 		});
 	} catch (error) {
-		next(errorHandler(error, req, res, next));
+		errorHandler(error, req, res, next);
 	}
 };
 
@@ -63,7 +63,7 @@ export const blockFollowNotification = async (req, res, next) => {
 			message: 'Block user has beend has been handled successfully.',
 		});
 	} catch (error) {
-		next(errorHandler(error, req, res, next));
+		errorHandler(error, req, res, next);
 	}
 };
 
@@ -79,7 +79,7 @@ export const unfollowFollowNotification = async (req, res, next) => {
 			message: 'Unfollow user has been handled successfully.',
 		});
 	} catch (error) {
-		next(errorHandler(error, req, res, next));
+		errorHandler(error, req, res, next);
 	}
 };
 
@@ -95,6 +95,6 @@ export const unfollowBothFollowNotification = async (req, res, next) => {
 			message: 'Unfollow for both users has been handled successfully.',
 		});
 	} catch (error) {
-		next(errorHandler(error, req, res, next));
+		errorHandler(error, req, res, next);
 	}
 };

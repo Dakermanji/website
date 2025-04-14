@@ -11,7 +11,7 @@ export const unblockBlocked = async (req, res, next) => {
 			message: 'The user unblocked successfully.',
 		});
 	} catch (error) {
-		next(errorHandler(error, req, res, next));
+		errorHandler(error, req, res, next);
 	}
 };
 
@@ -28,6 +28,6 @@ export const unblockAndFollowBlocked = async (req, res, next) => {
 				'The user has been unblocked successfully and a request to follow also been sent.',
 		});
 	} catch (error) {
-		next(errorHandler(error, req, res, next));
+		errorHandler(error, req, res, next);
 	}
 };
