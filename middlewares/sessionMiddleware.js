@@ -11,7 +11,7 @@ export const initializeSession = (app) => {
 			saveUninitialized: false, // Don't create session until something is stored
 			cookie: {
 				maxAge: 1000 * 60 * 60 * 24, // Set session expiration time (adjust as needed)
-				secure: false, // Set true if using HTTPS
+				secure: env.NODE_ENV === 'production', // Only secure in production
 				httpOnly: true, // Prevent client-side JavaScript access to cookies
 			},
 		})

@@ -10,3 +10,9 @@ export const logMiddlewareErrors = (middleware) => {
 		}
 	};
 };
+
+// Async wrapper to catch unhandled promise rejections in middleware
+export const wrapAsync = (middleware) => {
+	return (req, res, next) =>
+		Promise.resolve(middleware(req, res, next)).catch(next);
+};
