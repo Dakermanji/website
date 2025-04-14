@@ -21,5 +21,10 @@ export const generateToken = () => {
  */
 export const sendEmail = async (to, subject, html) => {
 	const mailOptions = { to, subject, html };
-	await transporter.sendMail(mailOptions);
+	try {
+		await transporter.sendMail(mailOptions);
+	} catch (error) {
+		console.error('Email sending failed:', err);
+		throw err;
+	}
 };
