@@ -1,5 +1,6 @@
 //! controllers/taskmanager/collaborationController.js
 
+import errorHandler from '../../middlewares/errorHandler.js';
 import Collaboration from '../../models/Collaboration.js';
 import User from '../../models/User.js';
 import Project from '../../models/Project.js';
@@ -61,9 +62,7 @@ export const addCollaborator = async (req, res) => {
 			success: 'User added to project successfully!',
 		});
 	} catch (error) {
-		console.error('Error adding collaborator:', error);
-		req.flash('error', 'Error adding collaborator.');
-		res.status(500).json({ error: 'Error adding collaborator' });
+		errorHandler(error, req, res, next);
 	}
 };
 
@@ -76,8 +75,7 @@ export const removeCollaborator = async (req, res) => {
 		req.flash('success', 'Collaborator removed successfully!');
 		res.status(200).json({ message: 'Collaborator removed successfully' });
 	} catch (error) {
-		req.flash('error', 'Error removing collaborator.');
-		res.status(500).json({ error: 'Error removing collaborator' });
+		errorHandler(error, req, res, next);
 	}
 };
 
@@ -95,7 +93,6 @@ export const getCollaborators = async (req, res) => {
 
 		res.status(200).json({ collaborators });
 	} catch (error) {
-		req.flash('error', 'Error fetching collaborators.');
-		res.status(500).json({ error: 'Error fetching collaborators' });
+		errorHandler(error, req, res, next);
 	}
 };

@@ -3,6 +3,7 @@
 import bcrypt from 'bcrypt';
 
 import passport from '../config/passport.js';
+import errorHandler from '../middlewares/errorHandler.js';
 import User from '../models/User.js';
 import {
 	handleRegistration,
@@ -62,9 +63,7 @@ export const register = async (req, res, next) => {
 		);
 		res.redirect('/?auth=true');
 	} catch (error) {
-		console.error('Error during registration:', error);
-		req.flash('error', 'Something went wrong. Please try again.');
-		res.redirect('/?auth=true');
+		errorHandler(error, req, res, next);
 	}
 };
 
@@ -94,9 +93,7 @@ export const googleCallback = async (req, res, next) => {
 			});
 		})(req, res, next);
 	} catch (error) {
-		console.error('Error during Google OAuth callback:', error);
-		req.flash('error', 'Something went wrong. Please try again.');
-		res.redirect('/?auth=true');
+		errorHandler(error, req, res, next);
 	}
 };
 
@@ -136,9 +133,7 @@ export const githubCallback = async (req, res, next) => {
 			});
 		})(req, res, next);
 	} catch (error) {
-		console.error('Error during GitHub OAuth callback:', error);
-		req.flash('error', 'Something went wrong. Please try again.');
-		res.redirect('/?auth=true');
+		errorHandler(error, req, res, next);
 	}
 };
 
@@ -174,9 +169,7 @@ export const confirmEmail = async (req, res) => {
 		);
 		res.redirect('/?auth=true');
 	} catch (error) {
-		console.error('Error during email confirmation:', error);
-		req.flash('error', 'Something went wrong. Please try again.');
-		res.redirect('/?auth=true');
+		errorHandler(error, req, res, next);
 	}
 };
 
@@ -202,9 +195,7 @@ export const resendConfirmation = async (req, res) => {
 		req.flash('success', message);
 		res.redirect('/?auth=true');
 	} catch (error) {
-		console.error('Error resending confirmation email:', error);
-		req.flash('error', 'Something went wrong. Please try again later.');
-		res.redirect('/?auth=true');
+		errorHandler(error, req, res, next);
 	}
 };
 
@@ -238,9 +229,7 @@ export const requestResetPassword = async (req, res) => {
 		req.flash('success', message);
 		res.redirect('/');
 	} catch (error) {
-		console.error('Error requesting password reset:', error);
-		req.flash('error', 'Something went wrong. Please try again later.');
-		res.redirect('/?auth=true');
+		errorHandler(error, req, res, next);
 	}
 };
 
@@ -257,8 +246,7 @@ export const renderResetPasswordForm = async (req, res) => {
 
 		res.redirect(`/?reset=true&token=${token}`);
 	} catch (error) {
-		console.error('Error rendering reset password form:', error);
-		req.flash('error', 'Something went wrong. Please try again later.');
+		errorHandler(error, req, res, next);
 	}
 };
 
@@ -289,8 +277,6 @@ export const processResetPassword = async (req, res) => {
 		);
 		res.redirect('/?auth=true');
 	} catch (error) {
-		console.error('Error processing password reset:', error);
-		req.flash('error', 'Something went wrong. Please try again later.');
-		res.redirect('/?auth=true');
+		errorHandler(error, req, res, next);
 	}
 };

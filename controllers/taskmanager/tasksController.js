@@ -1,5 +1,6 @@
 //! controllers/taskmanager/taskController.js
 
+import errorHandler from '../../middlewares/errorHandler.js';
 import Task from '../../models/Task.js';
 import User from '../../models/User.js';
 
@@ -28,8 +29,7 @@ export const createTask = async (req, res) => {
 		req.flash('success', 'Task created successfully!');
 		res.status(201).json({ success: 'Task created successfully!', task });
 	} catch (error) {
-		req.flash('error', 'Error creating task.');
-		res.status(500).json({ error: 'Error creating task' });
+		errorHandler(error, req, res, next);
 	}
 };
 
@@ -54,8 +54,7 @@ export const updateTask = async (req, res) => {
 		req.flash('success', 'Task updated successfully!');
 		res.status(200).json({ message: 'Task updated successfully' });
 	} catch (error) {
-		req.flash('error', 'Error updating task.');
-		res.status(500).json({ error: 'Error updating task' });
+		errorHandler(error, req, res, next);
 	}
 };
 
@@ -77,8 +76,7 @@ export const updateTaskStatus = async (req, res) => {
 			newStatus: status,
 		});
 	} catch (error) {
-		req.flash('error', 'Error updating task status.');
-		res.status(500).json({ error: 'Error updating task status' });
+		errorHandler(error, req, res, next);
 	}
 };
 
@@ -90,7 +88,6 @@ export const deleteTask = async (req, res) => {
 		req.flash('success', 'Task deleted successfully!');
 		res.status(200).json({ message: 'Task deleted successfully' });
 	} catch (error) {
-		req.flash('error', 'Error deleting task.');
-		res.status(500).json({ error: 'Error deleting task' });
+		errorHandler(error, req, res, next);
 	}
 };

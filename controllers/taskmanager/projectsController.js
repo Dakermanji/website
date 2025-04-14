@@ -1,5 +1,6 @@
 //! controllers/taskmanager/projectsController.js
 
+import errorHandler from '../../middlewares/errorHandler.js';
 import Project from '../../models/Project.js';
 import Task from '../../models/Task.js';
 import Collaboration from '../../models/Collaboration.js';
@@ -17,8 +18,7 @@ export const createProject = async (req, res) => {
 		req.flash('success', 'Project created successfully!');
 		res.status(201).json({ project });
 	} catch (error) {
-		req.flash('error', 'Error creating project.');
-		res.status(500).json({ error: 'Error creating project' });
+		errorHandler(error, req, res, next);
 	}
 };
 
@@ -49,8 +49,7 @@ export const getProjects = async (req, res) => {
 			error_msg: res.locals.error,
 		});
 	} catch (error) {
-		req.flash('error', 'Error loading projects.');
-		res.redirect('/projects'); // Redirect to a safe page
+		errorHandler(error, req, res, next);
 	}
 };
 
@@ -66,8 +65,7 @@ export const deleteProject = async (req, res) => {
 		req.flash('success', 'Project deleted successfully!');
 		res.status(200).json({ message: 'Project deleted successfully' });
 	} catch (error) {
-		req.flash('error', 'Error deleting project.');
-		res.status(500).json({ error: 'Error deleting project' });
+		errorHandler(error, req, res, next);
 	}
 };
 
@@ -107,7 +105,6 @@ export const getBoard = async (req, res) => {
 			styles: ['taskmanager/modals', 'taskmanager/tasks'],
 		});
 	} catch (error) {
-		req.flash('error', 'Error fetching project board.');
-		res.redirect('/taskmanager');
+		errorHandler(error, req, res, next);
 	}
 };

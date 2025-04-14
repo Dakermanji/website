@@ -99,7 +99,10 @@ async function deleteTask(taskId) {
 			showFlashMessage('danger', 'Failed to delete task.');
 		}
 	} catch (error) {
-		showFlashMessage('danger', 'Error deleting task.');
+		showFlashMessage(
+			'danger',
+			"Oops! We couldn't delete this task right now."
+		);
 	}
 }
 
