@@ -6,6 +6,7 @@ import { servicesData } from '../data/servicesData.js';
 import { projects } from '../data/projectsData.js';
 import Message from '../models/Message.js';
 import { sanitizeInput } from '../middlewares/sanitizeForm.js';
+import errorHandler from '../middlewares/errorHandler.js';
 
 // Handle Get Index Page
 export const getIndex = (req, res) => {
@@ -30,11 +31,7 @@ export const getIndex = (req, res) => {
 			],
 		});
 	} catch (error) {
-		console.error('Error loading index page:', error);
-		res.status(500).render('error', {
-			title: 'Error',
-			message: 'Failed to load the homepage.',
-		});
+		errorHandler(error, req, res);
 	}
 };
 
@@ -61,8 +58,6 @@ export const postMessage = async (req, res) => {
 		req.flash('success', 'Your message has been sent successfully!');
 		res.redirect('/');
 	} catch (error) {
-		console.error('Error handling message submission:', error);
-		req.flash('error', 'Something went wrong. Please try again.');
-		res.redirect('/');
+		errorHandler(error, req, res);
 	}
 };

@@ -65,7 +65,6 @@ export const register = async (req, res, next) => {
 		console.error('Error during registration:', error);
 		req.flash('error', 'Something went wrong. Please try again.');
 		res.redirect('/?auth=true');
-		next(error);
 	}
 };
 
@@ -228,7 +227,7 @@ export const requestResetPassword = async (req, res) => {
 		await User.updateToken(user.id, token, tokenExpiry);
 
 		// Send reset email
-		const resetUrl = `https://${req.headers.host}/auth/reset-password/${token}`;
+		const resetUrl = `${req.protocol}://${req.headers.host}/auth/reset-password/${token}`;
 		const emailContent = `
             <h1>Reset Your Password</h1>
             <p>Please click the link below to reset your password:</p>
