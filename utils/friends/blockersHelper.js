@@ -1,11 +1,11 @@
 //! utils/friends/blockersHelper.js
 
-import Blocks from '../../models/Block.js';
+import Block from '../../models/Block.js';
 import { createFollowRequest } from './friendsHelper.js';
 
 // General function to handle notification actions
 export const handleBlockersAction = async (blockId, userId, action) => {
-	const block = await Blocks.getBlockById(blockId);
+	const block = await Block.getBlockById(blockId);
 
 	if (!block) {
 		throw { status: 404, message: 'This block not found.' };
@@ -18,7 +18,7 @@ export const handleBlockersAction = async (blockId, userId, action) => {
 		};
 	}
 
-	await Blocks.unblockUser(userId, block.blocked_id);
+	await Block.unblockUser(userId, block.blocked_id);
 
 	if (action === 'unblock_follow') {
 		createFollowRequest(userId, block.blocked_id);

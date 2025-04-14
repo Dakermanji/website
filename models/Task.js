@@ -48,7 +48,7 @@ class Task {
 		const query = `
         DELETE FROM tasks WHERE project_id = ?`;
 		const [rows] = await promisePool.execute(query, [projectId]);
-		return rows.length > 0;
+		return rows.affectedRows > 0;
 	}
 
 	static async getTaskById(taskId) {

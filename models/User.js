@@ -172,12 +172,6 @@ class User {
 		return result;
 	}
 
-	static async findByToken(token) {
-		const query = 'SELECT * FROM users WHERE token = ?';
-		const [rows] = await promisePool.query(query, [token]);
-		return rows[0];
-	}
-
 	static async resetPassword(userId, hashedPassword) {
 		const query = `
         UPDATE users

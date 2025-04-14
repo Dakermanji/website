@@ -2,7 +2,7 @@
 
 import { promisePool } from '../config/database.js';
 
-class Blocks {
+class Block {
 	// Check if a user has blocked another user
 	static async checkBlockStatus(blockerId, blockedId) {
 		const query = `SELECT 1 FROM blocks WHERE blocker_id = ? AND blocked_id = ? LIMIT 1`;
@@ -42,4 +42,4 @@ class Blocks {
 	}
 }
 
-export default Blocks;
+export default Block;
