@@ -19,7 +19,6 @@ let isDatabaseConnected = false;
 
 pool.getConnection((err, connection) => {
 	if (err) {
-		Sentry.captureException(err);
 		handleDatabaseError(err);
 		isDatabaseConnected = false;
 	} else {

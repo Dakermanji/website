@@ -5,7 +5,7 @@
 	"main": "app.js",
 	"type": "module",
 	"scripts": {
-		"start": "node app.js && npm run sentry:sourcemaps",
+		"start": "npm run sentry:sourcemaps && node app.js",
 		"dev": "nodemon app.js",
 		"sentry:sourcemaps": "sentry-cli sourcemaps inject --org dakermanji-web-dev --project node ./ && sentry-cli sourcemaps upload --org dakermanji-web-dev --project node ./"
 	},
@@ -24,7 +24,7 @@
 		"projects"
 	],
 	"author": "Behnam Dakermanji",
-	"license": "ISC",
+	"license": "MIT",
 	"dependencies": {
 		"@sentry/cli": "^2.40.0",
 		"@sentry/node": "^8.48.0",

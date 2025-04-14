@@ -124,7 +124,7 @@ This is a personal portfolio website showcasing my skills, projects, and profess
 
 ### Task Manager
 
-![Friends Panel](./screenshots/taskmanager.png)
+![Task Manager](./screenshots/taskmanager.png)
 
 ## Contribution
 
