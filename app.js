@@ -3,6 +3,23 @@
 import app from './config/express.js';
 import env from './config/dotenv.js';
 
+// Catch uncaught exceptions
+process.on('uncaughtException', (err) => {
+	console.error('Uncaught Exception:', err);
+	import('./config/instrument.js').then(({ default: Sentry }) => {
+		Sentry.captureException(err);
+		process.exit(1); // Optional: crash for safety
+	});
+});
+
+// Catch unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+	console.error('Unhandled Rejection:', reason);
+	import('./config/instrument.js').then(({ default: Sentry }) => {
+		Sentry.captureException(reason);
+	});
+});
+
 // Function to start the server
 const startServer = () => {
 	try {
