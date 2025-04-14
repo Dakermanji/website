@@ -19,6 +19,7 @@ export const aboutData = {
 				period: '2019 - current',
 				role: 'Freelancer',
 				company: 'many small projects',
+				location: 'Remote / Montreal, QC',
 			},
 		],
 		skills: [
