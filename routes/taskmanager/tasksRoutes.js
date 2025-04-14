@@ -19,6 +19,6 @@ router.put('/:taskId', checkProjectAccess('editor'), updateTaskStatus);
 router.put('/update/:taskId', checkProjectAccess('editor'), updateTask);
 
 // Delete a task
-router.delete('/:taskId', checkProjectAccess('eidtor'), deleteTask);
+router.delete('/:taskId', checkProjectAccess('editor'), deleteTask);
 
 export default router;
