@@ -1,6 +1,12 @@
 //! middlewares/sanitizeForm.js
 
-import validator from 'validator';
+import {
+	validateSubject,
+	validateMessage,
+	validateEmail,
+	validateUsername,
+	validatePassword,
+} from '../utils/formValidator.js';
 
 /**
  * Sanitizes and trims input data to ensure clean and safe data.
@@ -28,25 +34,18 @@ export const sanitizeInput = (
 
 export const sanitizeMessageForm = (req, res, next) => {
 	const { subject, message } = req.body;
-
-	// Sanitize inputs using the new sanitizeInput helper
 	req.body.subject = sanitizeInput(subject);
 	req.body.message = sanitizeInput(message);
 
-	// Validate inputs
-	if (validator.isEmpty(req.body.subject) || req.body.subject.length > 100) {
-		req.flash(
-			'error',
-			'Subject is required and must be under 100 characters.'
-		);
+	const subjectError = validateSubject(req.body.subject);
+	const messageError = validateMessage(req.body.message);
+
+	if (subjectError) {
+		req.flash('error', subjectError);
 		return res.redirect('/#contact');
 	}
-
-	if (validator.isEmpty(req.body.message) || req.body.message.length > 1000) {
-		req.flash(
-			'error',
-			'Message is required and must be under 1000 characters.'
-		);
+	if (messageError) {
+		req.flash('error', messageError);
 		return res.redirect('/#contact');
 	}
 
@@ -55,16 +54,14 @@ export const sanitizeMessageForm = (req, res, next) => {
 
 export const sanitizeLoginForm = (req, res, next) => {
 	const { email, password } = req.body;
-
-	// Sanitize inputs
 	req.body.email = validator.normalizeEmail(email || '', {
 		gmail_remove_dots: false,
 	});
 	req.body.password = sanitizeInput(password);
 
-	// Validate inputs
-	if (!validator.isEmail(req.body.email)) {
-		req.flash('error', 'Invalid email address.');
+	const emailError = validateEmail(req.body.email);
+	if (emailError) {
+		req.flash('error', emailError);
 		return res.redirect('/?auth=true');
 	}
 
@@ -79,44 +76,30 @@ export const sanitizeLoginForm = (req, res, next) => {
 export const sanitizeRegisterForm = (req, res, next) => {
 	const { username, email, password, confirmPassword } = req.body;
 
-	// Sanitize inputs
 	req.body.username = sanitizeInput(username);
 	req.body.email = validator.normalizeEmail(email || '', {
 		gmail_remove_dots: false,
 	});
-	req.body.password = sanitizeInput(password, { escape: false }); // Avoid escaping passwords to keep them intact
+	req.body.password = sanitizeInput(password, { escape: false });
 	req.body.confirmPassword = sanitizeInput(confirmPassword, {
 		escape: false,
 	});
 
-	// Validate inputs
-	if (validator.isEmpty(req.body.username) || req.body.username.length < 3) {
-		req.flash('error', 'Username must be at least 3 characters long.');
+	const usernameError = validateUsername(req.body.username);
+	if (usernameError) {
+		req.flash('error', usernameError);
 		return res.redirect('/?auth=true');
 	}
 
-	if (!/^[A-Za-z0-9_.-]+$/.test(req.body.username)) {
-		req.flash(
-			'error',
-			'Username can only contain letters, numbers, underscores, dots, and hyphens.'
-		);
+	const emailError = validateEmail(req.body.email);
+	if (emailError) {
+		req.flash('error', emailError);
 		return res.redirect('/?auth=true');
 	}
 
-	if (!validator.isEmail(req.body.email)) {
-		req.flash('error', 'Invalid email address.');
-		return res.redirect('/?auth=true');
-	}
-
-	// Password strength validation
-	const passwordStrengthRegex =
-		/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@$%^&*()\[\]{}\-_=<>.,:;'"\~`#\\|\/+])[A-Za-z\d!@$%^&*()\[\]{}\-_=<>.,:;'"\~`#\\|\/+]{8,}$/;
-
-	if (!passwordStrengthRegex.test(req.body.password)) {
-		req.flash(
-			'error',
-			'Password Requirements:<br>- at least 8 characters long.<br>- has one uppercase letter.<br>- has one lowercase letter.<br>- has one number.<br>- has one special character.'
-		);
+	const passwordError = validatePassword(req.body.password);
+	if (passwordError) {
+		req.flash('error', passwordError);
 		return res.redirect('/?auth=true');
 	}
 
