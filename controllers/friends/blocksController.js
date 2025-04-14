@@ -25,7 +25,7 @@ export const unblockAndFollowBlocked = async (req, res, next) => {
 		);
 		res.status(200).json({
 			message:
-				'The user has been unblocked successfully and a request to follow also been sent.',
+				'The user has been unblocked successfully and a request to follow has also been sent.',
 		});
 	} catch (error) {
 		errorHandler(error, req, res, next);
