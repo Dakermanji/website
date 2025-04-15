@@ -29,6 +29,10 @@
     overflow-y: auto;
 }
 
+.auth-modal-content.small {
+    max-width: 400px;
+}
+
 #authModal .nav-link {
     color: var(--color-tertiary);
 }
@@ -42,9 +46,8 @@
 }
 
 .auth-modal-header {
-    display: flex;
-    justify-content: space-between;
     align-items: center;
+    text-align: center;
     margin-bottom: 20px;
 }
 
@@ -60,15 +63,28 @@
     top: 10px;
     right: 10px;
     font-size: 1.5rem;
-    cursor: pointer;
     color: var(--color-tertiary-dark);
     /* Adjust icon color */
-    z-index: 5;
     transition: color var(--transition-duration) ease;
 }
 
 .auth-modal-close i {
     font-size: inherit;
+}
+
+.auth-modal-body form {
+    font-size: 1rem;
+}
+
+.auth-modal-body .form-control {
+    margin-bottom: 15px;
+    padding: 10px;
+    font-size: 1rem;
+}
+
+.auth-modal-body .btn {
+    font-size: 1rem;
+    padding: 10px;
 }
 
 .auth-modal-close:hover {

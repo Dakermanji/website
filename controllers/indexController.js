@@ -21,7 +21,7 @@ export const getIndex = (req, res) => {
 			success_msg: res.locals.success,
 			error_msg: res.locals.error,
 			resetToken: token,
-			styles: ['index/main', 'index/login', 'index/forgot_resend'],
+			styles: ['index/main', 'index/auth'],
 			scripts: [
 				'helpers/modalHelper',
 				'index/selectors',
