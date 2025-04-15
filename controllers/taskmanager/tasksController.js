@@ -5,7 +5,7 @@ import Task from '../../models/Task.js';
 import User from '../../models/User.js';
 
 // Create a new task
-export const createTask = async (req, res) => {
+export const createTask = async (req, res, next) => {
 	try {
 		const { projectId, name, assignedTo, dueDate } = req.body;
 
@@ -20,14 +20,10 @@ export const createTask = async (req, res) => {
 				.json({ error: 'No user found with this email.' });
 		}
 
-		const task = await Task.createTask(
-			projectId,
-			name,
-			assigned_to,
-			dueDate
-		);
+		await Task.createTask(projectId, name, assigned_to, dueDate);
+
 		req.flash('success', 'Task created successfully!');
-		res.status(201).json({ success: 'Task created successfully!', task });
+		res.status(200).json({ reload: true });
 	} catch (error) {
 		errorHandler(error, req, res, next);
 	}
@@ -44,7 +40,6 @@ export const updateTask = async (req, res) => {
 			: null;
 
 		if (assignedTo && !assigned_to) {
-			req.flash('error', 'No user found with this email.');
 			return res
 				.status(404)
 				.json({ error: 'No user found with this email.' });
@@ -52,24 +47,24 @@ export const updateTask = async (req, res) => {
 
 		await Task.updateTask(taskId, { name, assigned_to, dueDate });
 		req.flash('success', 'Task updated successfully!');
-		res.status(200).json({ message: 'Task updated successfully' });
+		res.status(200).json({ reload: true });
 	} catch (error) {
 		errorHandler(error, req, res, next);
 	}
 };
 
-export const updateTaskStatus = async (req, res) => {
+// Update a task status
+export const updateTaskStatus = async (req, res, next) => {
 	try {
 		const { taskId } = req.params;
 		const { status } = req.body;
 
 		if (!['todo', 'in_progress', 'done'].includes(status)) {
-			req.flash('error', 'Invalid task status.');
 			return res.status(400).json({ error: 'Invalid task status' });
 		}
 
 		await Task.updateValueForATask(taskId, 'status', status);
-		req.flash('success', 'Task status updated successfully!');
+
 		res.status(200).json({
 			message: 'Task status updated successfully',
 			taskId,
@@ -86,7 +81,7 @@ export const deleteTask = async (req, res) => {
 		const { taskId } = req.params;
 		await Task.deleteTask(taskId);
 		req.flash('success', 'Task deleted successfully!');
-		res.status(200).json({ message: 'Task deleted successfully' });
+		res.status(200).json({ reload: true });
 	} catch (error) {
 		errorHandler(error, req, res, next);
 	}

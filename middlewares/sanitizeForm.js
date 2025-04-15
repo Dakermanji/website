@@ -1,5 +1,6 @@
 //! middlewares/sanitizeForm.js
 
+import validator from 'validator';
 import {
 	validateSubject,
 	validateMessage,

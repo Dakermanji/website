@@ -83,10 +83,17 @@ main.container {
     top: 25vh;
     left: 50vw;
     transform: translateX(-50%);
-    z-index: 5;
+    z-index: 100;
     max-width: 500px;
     width: 90%;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    transition: opacity 0.8s ease-in-out;
+}
+
+.flash-message.fade {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .flash-message .btn-close {

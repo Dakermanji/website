@@ -1,20 +1,5 @@
 //! public/js/taskmanager.js
 
-// 📌 Utility function to display flash messages
-function showFlashMessage(type, message) {
-	const flashContainer = document.createElement('div');
-	flashContainer.className = `flash-message alert alert-${type} alert-dismissible fade show text-center`;
-	flashContainer.innerHTML = `
-        ${message}
-		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    `;
-	document.body.appendChild(flashContainer);
-	setTimeout(() => {
-		flashContainer.classList.add('fade');
-		setTimeout(() => flashContainer.remove(), 500);
-	}, 4000);
-}
-
 // 📌 Handle task creation and update
 async function submitTaskForm(event, formId, requestType, taskId = null) {
 	event.preventDefault();
@@ -39,16 +24,9 @@ async function submitTaskForm(event, formId, requestType, taskId = null) {
 		});
 
 		const result = await response.json();
-		console.log(result);
 
 		if (response.ok) {
-			showFlashMessage(
-				'success',
-				taskId
-					? 'Task updated successfully!'
-					: 'Task created successfully!'
-			);
-			location.reload();
+			location.reload(); // server flash message will be shown after reload
 		} else {
 			showFlashMessage(
 				'danger',
@@ -120,25 +98,6 @@ function openDeleteTaskModal(taskId) {
 	deleteModalInstance.show();
 }
 
-// 📌 Function to update task status via drag and drop
-async function updateTaskStatus(taskId, newStatus) {
-	try {
-		const response = await fetch(`/taskmanager/tasks/${taskId}`, {
-			method: 'PUT',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ status: newStatus }),
-		});
-
-		if (response.ok) {
-			showFlashMessage('success', 'Task status updated successfully!');
-		} else {
-			showFlashMessage('danger', 'Failed to update task status.');
-		}
-	} catch (error) {
-		showFlashMessage('danger', 'Error updating task status.');
-	}
-}
-
 // 📌 Highlight drop zones
 function highlightDropZone(status) {
 	document.getElementById(status)?.classList.add('drop-highlight');
@@ -168,10 +127,16 @@ if (userRole === 'editor' || userRole === 'owner') {
 						status: newStatus,
 					})
 					.then((res) => {
-						console.log('Task moved:', res.data);
+						showFlashMessage(
+							'success',
+							'Task status updated successfully!'
+						);
 					})
 					.catch((err) => {
-						console.error('Failed to update task status:', err);
+						showFlashMessage(
+							'danger',
+							'Failed to update task status.'
+						);
 					});
 			},
 		});
