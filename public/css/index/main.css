@@ -84,9 +84,13 @@ main.container {
 .role {
     font-size: 1rem;
     color: black;
-    font-weight: 300;
+    font-weight: 350;
     text-transform: uppercase;
     letter-spacing: 2px;
+}
+
+.role .orange {
+    font-weight: bold;
 }
 
 h1 {
