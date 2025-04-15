@@ -11,10 +11,10 @@
 			- Owner
 		</li>
 		<% })} else {%>
-		<p class="list-group-item text-danger">
+		<li class="list-group-item text-danger">
 			You don't have any owned projects
-		</p>
-		<%}; %>
+		</li>
+		<% } %>
 	</ul>
 </div>
 
@@ -31,9 +31,9 @@
 			%> (Owner: <%= project.owner_username %>)
 		</li>
 		<% })} else { %>
-		<p class="list-group-item text-danger">
+		<li class="list-group-item text-danger">
 			You don't collaborate in any projects
-		</p>
-		<%}; %>
+		</li>
+		<% } %>
 	</ul>
 </div>
