@@ -12,10 +12,10 @@ userFriends.notifications.forEach(function(notification) { %>
 	>
 		<i class="bi bi-x-lg"></i>
 	</span>
+	<% if (notification.type ==='follow_request') { %>
 	<p class="mb-0">
 		<strong><%= notification.username %></strong>
-		(<%= notification.email %>) <% if (notification.type ===
-		'follow_request') { %> has sent you a
+		(<%= notification.email %>) has sent you a
 		<strong class="text-info">follow request</strong>
 	</p>
 	<div class="notification-buttons d-flex gap-2">
@@ -52,11 +52,11 @@ userFriends.notifications.forEach(function(notification) { %>
 			<i class="bi bi-ban"></i>
 		</button>
 	</div>
-	<% } else if (notification.type === 'follow_accepted') { %>
-	<p>
-		has
-		<strong class="text-success">accepted</strong>
-		your follow request
+	<% } else if (notification.type ==='follow_accepted') { %>
+	<p class="mb-0">
+		<strong><%= notification.username %></strong>
+		(<%= notification.email %>) has
+		<strong class="text-success">accepted</strong> your follow request
 	</p>
 	<div class="notification-buttons d-flex gap-2">
 		<button
@@ -76,11 +76,11 @@ userFriends.notifications.forEach(function(notification) { %>
 			<i class="bi bi-ban"></i>
 		</button>
 	</div>
-	<% } else if (notification.type === 'follow_back') { %>
-	<p>
-		has
-		<strong class="text-success">accepted</strong>
-		your follow request and
+	<% } else if (notification.type ==='follow_back') { %>
+	<p class="mb-0">
+		<strong><%= notification.username %></strong>
+		(<%= notification.email %>) has
+		<strong class="text-success">accepted</strong> your follow request and
 		<strong class="text-info">followed you back</strong>
 	</p>
 	<div class="notification-buttons d-flex gap-2">
