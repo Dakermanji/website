@@ -36,6 +36,12 @@ export const navBar = {
 			id: 'trigger-friends-modal',
 		},
 		{
+			link: '#',
+			text: 'Notifications',
+			icon: '<i class="bi bi-bell-fill"></i>',
+			id: 'trigger-notification-modal',
+		},
+		{
 			link: '/taskmanager',
 			icon: '<i class="bi bi-list-task"></i>',
 			text: 'Task Manager',

@@ -1,12 +1,12 @@
 #! sql/tables_sequence.txt
 
-1. users
-2. messages
-3. follow_requests
-4. follows
-5. follows_notifications
-6. blocks
-7. projects
-8. tasks
-9. collaborations
-
+01. users
+02. messages
+03. follow_requests
+04. follows
+05. follows_notifications
+06. blocks
+07. projects
+08. tasks
+09. collaborations
+10. notifications
