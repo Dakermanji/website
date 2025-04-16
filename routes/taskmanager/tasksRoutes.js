@@ -1,7 +1,7 @@
 //! routes/taskmanager/tasksRoutes.js
 
 import express from 'express';
-import { checkProjectAccess } from '../../middlewares/taskmanagerMiddleware.js';
+import { isEditor } from '../../middlewares/taskmanagerMiddleware.js';
 import {
 	createTask,
 	updateTask,
@@ -12,13 +12,13 @@ import {
 const router = express.Router();
 
 // Create a new task in a project
-router.post('/create', checkProjectAccess('editor'), createTask);
+router.post('/create', isEditor, createTask);
 
 // Update a task's status, name, or assignment
-router.put('/:taskId', checkProjectAccess('editor'), updateTaskStatus);
-router.put('/update/:taskId', checkProjectAccess('editor'), updateTask);
+router.put('/:taskId', isEditor, updateTaskStatus);
+router.put('/update/:taskId', isEditor, updateTask);
 
 // Delete a task
-router.delete('/:taskId', checkProjectAccess('editor'), deleteTask);
+router.delete('/:taskId', isEditor, deleteTask);
 
 export default router;

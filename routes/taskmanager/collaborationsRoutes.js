@@ -1,7 +1,11 @@
 //! routes/taskmanager/collaborationsRoutes.js
 
 import express from 'express';
-import { checkProjectAccess } from '../../middlewares/taskmanagerMiddleware.js';
+import {
+	isOwner,
+	isEditor,
+	isViewer,
+} from '../../middlewares/taskmanagerMiddleware.js';
 import {
 	addCollaborator,
 	removeCollaborator,
@@ -11,16 +15,12 @@ import {
 const router = express.Router();
 
 // Add a user to a project
-router.post('/add', checkProjectAccess('owner'), addCollaborator);
+router.post('/add', isOwner, addCollaborator);
 
 // Remove a user from a project
-router.delete(
-	'/remove/:userId/:projectId',
-	checkProjectAccess('owner'),
-	removeCollaborator
-);
+router.delete('/remove/:userId/:projectId', isOwner, removeCollaborator);
 
 // Get all collaborators for a project
-router.get('/:projectId', checkProjectAccess('viewer'), getCollaborators);
+router.get('/:projectId', isViewer, getCollaborators);
 
 export default router;

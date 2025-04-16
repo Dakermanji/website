@@ -1,8 +1,7 @@
 //! routes/taskmanager/projectsRoutes.js
 
 import express from 'express';
-import { ensureAuthenticated } from '../../middlewares/authMiddleware.js';
-import { checkProjectAccess } from '../../middlewares/taskmanagerMiddleware.js';
+import { isOwner, isViewer } from '../../middlewares/taskmanagerMiddleware.js';
 import {
 	createProject,
 	getProjects,
@@ -19,9 +18,9 @@ router.post('/create', createProject);
 router.get('/', getProjects); // Project list
 
 // Get a certain project
-router.get('/:projectId', checkProjectAccess('viewer'), getBoard); // Task Board
+router.get('/:projectId', isViewer, getBoard); // Task Board
 
 // Delete a project
-router.delete('/:projectId', checkProjectAccess('owner'), deleteProject);
+router.delete('/:projectId', isOwner, deleteProject);
 
 export default router;

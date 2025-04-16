@@ -62,3 +62,8 @@ export const checkProjectAccess = (requiredRole) => {
 		}
 	};
 };
+
+// Shortcut exports for cleaner usage in routes
+export const isOwner = checkProjectAccess('owner');
+export const isEditor = checkProjectAccess('editor');
+export const isViewer = checkProjectAccess('viewer');
