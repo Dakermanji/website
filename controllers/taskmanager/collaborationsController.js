@@ -4,6 +4,7 @@ import errorHandler from '../../middlewares/errorHandler.js';
 import Collaboration from '../../models/Collaboration.js';
 import User from '../../models/User.js';
 import Project from '../../models/Project.js';
+import { createNotification } from '../../utils/notificationHelper.js';
 
 // Add a collaborator to a project
 export const addCollaborator = async (req, res) => {
@@ -49,6 +50,14 @@ export const addCollaborator = async (req, res) => {
 		if (existingCollab) {
 			// Update the role if already a collaborator
 			await Collaboration.updateUserRole(projectId, user.id, role);
+			// 🔁 Send role update notification
+			await createNotification({
+				project: 'taskmanager',
+				notifierId: userId,
+				notifiedId: user.id,
+				description: `Your role has been updated to ** ${role} ** in project ** ${project.name} **.`,
+				link: `/taskmanager/${projectId}`,
+			});
 			req.flash('success', 'User role updated successfully!');
 			return res.status(200).json({
 				success: 'User role updated successfully!',
@@ -57,6 +66,14 @@ export const addCollaborator = async (req, res) => {
 
 		// Add new collaborator
 		await Collaboration.addUserToProject(projectId, user.id, role);
+		// 🆕 Send new collaborator notification
+		await createNotification({
+			project: 'taskmanager',
+			notifierId: userId,
+			notifiedId: user.id,
+			description: `You have been added as a ** ${role} ** to project ** ${project.name} **.`,
+			link: `/taskmanager/${projectId}`,
+		});
 		req.flash('success', 'User added to project successfully!');
 		res.status(201).json({
 			success: 'User added to project successfully!',
