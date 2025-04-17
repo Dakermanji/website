@@ -55,7 +55,7 @@ export const addCollaborator = async (req, res) => {
 				project: 'taskmanager',
 				notifierId: userId,
 				notifiedId: user.id,
-				description: `Your role has been updated to ** ${role} ** in project ** ${project.name} **.`,
+				description: `Your role has been updated to <strong>${role}</strong> in project <strong>${project.name}</strong>.`,
 				link: `/taskmanager/${projectId}`,
 			});
 			req.flash('success', 'User role updated successfully!');
@@ -71,7 +71,7 @@ export const addCollaborator = async (req, res) => {
 			project: 'taskmanager',
 			notifierId: userId,
 			notifiedId: user.id,
-			description: `You have been added as a ** ${role} ** to project ** ${project.name} **.`,
+			description: `You have been added as a <strong>${role}</strong> to project <strong>${project.name}</strong>.`,
 			link: `/taskmanager/${projectId}`,
 		});
 		req.flash('success', 'User added to project successfully!');

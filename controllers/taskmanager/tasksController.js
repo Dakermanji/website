@@ -30,7 +30,7 @@ export const createTask = async (req, res, next) => {
 				project: 'taskmanager',
 				notifierId: req.user.id,
 				notifiedId: assigned_to,
-				description: `You have been assigned a new task ** ${name} **.`,
+				description: `You have been assigned a new task <strong>${name}</strong>.`,
 				link: `/taskmanager/${projectId}`,
 			});
 		}
@@ -68,7 +68,7 @@ export const updateTask = async (req, res) => {
 				project: 'taskmanager',
 				notifierId: req.user.id,
 				notifiedId: assigned_to,
-				description: `The task ** ${task.name} ** has been updated.`,
+				description: `The task <strong>${task.name}</strong> has been updated.`,
 				link: `/taskmanager/${projectId}`,
 			});
 		}
@@ -104,9 +104,14 @@ export const updateTaskStatus = async (req, res, next) => {
 					project: 'taskmanager',
 					notifierId: req.user.id,
 					notifiedId: collab.user_id,
-					description: `${req.user.display_name} updated the task **${
+					description: `<strong>${
+						req.user.display_name
+					}</strong> updated the task <strong>${
 						task.name
-					}** to **${status.replace('_', ' ')}**.`,
+					}</strong> to <strong>${status.replace(
+						'_',
+						' '
+					)}</strong>.`,
 					link: `/taskmanager/${task.project_id}`,
 				});
 			}
@@ -120,9 +125,11 @@ export const updateTaskStatus = async (req, res, next) => {
 				project: 'taskmanager',
 				notifierId: req.user.id,
 				notifiedId: project.owner_id,
-				description: `${req.user.display_name} updated the task **${
+				description: `<strong>${
+					req.user.display_name
+				}</strong> updated the task <strong>${
 					task.name
-				}** to **${status.replace('_', ' ')}**.`,
+				}</strong> to <strong>${status.replace('_', ' ')}</strong>.`,
 				link: `/taskmanager/${task.project_id}`,
 			});
 		}
@@ -151,7 +158,7 @@ export const deleteTask = async (req, res) => {
 				project: 'taskmanager',
 				notifierId: req.user.id,
 				notifiedId: project.owner_id,
-				description: `${req.user.display_name} deleted the task ** ${task.name} ** (status: ** ${task.status} **)`,
+				description: `<strong>${req.user.display_name}</strong> deleted the task <strong>${task.name}</strong> (status: <strong>${task.status}</strong>)`,
 				link: `/taskmanager/${task.project_id}`,
 			});
 		}

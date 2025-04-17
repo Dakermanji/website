@@ -81,7 +81,7 @@ export const deleteProject = async (req, res) => {
 					project: 'taskmanager',
 					notifierId: userId,
 					notifiedId: collab.user_id,
-					description: `The project ** ${project.name} ** has been deleted by its owner.`,
+					description: `The project <strong>${project.name}</strong> has been deleted by its owner.`,
 					link: '/taskmanager',
 				});
 			}
