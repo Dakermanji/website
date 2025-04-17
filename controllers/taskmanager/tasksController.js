@@ -3,6 +3,9 @@
 import errorHandler from '../../middlewares/errorHandler.js';
 import Task from '../../models/Task.js';
 import User from '../../models/User.js';
+import Collaboration from '../../models/Collaboration.js';
+import Project from '../../models/Project.js';
+import { createNotification } from '../../utils/notificationHelper.js';
 
 // Create a new task
 export const createTask = async (req, res, next) => {
@@ -21,6 +24,16 @@ export const createTask = async (req, res, next) => {
 		}
 
 		await Task.createTask(projectId, name, assigned_to, dueDate);
+
+		if (assigned_to !== req.user.id) {
+			await createNotification({
+				project: 'taskmanager',
+				notifierId: req.user.id,
+				notifiedId: assigned_to,
+				description: `You have been assigned a new task ** ${name} **.`,
+				link: `/taskmanager/${projectId}`,
+			});
+		}
 
 		req.flash('success', 'Task created successfully!');
 		res.status(200).json({ reload: true });
@@ -45,7 +58,21 @@ export const updateTask = async (req, res) => {
 				.json({ error: 'No user found with this email.' });
 		}
 
+		const task = await Task.getTaskById(taskId);
+		const projectId = task?.project_id;
+
 		await Task.updateTask(taskId, { name, assigned_to, dueDate });
+
+		if (assigned_to && assigned_to !== req.user.id) {
+			await createNotification({
+				project: 'taskmanager',
+				notifierId: req.user.id,
+				notifiedId: assigned_to,
+				description: `The task ** ${task.name} ** has been updated.`,
+				link: `/taskmanager/${projectId}`,
+			});
+		}
+
 		req.flash('success', 'Task updated successfully!');
 		res.status(200).json({ reload: true });
 	} catch (error) {
@@ -65,6 +92,41 @@ export const updateTaskStatus = async (req, res, next) => {
 
 		await Task.updateValueForATask(taskId, 'status', status);
 
+		const task = await Task.getTaskById(taskId);
+		const collaborators = await Collaboration.getProjectCollaborators(
+			task.project_id
+		);
+		const project = await Project.getProjectById(task.project_id);
+
+		for (const collab of collaborators) {
+			if (collab.user_id !== req.user.id) {
+				await createNotification({
+					project: 'taskmanager',
+					notifierId: req.user.id,
+					notifiedId: collab.user_id,
+					description: `${req.user.display_name} updated the task **${
+						task.name
+					}** to **${status.replace('_', ' ')}**.`,
+					link: `/taskmanager/${task.project_id}`,
+				});
+			}
+		}
+
+		if (
+			project.owner_id !== req.user.id &&
+			!collaborators.find((c) => c.user_id === project.owner_id)
+		) {
+			await createNotification({
+				project: 'taskmanager',
+				notifierId: req.user.id,
+				notifiedId: project.owner_id,
+				description: `${req.user.display_name} updated the task **${
+					task.name
+				}** to **${status.replace('_', ' ')}**.`,
+				link: `/taskmanager/${task.project_id}`,
+			});
+		}
+
 		res.status(200).json({
 			message: 'Task status updated successfully',
 			taskId,
@@ -79,7 +141,21 @@ export const updateTaskStatus = async (req, res, next) => {
 export const deleteTask = async (req, res) => {
 	try {
 		const { taskId } = req.params;
+		const task = await Task.getTaskById(taskId);
+		const project = await Project.getProjectById(task.project_id);
+
 		await Task.deleteTask(taskId);
+
+		if (req.user.id !== project.owner_id) {
+			await createNotification({
+				project: 'taskmanager',
+				notifierId: req.user.id,
+				notifiedId: project.owner_id,
+				description: `${req.user.display_name} deleted the task ** ${task.name} ** (status: ** ${task.status} **)`,
+				link: `/taskmanager/${task.project_id}`,
+			});
+		}
+
 		req.flash('success', 'Task deleted successfully!');
 		res.status(200).json({ reload: true });
 	} catch (error) {
