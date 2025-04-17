@@ -7,6 +7,7 @@ import Collaboration from '../../models/Collaboration.js';
 import User from '../../models/User.js';
 import { navBar } from '../../data/navBar.js';
 import { getUserFriends } from '../../utils/friends/userFriendsHelper.js';
+import { createNotification } from '../../utils/notificationHelper.js';
 
 // Create a new project
 export const createProject = async (req, res) => {
@@ -57,10 +58,34 @@ export const getProjects = async (req, res) => {
 export const deleteProject = async (req, res) => {
 	try {
 		const { projectId } = req.params;
+		const userId = req.user.id;
 
-		await Task.deleteTasksByProjectId(projectId);
-		await Collaboration.removeAllByProjectId(projectId);
+		// Step 1: Fetch project & collaborators before deleting
+		const project = await Project.getProjectById(projectId);
+		if (!project) {
+			req.flash('error', 'Project not found.');
+			return res.status(404).json({ error: 'Project not found.' });
+		}
+
+		const collaborators = await Collaboration.getProjectCollaborators(
+			projectId
+		);
+
+		// Step 2: Delete Project
 		await Project.deleteProject(projectId);
+
+		// Step 3: Notify all collaborators (except owner)
+		for (const collab of collaborators) {
+			if (collab.user_id !== userId) {
+				await createNotification({
+					project: 'taskmanager',
+					notifierId: userId,
+					notifiedId: collab.user_id,
+					description: `The project ** ${project.name} ** has been deleted by its owner.`,
+					link: '/taskmanager',
+				});
+			}
+		}
 
 		req.flash('success', 'Project deleted successfully!');
 		res.status(200).json({ message: 'Project deleted successfully' });
