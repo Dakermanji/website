@@ -6,12 +6,13 @@ import indexRouter from '../routes/indexRoutes.js';
 import authRoutes from '../routes/authRoutes.js';
 import projectsRoutes from '../routes/projectsRoutes.js';
 
-// import friends rounds
+// import friends routes
 import friendsRoutes from '../routes/friends/friendsRoutes.js';
 import followNotificationsRoutes from '../routes/friends/followNotificationsRoutes.js';
 import followsRoutes from '../routes/friends/followsRoutes.js';
 import followersRoutes from '../routes/friends/followersRoutes.js';
 import blocksRoutes from '../routes/friends/blocksRoutes.js';
+import notificationRoutes from '../routes/notificationRoutes.js';
 
 // import taskmanager routes
 import projectsTMRoutes from '../routes/taskmanager/projectsRoutes.js';
@@ -34,6 +35,9 @@ router.use('/followNotifications', followNotificationsRoutes);
 router.use('/follows', followsRoutes);
 router.use('/followers', followersRoutes);
 router.use('/blocks', blocksRoutes);
+
+// Notification routes
+router.use('/notifications', notificationRoutes);
 
 // Task Manager
 router.use('/taskmanager/tasks', tasksTMRoutes);
