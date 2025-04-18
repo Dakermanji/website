@@ -71,7 +71,9 @@
 		<!-- Logged In Users -->
 		<% if (locals.user?.id && locals.userFriends) { %>
 		<link rel="stylesheet" href="/css/friends.css" />
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 		<script src="/js/friends.js" defer></script>
+		<script src="/js/notifications.js" defer></script>
 		<% } %>
 	</head>
 

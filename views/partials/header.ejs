@@ -18,23 +18,53 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
         <% navBar.forEach(nav => { %>
-        <li class="nav-item">
-          <a
-            class="nav-link <%= currentRoute === `${nav.link}` ? 'active' : '' %>"
-            <%= nav.id ? `id=${nav.id}` : '' %>
-            href="<%= nav.link %>"
-          >
-            <span
-              class="nav-icon"
-              data-bs-toggle="tooltip"
-              title="<%= nav.text %>"
+          <% if (nav.text === 'Notifications') { %>
+            <li class="nav-item dropdown">
+              <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifications dropdown">
+                <span class="nav-icon">
+                <%- (notifications && notifications.length > 0) ? nav.iconFilled : nav.iconEmpty %>
+                </span>
+              </a>
+              <ul id="notifications" class="dropdown-menu dropdown-menu-end p-2" style="width: 300px; max-height: 400px; overflow-y: auto;">
+                <% if (notifications && notifications.length > 0) { %>
+                  <% notifications.forEach(n => { %>
+                    <li class="mb-2">
+                      <a class="dropdown-item small" href="<%= n.link || '#' %>">
+                        <%- n.description %>
+                        <div class="text-muted small"><%= new Date(n.created_at).toLocaleString() %></div>
+                      </a>
+                    </li>
+                  <% }) %>
+                  <li><hr class="dropdown-divider"></li>
+                  <li>
+                    <button class="dropdown-item text-center small" id="markAllReadBtn">Mark all as read</button>
+                  </li>
+                <% } else { %>
+                  <li>
+                    <span class="dropdown-item text-muted small">No Notifications</span>
+                  </li>
+                <% } %>
+            </ul>
+          </li>
+        <% } else { %>
+          <li class="nav-item">
+            <a
+              class="nav-link <%= currentRoute === `${nav.link}` ? 'active' : '' %>"
+              <%= nav.id ? `id=${nav.id}` : '' %>
+              href="<%= nav.link %>"
             >
-              <%- nav.icon %>
-            </span>
-            <span class="nav-text"><%= nav.text %></span>
-          </a>
-        </li>
-        <% }) %>
+              <span
+                class="nav-icon"
+                data-bs-toggle="tooltip"
+                title="<%= nav.text %>"
+              >
+                <%- nav.icon %>
+              </span>
+              <span class="nav-text"><%= nav.text %></span>
+            </a>
+          </li>
+        <% } %>
+      <% }) %>
         <li class="nav-item">
           <% if (!user) { %>
           <!-- If the user is not logged in -->

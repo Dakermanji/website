@@ -71,7 +71,6 @@ async function deleteTask(taskId) {
 		});
 
 		if (response.ok) {
-			showFlashMessage('success', 'Task deleted successfully!');
 			location.reload();
 		} else {
 			showFlashMessage('danger', 'Failed to delete task.');
@@ -119,8 +118,15 @@ if (userRole === 'editor' || userRole === 'owner') {
 			onEnd: function (evt) {
 				const taskId = evt.item.dataset.taskId;
 				const newStatus = evt.to.dataset.status;
+				const oldStatus = evt.from.dataset.status;
 
-				if (!taskId || !newStatus) return;
+				if (
+					!taskId ||
+					!newStatus ||
+					!oldStatus ||
+					newStatus === oldStatus
+				)
+					return;
 
 				axios
 					.put(`/taskmanager/tasks/${taskId}`, {
@@ -165,7 +171,6 @@ document
 
 			const result = await response.json();
 			if (response.ok) {
-				showFlashMessage('success', 'User added as collaborator!');
 				location.reload();
 			} else {
 				showFlashMessage(
@@ -186,7 +191,6 @@ async function removeCollaborator(userId, projectId) {
 			{ method: 'DELETE' }
 		);
 		if (response.ok) {
-			showFlashMessage('success', 'Collaborator removed successfully!');
 			location.reload();
 		} else {
 			showFlashMessage('danger', 'Failed to remove collaborator.');

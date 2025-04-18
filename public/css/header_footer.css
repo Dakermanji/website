@@ -60,6 +60,12 @@ a.nav-link.active::after {
     display: none;
 }
 
+#notifications .dropdown-item {
+    font-weight: normal;
+    display: block;
+    text-wrap: wrap;
+}
+
 @media (max-width: 990px) {
     nav a.nav-link:hover {
         color: var(--color-primary);
