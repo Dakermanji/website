@@ -12,6 +12,7 @@ export const renderProjects = async (req, res, next) => {
 		const notifications = await Notification.getUnreadNotiifcationsForUser(
 			userId
 		);
+		const unreadCount = await Notification.countUnread(req.user.id);
 
 		res.render('projects', {
 			title: 'Projects - Dakermanji Web Dev',
@@ -19,6 +20,7 @@ export const renderProjects = async (req, res, next) => {
 			scripts: ['helpers/modalHelper'],
 			userFriends,
 			notifications,
+			unreadCount,
 			success_msg: res.locals.success,
 			error_msg: res.locals.error,
 		});

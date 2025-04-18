@@ -42,6 +42,7 @@ export const getProjects = async (req, res) => {
 		const notifications = await Notification.getUnreadNotiifcationsForUser(
 			userId
 		);
+		const unreadCount = await Notification.countUnread(req.user.id);
 
 		res.render('taskmanager/index', {
 			title: 'Task Manager - DWD',
@@ -49,6 +50,7 @@ export const getProjects = async (req, res) => {
 			collaboratedProjects,
 			navBar: navBar.projects,
 			notifications,
+			unreadCount,
 			scripts: ['helpers/modalHelper', 'taskmanager'],
 			styles: ['taskmanager/modals'],
 			userFriends,
@@ -123,6 +125,7 @@ export const getBoard = async (req, res) => {
 		const notifications = await Notification.getUnreadNotiifcationsForUser(
 			userId
 		);
+		const unreadCount = await Notification.countUnread(req.user.id);
 
 		const tasks = await Task.getTasksByProjectId(projectId);
 		res.render('taskmanager/board', {
@@ -133,6 +136,7 @@ export const getBoard = async (req, res) => {
 			owner,
 			collaborators,
 			notifications,
+			unreadCount,
 			userRole: isOwner ? 'owner' : userCollab?.role,
 			userFriends,
 			success_msg: res.locals.success,

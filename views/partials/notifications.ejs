@@ -9,6 +9,13 @@
 		aria-expanded="false"
 		aria-label="Notifications dropdown"
 	>
+		<% if (unreadCount && unreadCount > 0) { %>
+		<span
+			class="position-absolute start-100 translate-middle badge rounded-pill bg-danger"
+		>
+			<%= unreadCount %>
+		</span>
+		<% } %>
 		<span class="nav-icon">
 			<%- (notifications && notifications.length > 0) ? nav.iconFilled :
 			nav.iconEmpty %>
