@@ -19,6 +19,16 @@ class Notification {
 		return result.insertId;
 	}
 
+	// Get a specific notification for a specific user
+	static async getNotificationByIdForAUser(notificationId, userId) {
+		const [rows] = await promisePool.query(
+			`SELECT * FROM notifications
+			 WHERE id = ? AND notified_id = ? LIMIT 1`,
+			[notificationId, userId]
+		);
+		return rows[0];
+	}
+
 	// Get all notifications for a user (most recent first)
 	static async getUnreadNotiifcationsForUser(userId) {
 		const [rows] = await promisePool.query(

@@ -1,0 +1,18 @@
+<!-- views/partials/navBar.ejs -->
+
+<% navBar.forEach(nav => { %>
+    <% if (nav.text === 'Notifications') { %>
+        <%- include('notifications', { nav }) %>
+    <% } else { %>
+        <li class="nav-item">
+            <a class="nav-link <%= currentRoute === `${nav.link}` ? 'active' : '' %>" <%= nav.id ? `id=${nav.id}` : '' %> href="<%= nav.link %>" >
+                <span class="nav-icon" data-bs-toggle="tooltip" title="<%= nav.text %>"><%- nav.icon %></span>
+                <span class="nav-text"><%= nav.text %></span>
+            </a>
+        </li>
+    <% } %>
+<% }) %>
+
+<li class="nav-item">
+    <%- include('auth') %>
+</li>

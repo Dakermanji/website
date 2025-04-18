@@ -60,6 +60,12 @@ a.nav-link.active::after {
     display: none;
 }
 
+#notifications {
+    width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
 #notifications .dropdown-item {
     font-weight: normal;
     display: block;

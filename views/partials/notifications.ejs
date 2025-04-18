@@ -1,0 +1,45 @@
+<!-- views/partials/notifications.ejs -->
+
+<li class="nav-item dropdown">
+	<a
+		class="nav-link"
+		href="#"
+		role="button"
+		data-bs-toggle="dropdown"
+		aria-expanded="false"
+		aria-label="Notifications dropdown"
+	>
+		<span class="nav-icon">
+			<%- (notifications && notifications.length > 0) ? nav.iconFilled :
+			nav.iconEmpty %>
+		</span>
+	</a>
+	<ul id="notifications" class="dropdown-menu dropdown-menu-end p-2">
+		<% if (notifications && notifications.length > 0) { %> <%
+		notifications.forEach(n => { %>
+
+		<li class="mb-2">
+			<a
+				class="dropdown-item small"
+				href="/notifications/read/<%= n.id %>"
+			>
+				<%- n.description %>
+				<div class="text-muted small"
+					><%= new Date(n.created_at).toLocaleString() %></div
+				>
+			</a>
+		</li>
+		<% }) %>
+		<li><hr class="dropdown-divider" /></li>
+		<li>
+			<button class="dropdown-item text-center small" id="markAllReadBtn"
+				>Mark all as read</button
+			>
+		</li>
+		<% } else { %>
+		<li>
+			<span class="dropdown-item text-muted small">No Notifications</span>
+		</li>
+		<% } %>
+	</ul>
+</li>
