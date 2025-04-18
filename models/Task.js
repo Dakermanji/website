@@ -52,7 +52,7 @@ class Task {
 	}
 
 	static async getTaskById(taskId) {
-		const query = `SELECT id, project_id FROM tasks WHERE id = ? LIMIT 1`;
+		const query = `SELECT id, project_id, name, status FROM tasks WHERE id = ? LIMIT 1`;
 		const [rows] = await promisePool.execute(query, [taskId]);
 		return rows.length ? rows[0] : null;
 	}

@@ -5,6 +5,7 @@ import Project from '../../models/Project.js';
 import Task from '../../models/Task.js';
 import Collaboration from '../../models/Collaboration.js';
 import User from '../../models/User.js';
+import Notification from '../../models/Notification.js';
 import { navBar } from '../../data/navBar.js';
 import { getUserFriends } from '../../utils/friends/userFriendsHelper.js';
 import { createNotification } from '../../utils/notificationHelper.js';
@@ -38,11 +39,16 @@ export const getProjects = async (req, res) => {
 
 		const userFriends = await getUserFriends(userId);
 
+		const notifications = await Notification.getUnreadNotiifcationsForUser(
+			userId
+		);
+
 		res.render('taskmanager/index', {
 			title: 'Task Manager - DWD',
 			ownedProjects,
 			collaboratedProjects,
 			navBar: navBar.projects,
+			notifications,
 			scripts: ['helpers/modalHelper', 'taskmanager'],
 			styles: ['taskmanager/modals'],
 			userFriends,
@@ -114,6 +120,10 @@ export const getBoard = async (req, res) => {
 
 		const owner = await User.findById(project.owner_id);
 
+		const notifications = await Notification.getUnreadNotiifcationsForUser(
+			userId
+		);
+
 		const tasks = await Task.getTasksByProjectId(projectId);
 		res.render('taskmanager/board', {
 			title: `${project.name} - Kanban Board`,
@@ -122,6 +132,7 @@ export const getBoard = async (req, res) => {
 			tasks,
 			owner,
 			collaborators,
+			notifications,
 			userRole: isOwner ? 'owner' : userCollab?.role,
 			userFriends,
 			success_msg: res.locals.success,

@@ -90,13 +90,19 @@ export const updateTaskStatus = async (req, res, next) => {
 			return res.status(400).json({ error: 'Invalid task status' });
 		}
 
-		await Task.updateValueForATask(taskId, 'status', status);
-
 		const task = await Task.getTaskById(taskId);
+		if (task.status === status) {
+			return res
+				.status(400)
+				.json({ error: 'Task already in this status.' });
+		}
 		const collaborators = await Collaboration.getProjectCollaborators(
 			task.project_id
 		);
 		const project = await Project.getProjectById(task.project_id);
+		await Task.updateValueForATask(taskId, 'status', status);
+
+		collaborators.push({ user_id: project.owner_id });
 
 		for (const collab of collaborators) {
 			if (collab.user_id !== req.user.id) {
@@ -105,33 +111,16 @@ export const updateTaskStatus = async (req, res, next) => {
 					notifierId: req.user.id,
 					notifiedId: collab.user_id,
 					description: `<strong>${
-						req.user.display_name
+						req.user.username
 					}</strong> updated the task <strong>${
 						task.name
-					}</strong> to <strong>${status.replace(
+					}</strong> from ${task.status.replace(
 						'_',
 						' '
-					)}</strong>.`,
+					)} to <strong>${status.replace('_', ' ')}</strong>.`,
 					link: `/taskmanager/${task.project_id}`,
 				});
 			}
-		}
-
-		if (
-			project.owner_id !== req.user.id &&
-			!collaborators.find((c) => c.user_id === project.owner_id)
-		) {
-			await createNotification({
-				project: 'taskmanager',
-				notifierId: req.user.id,
-				notifiedId: project.owner_id,
-				description: `<strong>${
-					req.user.display_name
-				}</strong> updated the task <strong>${
-					task.name
-				}</strong> to <strong>${status.replace('_', ' ')}</strong>.`,
-				link: `/taskmanager/${task.project_id}`,
-			});
 		}
 
 		res.status(200).json({
@@ -158,7 +147,14 @@ export const deleteTask = async (req, res) => {
 				project: 'taskmanager',
 				notifierId: req.user.id,
 				notifiedId: project.owner_id,
-				description: `<strong>${req.user.display_name}</strong> deleted the task <strong>${task.name}</strong> (status: <strong>${task.status}</strong>)`,
+				description: `<strong>${
+					req.user.username
+				}</strong> deleted the task <strong>${
+					task.name
+				}</strong> (status: <strong>${task.status.replace(
+					'_',
+					' '
+				)}</strong>)`,
 				link: `/taskmanager/${task.project_id}`,
 			});
 		}

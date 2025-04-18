@@ -38,7 +38,8 @@ export const navBar = {
 		{
 			link: '#',
 			text: 'Notifications',
-			icon: '<i class="bi bi-bell-fill"></i>',
+			iconEmpty: '<i class="bi bi-bell"></i>',
+			iconFilled: '<i class="bi bi-bell-fill"></i>',
 			id: 'trigger-notification-modal',
 		},
 		{

@@ -20,10 +20,10 @@ class Notification {
 	}
 
 	// Get all notifications for a user (most recent first)
-	static async getAllForUser(userId) {
+	static async getUnreadNotiifcationsForUser(userId) {
 		const [rows] = await promisePool.query(
 			`SELECT * FROM notifications
-			 WHERE notified_id = ?
+			 WHERE notified_id = ? AND is_read = FALSE
 			 ORDER BY created_at DESC`,
 			[userId]
 		);

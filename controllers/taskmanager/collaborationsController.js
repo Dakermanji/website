@@ -48,6 +48,17 @@ export const addCollaborator = async (req, res) => {
 		);
 
 		if (existingCollab) {
+			// No change made
+			if (existingCollab.role === role) {
+				req.flash(
+					'error',
+					`The collaborator you are adding is already ${role}`
+				);
+				return res.status(200).json({
+					error: `The collaborator you are adding is already ${role}`,
+				});
+			}
+
 			// Update the role if already a collaborator
 			await Collaboration.updateUserRole(projectId, user.id, role);
 			// 🔁 Send role update notification
