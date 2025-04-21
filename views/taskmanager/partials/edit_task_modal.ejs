@@ -30,14 +30,34 @@
 					</div>
 
 					<div class="mb-3">
-						<label class="form-label">Assigned To (Email)</label>
-						<input
-							type="email"
+						<label class="form-label">Priority</label>
+						<select
+							name="priority"
+							id="edit-task-priority"
 							class="form-control"
+						>
+							<option value="">-</option>
+							<option value="low">🟢 Low</option>
+							<option value="medium">🟡 Medium</option>
+							<option value="high">🔴 High</option>
+						</select>
+					</div>
+
+					<div class="mb-3">
+						<label class="form-label">Assigned To </label>
+
+						<select
 							name="assigned_to"
 							id="edit-task-assigned-to"
-							autocomplete="email"
-						/>
+							class="form-control"
+						>
+							<option value="">-</option>
+							<% collaborators.forEach(collaborator => { %>
+							<option value="<%= collaborator.email %>"
+								><%= collaborator.email %></option
+							>
+							<% }); %>
+						</select>
 					</div>
 
 					<div class="mb-3">

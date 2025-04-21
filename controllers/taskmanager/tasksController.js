@@ -7,10 +7,16 @@ import Collaboration from '../../models/Collaboration.js';
 import Project from '../../models/Project.js';
 import { createNotification } from '../../utils/notificationHelper.js';
 
+const priority_color = {
+	low: '🟢',
+	medium: '🟡',
+	high: '🔴',
+};
+
 // Create a new task
 export const createTask = async (req, res, next) => {
 	try {
-		const { projectId, name, assignedTo, dueDate } = req.body;
+		const { projectId, name, priority, assignedTo, dueDate } = req.body;
 
 		let assigned_to = assignedTo
 			? (await User.findByEmail(assignedTo))?.id
@@ -23,14 +29,14 @@ export const createTask = async (req, res, next) => {
 				.json({ error: 'No user found with this email.' });
 		}
 
-		await Task.createTask(projectId, name, assigned_to, dueDate);
+		await Task.createTask(projectId, name, priority, assigned_to, dueDate);
 
 		if (assigned_to !== req.user.id) {
 			await createNotification({
 				project: 'taskmanager',
 				notifierId: req.user.id,
 				notifiedId: assigned_to,
-				description: `You have been assigned a new task <strong>${name}</strong>.`,
+				description: `You have been assigned a new task ${priority_color[priority]}<strong>${name}</strong>.`,
 				link: `/taskmanager/${projectId}`,
 			});
 		}
@@ -43,10 +49,16 @@ export const createTask = async (req, res, next) => {
 };
 
 // Update a task
-export const updateTask = async (req, res) => {
+export const updateTask = async (req, res, next) => {
 	try {
 		const { taskId } = req.params;
-		const { name, assignedTo, dueDate } = req.body;
+		const { name, priority, assignedTo, dueDate } = req.body;
+
+		if (!['low', 'medium', 'high'].includes(priority)) {
+			return res
+				.status(400)
+				.json({ error: 'Please set a valid priority value.' });
+		}
 
 		let assigned_to = assignedTo
 			? (await User.findByEmail(assignedTo))?.id
@@ -61,14 +73,14 @@ export const updateTask = async (req, res) => {
 		const task = await Task.getTaskById(taskId);
 		const projectId = task?.project_id;
 
-		await Task.updateTask(taskId, { name, assigned_to, dueDate });
+		await Task.updateTask(taskId, { name, priority, assigned_to, dueDate });
 
 		if (assigned_to && assigned_to !== req.user.id) {
 			await createNotification({
 				project: 'taskmanager',
 				notifierId: req.user.id,
 				notifiedId: assigned_to,
-				description: `The task <strong>${task.name}</strong> has been updated.`,
+				description: `${priority_color[priority]} The task <strong>${task.name}</strong> has been updated.`,
 				link: `/taskmanager/${projectId}`,
 			});
 		}
@@ -112,9 +124,9 @@ export const updateTaskStatus = async (req, res, next) => {
 					notifiedId: collab.user_id,
 					description: `<strong>${
 						req.user.username
-					}</strong> updated the task <strong>${
-						task.name
-					}</strong> from ${task.status.replace(
+					}</strong> updated the task ${
+						priority_color[task.priority]
+					}<strong>${task.name}</strong> from ${task.status.replace(
 						'_',
 						' '
 					)} to <strong>${status.replace('_', ' ')}</strong>.`,
@@ -149,7 +161,9 @@ export const deleteTask = async (req, res) => {
 				notifiedId: project.owner_id,
 				description: `<strong>${
 					req.user.username
-				}</strong> deleted the task <strong>${
+				}</strong> deleted the task ${
+					priority_color[task.priority]
+				}<strong>${
 					task.name
 				}</strong> (status: <strong>${task.status.replace(
 					'_',

@@ -1,7 +1,5 @@
 <!-- views/taskmanager/board.ejs -->
 
-<%- include('../partials/header') %>
-
 <div class="container mt-4">
 	<h2 class="mb-4 text-center"><%= project.name %></h2>
 
@@ -67,12 +65,19 @@
 		>
 			Add Task
 		</button>
-		<% } %> <%- include('./partials/task_board', { tasks }) %>
+		<% } %>
+		<!-- Task Board -->
+		<%- include('./partials/task_board', { tasks }) %>
 	</section>
 </div>
 
+<!-- Collaborator Modal -->
 <%- include('./partials/collaborator_modal') %>
+
+<!-- Task Modal -->
 <%-include('./partials/task_modal') %>
+
+<!-- Delete Project Modal -->
 <%-include('./partials/delete_project_modal') %>
 
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>

@@ -8,6 +8,7 @@ async function submitTaskForm(event, formId, requestType, taskId = null) {
 	const taskData = {
 		projectId: formData.get('projectId'),
 		name: formData.get('name'),
+		priority: formData.get('priority'),
 		assignedTo: formData.get('assigned_to'),
 		dueDate: formData.get('due_date'),
 	};
@@ -39,9 +40,10 @@ async function submitTaskForm(event, formId, requestType, taskId = null) {
 }
 
 // 📌 Open the edit task modal and populate it
-function openEditTaskModal(taskId, name, assignedTo, dueDate) {
+function openEditTaskModal(taskId, name, priority, assignedTo, dueDate) {
 	document.getElementById('edit-task-id').value = taskId;
 	document.getElementById('edit-task-name').value = name;
+	document.getElementById('edit-task-priority').value = priority;
 	document.getElementById('edit-task-assigned-to').value = assignedTo || '';
 	document.getElementById('edit-task-due-date').value = dueDate
 		? new Date(dueDate).toISOString().split('T')[0]

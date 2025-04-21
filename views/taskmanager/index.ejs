@@ -1,8 +1,5 @@
 <!-- views/taskmanager/index.ejs -->
 
-<!-- Header -->
-<%- include('../partials/header') %>
-
 <!-- Projects -->
 <div class="container m-4">
 	<h2 class="mb-3">Task Manager</h2>
@@ -14,10 +11,11 @@
 		Create New Project
 	</button>
 	<div class="mt-4">
+		<!-- Project List -->
 		<%- include('./partials/project_list', { ownedProjects,
 		collaboratedProjects }) %>
 	</div>
 </div>
 
-<!-- Modals -->
+<!-- Project Modal -->
 <%- include('./partials/project_modal') %>

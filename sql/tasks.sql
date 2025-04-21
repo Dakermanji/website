@@ -4,6 +4,7 @@ CREATE TABLE tasks (
     project_id CHAR(36) NOT NULL,
     name VARCHAR(255) NOT NULL,
     status ENUM('todo', 'in_progress', 'done') DEFAULT 'todo',
+    priority ENUM('low', 'medium', 'high') DEFAULT 'medium',
     assigned_to CHAR(36) NULL,
     due_date DATE NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

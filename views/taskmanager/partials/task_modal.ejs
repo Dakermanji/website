@@ -1,6 +1,5 @@
 <!-- views/taskmanager/partials/task_modal.ejs -->
 
-<!-- Task Modal -->
 <div id="taskModal" class="modal fade" tabindex="-1">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -31,13 +30,34 @@
 						/>
 					</div>
 					<div class="mb-3">
-						<label class="form-label">Assign To</label>
-						<input
-							type="text"
+						<label class="form-label">Priority</label>
+						<select
+							name="priority"
+							id="priority"
 							class="form-control"
+						>
+							<option value="">-</option>
+							<option value="low">🟢 Low</option>
+							<option value="medium">🟡 Medium</option>
+							<option value="high">🔴 High</option>
+						</select>
+					</div>
+					<div class="mb-3">
+						<label id="assigned_to" class="form-label"
+							>Assign To</label
+						>
+						<select
 							name="assigned_to"
-							autocomplete="off"
-						/>
+							id="assigned_to"
+							class="form-control"
+						>
+							<option value="">-</option>
+							<% collaborators.forEach(collaborator => { %>
+							<option value="<%= collaborator.email %>"
+								><%= collaborator.email %></option
+							>
+							<% }); %>
+						</select>
 					</div>
 					<div class="mb-3">
 						<label class="form-label">Due Date</label>

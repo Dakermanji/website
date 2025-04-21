@@ -1,5 +1,7 @@
 <!-- views/partials/notifications.ejs -->
 
+<% notificationIcons = { taskmanager: '<i class="bi bi-list-task"></i>' } %>
+
 <li class="nav-item dropdown">
 	<a
 		class="nav-link"
@@ -30,7 +32,7 @@
 				class="dropdown-item small"
 				href="/notifications/read/<%= n.id %>"
 			>
-				<%- n.description %>
+				<%- notificationIcons[n.project] %> <%- n.description %>
 				<div class="text-muted small"
 					><%= new Date(n.created_at).toLocaleString() %></div
 				>
