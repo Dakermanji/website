@@ -1,6 +1,7 @@
 <!-- views/taskmanager/partials/task_board.ejs -->
 
-<% const priority_colors = { low: '🟢', medium: '🟡', high: '🔴', }; %>
+<% const priority_colors = { low: '🟢', medium: '🟡', high: '🔴', }; %> <% const
+now = new Date(); const oneDay = 1000 * 60 * 60 * 24; %>
 
 <div hidden id="user-role" data-user-role="<%= userRole %>"></div>
 
@@ -14,7 +15,19 @@
 		</h4>
 		<div class="task-column" id="<%= status %>" data-status="<%= status %>">
 			<% tasks.filter(task => task.status === status).forEach(task => { %>
-			<div class="task-card" data-task-id="<%= task.id %>">
+			<% const due = task.due_date ? new Date(task.due_date) : null; let
+			dueClass = ''; let dueIcon = ''; if (due) { if (due < now) {
+			dueClass = 'task-overdue'; dueIcon = '⛔'; } else if (due - now <
+			oneDay) { dueClass = 'task-due-soon'; dueIcon = '🔥'; } } %>
+
+			<div
+				class="task-card <%= dueClass %>"
+				data-task-id="<%= task.id %>"
+			>
+				<% if (dueIcon) { %>
+				<span class="float-end fs-5"><%= dueIcon %></span>
+				<% } %>
+
 				<p
 					><%= priority_colors[task.priority] %>
 					<strong><%= task.name %></strong></p
