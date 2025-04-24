@@ -16,9 +16,14 @@ now = new Date(); const oneDay = 1000 * 60 * 60 * 24; %>
 		<div class="task-column" id="<%= status %>" data-status="<%= status %>">
 			<% tasks.filter(task => task.status === status).forEach(task => { %>
 			<% const due = task.due_date ? new Date(task.due_date) : null; let
-			dueClass = ''; let dueIcon = ''; if (due) { if (due < now) {
-			dueClass = 'task-overdue'; dueIcon = '⛔'; } else if (due - now <
-			oneDay) { dueClass = 'task-due-soon'; dueIcon = '🔥'; } } %>
+			dueClass = ''; let dueIcon = ''; const now = new Date(); const
+			todayUTC = new Date(Date.UTC(now.getUTCFullYear(),
+			now.getUTCMonth(), now.getUTCDate())).toISOString().slice(0, 10);
+			const dueDateStr = due ? new Date(Date.UTC(due.getUTCFullYear(),
+			due.getUTCMonth(), due.getUTCDate())).toISOString().slice(0, 10) :
+			null; if (dueDateStr) { if (dueDateStr < todayUTC) { dueClass =
+			'task-overdue'; dueIcon = '⛔'; } else if (dueDateStr === todayUTC)
+			{ dueClass = 'task-due-soon'; dueIcon = '🔥'; } } %>
 
 			<div
 				class="task-card <%= dueClass %>"

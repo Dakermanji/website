@@ -3,7 +3,7 @@ CREATE TABLE notifications (
     id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
     project VARCHAR(50) NOT NULL,
     -- e.g., 'taskmanager', 'chat_app'
-    notifier_id CHAR(36) NOT NULL,
+    notifier_id CHAR(36) NULL,
     notified_id CHAR(36) NOT NULL,
     description TEXT NOT NULL,
     link VARCHAR(255),

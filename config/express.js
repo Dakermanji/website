@@ -5,6 +5,7 @@ import express from 'express';
 import applyMiddlewares from './middleware.js';
 import router from './routes.js';
 import errorHandler from '../middlewares/errorHandler.js';
+import '../cron/reminderJob.js';
 
 // Initialize the Express application
 const app = express();

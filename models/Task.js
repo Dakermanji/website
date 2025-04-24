@@ -16,7 +16,7 @@ class Task {
 	}
 
 	static async updateTask(taskId, { name, priority, assigned_to, dueDate }) {
-		const query = `UPDATE tasks SET name = ?, priority = ?, assigned_to = ?, due_date = ? WHERE id = ?`;
+		const query = `UPDATE tasks SET name = ?, priority = ?, assigned_to = ?, due_date = ?, reminder_24hr_sent = FALSE, reminder_overdue_sent = FALSE WHERE id = ?`;
 		return promisePool.execute(query, [
 			name,
 			priority,
@@ -61,6 +61,33 @@ class Task {
 		const query = `SELECT id, project_id, name, status, priority FROM tasks WHERE id = ? LIMIT 1`;
 		const [rows] = await promisePool.execute(query, [taskId]);
 		return rows.length ? rows[0] : null;
+	}
+
+	static async getAllPendingWithDueDates() {
+		const [rows] = await promisePool.query(
+			`SELECT *
+			FROM tasks
+			WHERE
+				due_date IS NOT NULL
+				AND status != 'done'
+				AND (
+					(due_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 1 DAY))
+				OR due_date < CURDATE()
+				)`
+		);
+		return rows;
+	}
+
+	static async markReminderSent(taskId, type) {
+		let column = '';
+		if (type === '24hr') column = 'reminder_24hr_sent';
+		else if (type === 'overdue') column = 'reminder_overdue_sent';
+		else throw new Error('Invalid reminder type');
+
+		await promisePool.query(
+			`UPDATE tasks SET ${column} = TRUE WHERE id = ?`,
+			[taskId]
+		);
 	}
 }
 

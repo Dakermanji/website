@@ -6,6 +6,10 @@ import User from '../../models/User.js';
 import Collaboration from '../../models/Collaboration.js';
 import Project from '../../models/Project.js';
 import { createNotification } from '../../utils/notificationHelper.js';
+import {
+	getTaskDueStatus,
+	sendDueTaskNotification,
+} from '../../utils/reminderHelper.js';
 
 const priority_color = {
 	low: '🟢',
@@ -29,7 +33,13 @@ export const createTask = async (req, res, next) => {
 				.json({ error: 'No user found with this email.' });
 		}
 
-		await Task.createTask(projectId, name, priority, assigned_to, dueDate);
+		const taskId = await Task.createTask(
+			projectId,
+			name,
+			priority,
+			assigned_to,
+			dueDate
+		);
 
 		if (assigned_to !== req.user.id) {
 			await createNotification({
@@ -39,6 +49,14 @@ export const createTask = async (req, res, next) => {
 				description: `You have been assigned a new task ${priority_color[priority]}<strong>${name}</strong>.`,
 				link: `/taskmanager/${projectId}`,
 			});
+		}
+
+		const dueStatus = getTaskDueStatus(dueDate, 'todo');
+
+		if (dueStatus === '24hr' || dueStatus === 'overdue') {
+			const project = await Project.getProjectById(projectId);
+			const task = await Task.getTaskById(taskId);
+			await sendDueTaskNotification(dueStatus, project.owner_id, task);
 		}
 
 		req.flash('success', 'Task created successfully!');
@@ -83,6 +101,13 @@ export const updateTask = async (req, res, next) => {
 				description: `${priority_color[priority]} The task <strong>${task.name}</strong> has been updated.`,
 				link: `/taskmanager/${projectId}`,
 			});
+		}
+
+		const dueStatus = getTaskDueStatus(dueDate);
+
+		if (dueStatus === '24hr' || dueStatus === 'overdue') {
+			const project = await Project.getProjectById(projectId);
+			await sendDueTaskNotification(dueStatus, project.owner_id, task);
 		}
 
 		req.flash('success', 'Task updated successfully!');

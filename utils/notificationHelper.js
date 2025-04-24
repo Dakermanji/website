@@ -12,12 +12,12 @@ import Notification from '../models/Notification.js';
  */
 export const createNotification = async ({
 	project,
-	notifierId,
+	notifierId = null,
 	notifiedId,
 	description,
 	link = null,
 }) => {
-	if (!project || !notifierId || !notifiedId || !description) {
+	if (!project || !notifiedId || !description) {
 		throw new Error('Missing required fields to create a notification');
 	}
 

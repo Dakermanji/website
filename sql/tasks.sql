@@ -8,6 +8,8 @@ CREATE TABLE tasks (
     assigned_to CHAR(36) NULL,
     due_date DATE NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    reminder_24hr_sent BOOLEAN DEFAULT FALSE,
+    reminder_overdue_sent BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
     FOREIGN KEY (assigned_to) REFERENCES users(id) ON DELETE
     SET NULL
