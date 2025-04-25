@@ -10,9 +10,7 @@ const oneHour = 1000 * 60 * 60;
  * Checks task due status and returns:
  * '24hr' | 'overdue' | null
  */
-export const getTaskDueStatus = (dueDate, status = '') => {
-	if (!dueDate || status === 'done') return null;
-
+export const getTaskDue = (dueDate) => {
 	const now = new Date();
 	const due = new Date(dueDate);
 
@@ -35,7 +33,7 @@ export const processDueTaskReminders = async () => {
 	const tasks = await Task.getAllPendingWithDueDates();
 
 	for (const task of tasks) {
-		const dueStatus = getTaskDueStatus(task.due_date, task.status);
+		const dueStatus = getTaskDue(task.due_date);
 		if (!dueStatus) continue;
 
 		const alreadySent =

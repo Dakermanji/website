@@ -7,7 +7,7 @@ import Collaboration from '../../models/Collaboration.js';
 import Project from '../../models/Project.js';
 import { createNotification } from '../../utils/notificationHelper.js';
 import {
-	getTaskDueStatus,
+	getTaskDue,
 	sendDueTaskNotification,
 } from '../../utils/reminderHelper.js';
 
@@ -51,7 +51,7 @@ export const createTask = async (req, res, next) => {
 			});
 		}
 
-		const dueStatus = getTaskDueStatus(dueDate, 'todo');
+		const dueStatus = getTaskDue(dueDate);
 
 		if (dueStatus === '24hr' || dueStatus === 'overdue') {
 			const project = await Project.getProjectById(projectId);
@@ -78,6 +78,14 @@ export const updateTask = async (req, res, next) => {
 				.json({ error: 'Please set a valid priority value.' });
 		}
 
+		const task = await Task.getTaskById(taskId);
+		const originalDueStatus = getTaskDue(task.due_date);
+		if (originalDueStatus === 'overdue') {
+			return res.status(403).json({
+				error: 'The task is over due. Please ask the owner to update.',
+			});
+		}
+
 		let assigned_to = assignedTo
 			? (await User.findByEmail(assignedTo))?.id
 			: null;
@@ -88,7 +96,6 @@ export const updateTask = async (req, res, next) => {
 				.json({ error: 'No user found with this email.' });
 		}
 
-		const task = await Task.getTaskById(taskId);
 		const projectId = task?.project_id;
 
 		await Task.updateTask(taskId, { name, priority, assigned_to, dueDate });
@@ -103,7 +110,7 @@ export const updateTask = async (req, res, next) => {
 			});
 		}
 
-		const dueStatus = getTaskDueStatus(dueDate);
+		const dueStatus = getTaskDue(dueDate);
 
 		if (dueStatus === '24hr' || dueStatus === 'overdue') {
 			const project = await Project.getProjectById(projectId);
@@ -128,6 +135,13 @@ export const updateTaskStatus = async (req, res, next) => {
 		}
 
 		const task = await Task.getTaskById(taskId);
+		const originalDueStatus = getTaskDue(task.due_date);
+		if (originalDueStatus === 'overdue') {
+			return res.status(403).json({
+				error: 'The task is over due. Please ask the owner to update status.',
+			});
+		}
+
 		if (task.status === status) {
 			return res
 				.status(400)
@@ -175,6 +189,12 @@ export const deleteTask = async (req, res) => {
 	try {
 		const { taskId } = req.params;
 		const task = await Task.getTaskById(taskId);
+		const originalDueStatus = getTaskDue(task.due_date);
+		if (originalDueStatus === 'overdue') {
+			return res.status(403).json({
+				error: 'The task is over due. Please ask the owner to delete.',
+			});
+		}
 		const project = await Project.getProjectById(task.project_id);
 
 		await Task.deleteTask(taskId);
