@@ -52,11 +52,12 @@
 							class="form-control"
 						>
 							<option value="">-</option>
-							<% collaborators.forEach(collaborator => { %>
+							<% collaborators.forEach(collaborator => { if
+							(collaborator.role === 'editor') { %>
 							<option value="<%= collaborator.email %>"
 								><%= collaborator.email %></option
 							>
-							<% }); %>
+							<% }}); %>
 						</select>
 					</div>
 

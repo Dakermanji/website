@@ -16,6 +16,7 @@ const priority_color = {
 	medium: '🟡',
 	high: '🔴',
 };
+const errorAssignMessage = 'You can only assign tasks to editors or the owner.';
 
 // Create a new task
 export const createTask = async (req, res, next) => {
@@ -28,9 +29,19 @@ export const createTask = async (req, res, next) => {
 
 		if (!assigned_to) {
 			req.flash('error', 'No user found with this email.');
-			return res
-				.status(404)
-				.json({ error: 'No user found with this email.' });
+			return res.status(404).json({
+				error: errorAssignMessage,
+			});
+		}
+
+		// Prevent assigning to anyone who’s not the owner or an editor collaborator
+		const project = await Project.getProjectById(projectId);
+		if (
+			assigned_to !== project.owner_id &&
+			!(await Collaboration.hasEditorAccess(projectId, assigned_to))
+		) {
+			req.flash('error', errorAssignMessage);
+			return res.status(403).json({ error: 'Invalid assignee.' });
 		}
 
 		const taskId = await Task.createTask(
@@ -54,7 +65,6 @@ export const createTask = async (req, res, next) => {
 		const dueStatus = getTaskDue(dueDate);
 
 		if (dueStatus === '24hr' || dueStatus === 'overdue') {
-			const project = await Project.getProjectById(projectId);
 			const task = await Task.getTaskById(taskId);
 			await sendDueTaskNotification(dueStatus, project.owner_id, task);
 		}
@@ -91,12 +101,18 @@ export const updateTask = async (req, res, next) => {
 			: null;
 
 		if (assignedTo && !assigned_to) {
-			return res
-				.status(404)
-				.json({ error: 'No user found with this email.' });
+			return res.status(404).json({ error: errorAssignMessage });
 		}
 
 		const projectId = task?.project_id;
+		const project = await Project.getProjectById(projectId);
+		if (
+			assigned_to !== project.owner_id &&
+			!(await Collaboration.hasEditorAccess(projectId, assigned_to))
+		) {
+			req.flash('error', errorAssignMessage);
+			return res.status(403).json({ error: 'Invalid assignee.' });
+		}
 
 		await Task.updateTask(taskId, { name, priority, assigned_to, dueDate });
 

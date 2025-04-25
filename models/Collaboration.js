@@ -47,6 +47,15 @@ class Collaboration {
 		const query = `UPDATE collaborations SET role = ? WHERE project_id = ? AND user_id = ?`;
 		return promisePool.execute(query, [role, projectId, userId]);
 	}
+
+	static async hasEditorAccess(projectId, userId) {
+		const [rows] = await promisePool.query(
+			`SELECT role FROM collaborations WHERE project_id = ? AND user_id = ?`,
+			[projectId, userId]
+		);
+
+		return rows.length && rows[0].role === 'editor';
+	}
 }
 
 export default Collaboration;
