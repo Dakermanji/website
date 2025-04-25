@@ -89,6 +89,14 @@ class Task {
 			[taskId]
 		);
 	}
+
+	static async getTasksByAssignee(projectId, userId) {
+		const [rows] = await promisePool.query(
+			`SELECT id FROM tasks WHERE project_id = ? AND assigned_to = ?`,
+			[projectId, userId]
+		);
+		return rows;
+	}
 }
 
 export default Task;

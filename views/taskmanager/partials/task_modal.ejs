@@ -51,7 +51,7 @@
 							id="assigned_to"
 							class="form-control"
 						>
-							<option value="">-</option>
+							<option value="">Self assign</option>
 							<% collaborators.forEach(collaborator => { if
 							(collaborator.role === 'editor') { %>
 							<option value="<%= collaborator.email %>"

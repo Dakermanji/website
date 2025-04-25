@@ -4,10 +4,11 @@ import errorHandler from '../../middlewares/errorHandler.js';
 import Collaboration from '../../models/Collaboration.js';
 import User from '../../models/User.js';
 import Project from '../../models/Project.js';
+import Task from '../../models/Task.js';
 import { createNotification } from '../../utils/notificationHelper.js';
 
 // Add a collaborator to a project
-export const addCollaborator = async (req, res) => {
+export const addCollaborator = async (req, res, next) => {
 	try {
 		const { projectId, email, role } = req.body;
 		const userId = req.user.id;
@@ -60,6 +61,23 @@ export const addCollaborator = async (req, res) => {
 			}
 
 			// Update the role if already a collaborator
+			if (role === 'viewer') {
+				const assignedTasks = await Task.getTasksByAssignee(
+					projectId,
+					user.id
+				);
+
+				if (assignedTasks.length > 0) {
+					req.flash(
+						'error',
+						'Please unassign this collaborator from all tasks before removing.'
+					);
+					return res.status(400).json({
+						error: 'Please unassign this collaborator from all tasks before removing.',
+					});
+				}
+			}
+
 			await Collaboration.updateUserRole(projectId, user.id, role);
 			// 🔁 Send role update notification
 			await createNotification({
@@ -98,6 +116,17 @@ export const addCollaborator = async (req, res) => {
 export const removeCollaborator = async (req, res) => {
 	try {
 		const { userId, projectId } = req.params;
+		const assignedTasks = await Task.getTasksByAssignee(projectId, userId);
+
+		if (assignedTasks.length > 0) {
+			req.flash(
+				'error',
+				'Please unassign this collaborator from all tasks before removing.'
+			);
+			return res.status(400).json({
+				error: 'Please unassign this collaborator from all tasks before removing.',
+			});
+		}
 
 		await Collaboration.removeUserFromProject(projectId, userId);
 		req.flash('success', 'Collaborator removed successfully!');

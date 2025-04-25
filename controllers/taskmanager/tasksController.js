@@ -98,7 +98,7 @@ export const updateTask = async (req, res, next) => {
 
 		let assigned_to = assignedTo
 			? (await User.findByEmail(assignedTo))?.id
-			: null;
+			: req.user.id;
 
 		if (assignedTo && !assigned_to) {
 			return res.status(404).json({ error: errorAssignMessage });
