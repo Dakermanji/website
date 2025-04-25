@@ -117,6 +117,7 @@ if (userRole === 'editor' || userRole === 'owner') {
 		new Sortable(column, {
 			group: 'tasks',
 			animation: 150,
+			draggable: '.task-card:not(.undraggable)',
 			onEnd: function (evt) {
 				const taskId = evt.item.dataset.taskId;
 				const newStatus = evt.to.dataset.status;

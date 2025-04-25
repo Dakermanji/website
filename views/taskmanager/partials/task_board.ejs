@@ -1,7 +1,18 @@
 <!-- views/taskmanager/partials/task_board.ejs -->
 
-<% const priority_colors = { low: '🟢', medium: '🟡', high: '🔴', }; %> <% const
-now = new Date(); const oneDay = 1000 * 60 * 60 * 24; %>
+<% const priority_colors = { low: '🟢', medium: '🟡', high: '🔴' }; const now =
+new Date(); const todayUTC = new Date(Date.UTC(now.getUTCFullYear(),
+now.getUTCMonth(), now.getUTCDate())).toISOString().slice(0, 10); %> <% const
+getDueClassAndIcon = function (dueDate) { if (!dueDate) return { dueClass: '',
+dueIcon: '' }; const due = new Date(dueDate); const dueDateStr = new
+Date(Date.UTC(due.getUTCFullYear(), due.getUTCMonth(), due.getUTCDate()))
+.toISOString() .slice(0, 10); if (dueDateStr < todayUTC) return { dueClass:
+'task-overdue', dueIcon: '🚫' }; if (dueDateStr === todayUTC) return { dueClass:
+'task-due-soon', dueIcon: '🔥' }; return { dueClass: '', dueIcon: '' }; }; const
+canEditTask = function (userRole, dueClass) { const isEditorOrOwner = userRole
+=== 'editor' || userRole === 'owner'; const isOverdue = dueClass ===
+'task-overdue'; return isEditorOrOwner && (!isOverdue || userRole === 'owner');
+}; %>
 
 <div hidden id="user-role" data-user-role="<%= userRole %>"></div>
 
@@ -9,60 +20,48 @@ now = new Date(); const oneDay = 1000 * 60 * 60 * 24; %>
 	<% ['todo', 'in_progress', 'done'].forEach(status => { %>
 	<div class="col-md-4">
 		<h4 class="text-center">
-			<% if (status === 'todo') { %>To Do<% } %> <% if (status ===
-			'in_progress') { %>In Progress<% } %> <% if (status === 'done') {
-			%>Done<% } %>
+			<%= status === 'todo' ? 'To Do' : status === 'in_progress' ? `In
+			Progress` : 'Done' %>
 		</h4>
 		<div class="task-column" id="<%= status %>" data-status="<%= status %>">
-			<% tasks.filter(task => task.status === status).forEach(task => { %>
-			<% const due = task.due_date ? new Date(task.due_date) : null; let
-			dueClass = ''; let dueIcon = ''; const now = new Date(); const
-			todayUTC = new Date(Date.UTC(now.getUTCFullYear(),
-			now.getUTCMonth(), now.getUTCDate())).toISOString().slice(0, 10);
-			const dueDateStr = due ? new Date(Date.UTC(due.getUTCFullYear(),
-			due.getUTCMonth(), due.getUTCDate())).toISOString().slice(0, 10) :
-			null; if (dueDateStr) { if (dueDateStr < todayUTC) { dueClass =
-			'task-overdue'; dueIcon = '⛔'; } else if (dueDateStr === todayUTC)
-			{ dueClass = 'task-due-soon'; dueIcon = '🔥'; } } %>
-
+			<% tasks.filter(task => task.status === status).forEach(task => {
+			const { dueClass, dueIcon } = getDueClassAndIcon(task.due_date);
+			const canEdit = canEditTask(userRole, dueClass); %> <% const
+			dragAllowed = canEditTask(userRole, dueClass); %>
 			<div
-				class="task-card <%= dueClass %>"
+				class="task-card <%= dueClass %> <%= dragAllowed ? '' : 'undraggable' %>"
 				data-task-id="<%= task.id %>"
 			>
 				<% if (dueIcon) { %>
 				<span class="float-end fs-5"><%= dueIcon %></span>
 				<% } %>
-
 				<p
 					><%= priority_colors[task.priority] %>
 					<strong><%= task.name %></strong></p
 				>
-				<p class="text-muted">
-					Assigned to: <%= task.username || 'Unassigned' %>
-				</p>
+				<p class="text-muted"
+					>Assigned to: <%= task.username || 'Unassigned' %></p
+				>
 				<p class="text-muted">
 					Due: <%= task.due_date ? new
 					Date(task.due_date).toLocaleDateString("en-US", { month:
 					"short", day: "numeric", year: "numeric" }) : "No deadline"
 					%>
 				</p>
-
-				<% if (userRole === 'editor' || userRole === 'owner') { %>
+				<% if (canEdit) { %>
 				<button
 					class="btn btn-sm btn-warning edit-task-btn"
 					data-bs-toggle="modal"
 					data-bs-target="#editTaskModal"
 					onclick="openEditTaskModal('<%= task.id %>', '<%= task.name %>', '<%= task.priority %>','<%= task.email %>', '<%= task.due_date %>')"
 				>
-					<i class="bi bi-pencil"></i>
-					Edit
+					<i class="bi bi-pencil"></i> Edit
 				</button>
 				<button
 					class="btn btn-sm btn-danger"
 					onclick="openDeleteTaskModal('<%= task.id %>')"
 				>
-					<i class="bi bi-trash"></i>
-					Delete
+					<i class="bi bi-trash"></i> Delete
 				</button>
 				<% } %>
 			</div>
