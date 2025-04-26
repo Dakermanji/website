@@ -68,6 +68,12 @@
 		<% } %>
 		<!-- Task Board -->
 		<%- include('./partials/task_board', { tasks }) %>
+
+		<!-- Edit Task Modal -->
+		<%- include('./partials/edit_task_modal', {owner}) %>
+
+		<!-- Delete Task Modal -->
+		<%- include('./partials/delete_task_modal') %>
 	</section>
 </div>
 
@@ -75,7 +81,7 @@
 <%- include('./partials/collaborator_modal') %>
 
 <!-- Task Modal -->
-<%-include('./partials/task_modal') %>
+<%-include('./partials/task_modal', {owner}) %>
 
 <!-- Delete Project Modal -->
 <%-include('./partials/delete_project_modal') %>
