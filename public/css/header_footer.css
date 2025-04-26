@@ -72,7 +72,15 @@ a.nav-link.active::after {
     text-wrap: wrap;
 }
 
-@media (max-width: 990px) {
+@media (max-width: 992px) {
+    .navbar {
+        padding: 0;
+    }
+
+    .navbar-toggler {
+        font-size: inherit;
+    }
+
     nav a.nav-link:hover {
         color: var(--color-primary);
     }
@@ -125,6 +133,10 @@ footer a:hover {
     color: var(--color-primary);
 }
 
+#back-to-top {
+    margin-top: 0.5rem;
+}
+
 #back-to-top,
 footer .social i {
     color: lightgray;
@@ -136,7 +148,17 @@ footer .social i:hover {
     color: var(--color-primary);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
+
+
+    #back-to-top {
+        margin-top: 0;
+    }
+
+    footer {
+        padding: 0;
+    }
+
     main {
         margin-bottom: 0;
     }
