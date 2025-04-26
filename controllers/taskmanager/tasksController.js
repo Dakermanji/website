@@ -2,14 +2,14 @@
 
 import errorHandler from '../../middlewares/errorHandler.js';
 import Task from '../../models/Task.js';
-import User from '../../models/User.js';
 import Collaboration from '../../models/Collaboration.js';
 import Project from '../../models/Project.js';
 import { createNotification } from '../../utils/notificationHelper.js';
+import { getTaskDue } from '../../utils/reminderHelper.js';
 import {
-	getTaskDue,
-	sendDueTaskNotification,
-} from '../../utils/reminderHelper.js';
+	resolveAssignedUser,
+	handleDueReminderIfNeeded,
+} from '../../utils/taskHelper.js';
 
 const priority_color = {
 	low: '🟢',
@@ -23,25 +23,13 @@ export const createTask = async (req, res, next) => {
 	try {
 		const { projectId, name, priority, assignedTo, dueDate } = req.body;
 
-		let assigned_to = assignedTo
-			? (await User.findByEmail(assignedTo))?.id
-			: req.user.id;
-
+		const assigned_to = await resolveAssignedUser(
+			projectId,
+			assignedTo,
+			req.user.id
+		);
 		if (!assigned_to) {
-			req.flash('error', 'No user found with this email.');
-			return res.status(404).json({
-				error: errorAssignMessage,
-			});
-		}
-
-		// Prevent assigning to anyone who’s not the owner or an editor collaborator
-		const project = await Project.getProjectById(projectId);
-		if (
-			assigned_to !== project.owner_id &&
-			!(await Collaboration.hasEditorAccess(projectId, assigned_to))
-		) {
-			req.flash('error', errorAssignMessage);
-			return res.status(403).json({ error: 'Invalid assignee.' });
+			return res.status(403).json({ error: errorAssignMessage });
 		}
 
 		const taskId = await Task.createTask(
@@ -62,12 +50,7 @@ export const createTask = async (req, res, next) => {
 			});
 		}
 
-		const dueStatus = getTaskDue(dueDate);
-
-		if (dueStatus === '24hr' || dueStatus === 'overdue') {
-			const task = await Task.getTaskById(taskId);
-			await sendDueTaskNotification(dueStatus, project.owner_id, task);
-		}
+		await handleDueReminderIfNeeded(projectId, taskId, dueDate);
 
 		req.flash('success', 'Task created successfully!');
 		res.status(200).json({ reload: true });
@@ -96,22 +79,14 @@ export const updateTask = async (req, res, next) => {
 			});
 		}
 
-		let assigned_to = assignedTo
-			? (await User.findByEmail(assignedTo))?.id
-			: req.user.id;
-
-		if (assignedTo && !assigned_to) {
-			return res.status(404).json({ error: errorAssignMessage });
-		}
-
 		const projectId = task?.project_id;
-		const project = await Project.getProjectById(projectId);
-		if (
-			assigned_to !== project.owner_id &&
-			!(await Collaboration.hasEditorAccess(projectId, assigned_to))
-		) {
-			req.flash('error', errorAssignMessage);
-			return res.status(403).json({ error: 'Invalid assignee.' });
+		const assigned_to = await resolveAssignedUser(
+			projectId,
+			assignedTo,
+			req.user.id
+		);
+		if (!assigned_to) {
+			return res.status(403).json({ error: errorAssignMessage });
 		}
 
 		await Task.updateTask(taskId, { name, priority, assigned_to, dueDate });
@@ -126,12 +101,7 @@ export const updateTask = async (req, res, next) => {
 			});
 		}
 
-		const dueStatus = getTaskDue(dueDate);
-
-		if (dueStatus === '24hr' || dueStatus === 'overdue') {
-			const project = await Project.getProjectById(projectId);
-			await sendDueTaskNotification(dueStatus, project.owner_id, task);
-		}
+		await handleDueReminderIfNeeded(projectId, taskId, dueDate);
 
 		req.flash('success', 'Task updated successfully!');
 		res.status(200).json({ reload: true });
