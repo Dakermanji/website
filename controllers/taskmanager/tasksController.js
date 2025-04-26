@@ -17,6 +17,8 @@ const priority_color = {
 	high: '🔴',
 };
 const errorAssignMessage = 'You can only assign tasks to editors or the owner.';
+const overDueMessage =
+	'This task is overdue. Only the project owner can update, change status, or delete it.';
 
 // Create a new task
 export const createTask = async (req, res, next) => {
@@ -52,8 +54,10 @@ export const createTask = async (req, res, next) => {
 
 		await handleDueReminderIfNeeded(projectId, taskId, dueDate);
 
-		req.flash('success', 'Task created successfully!');
-		res.status(200).json({ reload: true });
+		res.status(200).json({
+			reload: true,
+			success: 'Task created successfully!',
+		});
 	} catch (error) {
 		errorHandler(error, req, res, next);
 	}
@@ -73,13 +77,16 @@ export const updateTask = async (req, res, next) => {
 
 		const task = await Task.getTaskById(taskId);
 		const originalDueStatus = getTaskDue(task.due_date);
-		if (originalDueStatus === 'overdue') {
+		const projectId = task?.project_id;
+		const project = await Project.getProjectById(projectId);
+		const isOwner = project.owner_id === req.user.id;
+
+		if (originalDueStatus === 'overdue' && !isOwner) {
 			return res.status(403).json({
-				error: 'The task is over due. Please ask the owner to update.',
+				error: overDueMessage,
 			});
 		}
 
-		const projectId = task?.project_id;
 		const assigned_to = await resolveAssignedUser(
 			projectId,
 			assignedTo,
@@ -101,7 +108,17 @@ export const updateTask = async (req, res, next) => {
 			});
 		}
 
-		await handleDueReminderIfNeeded(projectId, taskId, dueDate);
+		let previousDue;
+		if (task.reminder_overdue_sent) previousDue = 'overdue';
+		else if (task.reminder_24hr_sent) previousDue = '24hr';
+		else previousDue = '';
+
+		await handleDueReminderIfNeeded(
+			projectId,
+			taskId,
+			dueDate,
+			previousDue
+		);
 
 		req.flash('success', 'Task updated successfully!');
 		res.status(200).json({ reload: true });
@@ -122,9 +139,13 @@ export const updateTaskStatus = async (req, res, next) => {
 
 		const task = await Task.getTaskById(taskId);
 		const originalDueStatus = getTaskDue(task.due_date);
-		if (originalDueStatus === 'overdue') {
+		const projectId = task?.project_id;
+		const project = await Project.getProjectById(projectId);
+		const isOwner = project.owner_id === req.user.id;
+
+		if (originalDueStatus === 'overdue' && !isOwner) {
 			return res.status(403).json({
-				error: 'The task is over due. Please ask the owner to update status.',
+				error: overDueMessage,
 			});
 		}
 
@@ -133,11 +154,11 @@ export const updateTaskStatus = async (req, res, next) => {
 				.status(400)
 				.json({ error: 'Task already in this status.' });
 		}
+		await Task.updateValueForATask(taskId, 'status', status);
+
 		const collaborators = await Collaboration.getProjectCollaborators(
 			task.project_id
 		);
-		const project = await Project.getProjectById(task.project_id);
-		await Task.updateValueForATask(taskId, 'status', status);
 
 		collaborators.push({ user_id: project.owner_id });
 
@@ -178,7 +199,7 @@ export const deleteTask = async (req, res) => {
 		const originalDueStatus = getTaskDue(task.due_date);
 		if (originalDueStatus === 'overdue') {
 			return res.status(403).json({
-				error: 'The task is over due. Please ask the owner to delete.',
+				error: overDueMessage,
 			});
 		}
 		const project = await Project.getProjectById(task.project_id);
@@ -204,8 +225,10 @@ export const deleteTask = async (req, res) => {
 			});
 		}
 
-		req.flash('success', 'Task deleted successfully!');
-		res.status(200).json({ reload: true });
+		res.status(200).json({
+			reload: true,
+			success: 'Task deleted successfully!',
+		});
 	} catch (error) {
 		errorHandler(error, req, res, next);
 	}

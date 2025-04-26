@@ -32,9 +32,21 @@ export const resolveAssignedUser = async (projectId, email, currentUserId) => {
 	return assignedUser.id;
 };
 
-export const handleDueReminderIfNeeded = async (projectId, taskId, dueDate) => {
+export const handleDueReminderIfNeeded = async (
+	projectId,
+	taskId,
+	dueDate,
+	previousDue = ''
+) => {
 	const dueStatus = getTaskDue(dueDate);
+
 	if (!['24hr', 'overdue'].includes(dueStatus)) return;
+
+	if (dueStatus === previousDue) {
+		// Only update reminder flags without sending a new notification
+		await Task.markReminderSent(taskId, dueStatus);
+		return;
+	}
 
 	const project = await Project.getProjectById(projectId);
 	const task = await Task.getTaskById(taskId);

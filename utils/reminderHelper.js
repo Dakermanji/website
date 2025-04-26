@@ -4,8 +4,6 @@ import Task from '../models/Task.js';
 import Project from '../models/Project.js';
 import { createNotification } from './notificationHelper.js';
 
-const oneHour = 1000 * 60 * 60;
-
 /**
  * Checks task due status and returns:
  * '24hr' | 'overdue' | null
