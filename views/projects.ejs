@@ -4,39 +4,30 @@
 
 <div class="container">
 	<div class="row justify-content-center">
-		<div class="col-md-5 mb-4">
-			<a href="/taskmanager" class="text-decoration-none">
+		<% projects.forEach(project => { %>
+		<div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+			<% if (project.link) { %>
+			<a href="<%= project.link %>" class="text-decoration-none">
+				<% } %>
 				<div class="card project-card h-100">
-					<img
-						src="/images/index/taskmanager.jpg"
-						class="card-img-top"
-						alt="Task Manager Screenshot"
-					/>
+					<div class="project-image-container">
+						<img
+							src="/images/index/<%= project.img %>"
+							class="card-img-top"
+							alt="<%= project.title %>"
+						/>
+					</div>
 					<div class="card-body text-center">
-						<h5 class="card-title">Task Manager</h5>
+						<h5 class="card-title"><%= project.title %></h5>
 						<p class="card-text small text-muted"
-							>Organize tasks, manage projects, collaborate with
-							team members.</p
+							><%= project.description %></p
 						>
 					</div>
 				</div>
+				<% if (project.link) { %>
 			</a>
+			<% } %>
 		</div>
-
-		<div class="col-md-5 mb-4">
-			<div class="card project-card h-100">
-				<img
-					src="/images/index/under_construction.jpeg"
-					class="card-img-top"
-					alt="Under Construction"
-				/>
-				<div class="card-body text-center">
-					<h5 class="card-title">Coming Soon</h5>
-					<p class="card-text small text-muted"
-						>Stay tuned for exciting new projects!</p
-					>
-				</div>
-			</div>
-		</div>
+		<% }); %>
 	</div>
 </div>

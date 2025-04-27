@@ -4,7 +4,8 @@ export const projects = [
 	{
 		img: 'taskmanager.jpg',
 		title: 'Task Manager',
-		description: 'Built with Express, EJS and MySql',
+		description:
+			'Organize tasks, manage projects, collaborate with team members',
 		link: 'taskmanager',
 	},
 	// {
@@ -31,4 +32,10 @@ export const projects = [
 	// 	description: 'Built with MySQL and OpenLibrary API',
 	// 	link: 'books',
 	// },
+	{
+		img: 'under_construction.jpeg',
+		title: 'Coming Soon',
+		description: 'Stay tuned for exciting new projects!',
+		link: null,
+	},
 ];

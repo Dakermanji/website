@@ -4,6 +4,7 @@ import { navBar } from '../data/navBar.js';
 import errorHandler from '../middlewares/errorHandler.js';
 import Notification from '../models/Notification.js';
 import { getUserFriends } from '../utils/friends/userFriendsHelper.js';
+import { projects } from '../data/projectsData.js';
 
 export const renderProjects = async (req, res, next) => {
 	try {
@@ -13,10 +14,12 @@ export const renderProjects = async (req, res, next) => {
 			userId
 		);
 		const unreadCount = await Notification.countUnread(req.user.id);
+		console.log(projects);
 
 		res.render('projects', {
 			title: 'Projects - Dakermanji Web Dev',
 			navBar: navBar.projects,
+			projects,
 			scripts: ['helpers/modalHelper'],
 			styles: ['projects'],
 			userFriends,
