@@ -72,7 +72,7 @@ a.nav-link.active::after {
     text-wrap: wrap;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 991.98px) {
     .navbar {
         padding: 0;
     }
@@ -148,7 +148,7 @@ footer .social i:hover {
     color: var(--color-primary);
 }
 
-@media (max-width: 992px) {
+@media (max-width: 991.98px) {
 
 
     #back-to-top {

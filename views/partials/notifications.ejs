@@ -18,10 +18,10 @@
 			<%= unreadCount %>
 		</span>
 		<% } %>
-		<span class="nav-icon">
+		<span class="nav-icon" data-bs-toggle="tooltip" title="<%= nav.text %>">
 			<%- (notifications && notifications.length > 0) ? nav.iconFilled :
-			nav.iconEmpty %>
-		</span>
+			nav.iconEmpty %> </span
+		><span class="nav-text"><%= nav.text %></span>
 	</a>
 	<ul id="notifications" class="dropdown-menu dropdown-menu-end p-2">
 		<% if (notifications && notifications.length > 0) { %> <%
