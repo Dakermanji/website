@@ -10,7 +10,14 @@ const tooltips = tooltipTriggerList.map((el) => new bootstrap.Tooltip(el));
 const navbarCollapses = document.querySelectorAll('.navbar-collapse');
 
 // Collapse each navbar when clicking anywhere (if open)
-document.addEventListener('click', () => {
+document.addEventListener('click', (event) => {
+	// Check if clicked inside the Notifications trigger or dropdown
+	const isNotificationClick =
+		event.target.closest('#notifications-trigger') ||
+		event.target.closest('#notifications li');
+
+	if (isNotificationClick) return;
+
 	setTimeout(() => {
 		navbarCollapses.forEach((collapseEl) => {
 			if (collapseEl.classList.contains('show')) {
@@ -19,5 +26,5 @@ document.addEventListener('click', () => {
 				collapseInstance?.hide();
 			}
 		});
-	}, 10); // Delay to avoid conflicts with Bootstrap's animation
+	}, 10); // Small delay to let Bootstrap animations finish
 });
