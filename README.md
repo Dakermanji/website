@@ -2,7 +2,11 @@
 
 ## Overview
 
-This is a personal portfolio website showcasing my skills, projects, and professional experience as a full-stack web developer. The website includes dynamic sections such as "About Me," "Services," "Portfolio," and "Contact Me," with data stored in a MySQL database. It also features authentication, messaging, and social interactions like follows, blocks, notifications, and a **Task Management System**.
+- It also features authentication, messaging, and social interactions like follows, blocks, notifications, and a Task Management System.
+
+- It also features authentication, messaging, social interactions (follows, blocks, notifications), a Task Management System, and a dynamic Projects showcase page.
+
+This is a personal portfolio website showcasing my skills, projects, and professional experience as a full-stack web developer. The website includes dynamic sections such as "About Me," "Services," "Portfolio," and "Contact Me," with data stored in a MySQL database. It also features authentication, messaging, social interactions (follows, blocks, notifications), a **Task Management System** and a dynamic Projects showcase page.
 
 ## Features
 
@@ -23,6 +27,12 @@ This is a personal portfolio website showcasing my skills, projects, and profess
   - **Role-based collaboration**: Owners, Editors, and Viewers.
   - **Real-time UI updates via AJAX**.
   - **Bootstrap modals** for creating, editing, and deleting tasks.
+  - **Dynamic Projects Page**:
+  - - Projects are rendered dynamically from a data file
+  - - Responsive Bootstrap card layout
+  - - Clean scaling for desktop and mobile
+  - - Easy to add new projects without modifying EJS templates
+
 - **Messaging**:
   - Allows user-linked messages with timestamped storage.
 - **Contact Form**:
@@ -38,7 +48,7 @@ This is a personal portfolio website showcasing my skills, projects, and profess
 
 - **Backend**: Node.js, Express.js
 - **Database**: MySQL with MySQL2 package
-- **Frontend**: EJS, Bootstrap, custom CSS
+- **Frontend**: EJS, Bootstrap 5, custom CSS (modularized for each section)
 - **Task Management System**:
   - **Drag-and-drop** with JavaScript event handling.
   - **AJAX-based real-time updates**.
