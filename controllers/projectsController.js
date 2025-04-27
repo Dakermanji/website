@@ -18,6 +18,7 @@ export const renderProjects = async (req, res, next) => {
 			title: 'Projects - Dakermanji Web Dev',
 			navBar: navBar.projects,
 			scripts: ['helpers/modalHelper'],
+			styles: ['projects'],
 			userFriends,
 			notifications,
 			unreadCount,

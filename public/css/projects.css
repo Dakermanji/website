@@ -1,0 +1,9 @@
+/*! public/css/projects.css */
+
+.project-card {
+    transition: transform 0.3s ease;
+}
+
+.project-card:hover {
+    transform: scale(1.03);
+}
