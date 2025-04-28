@@ -14,10 +14,9 @@ export const renderProjects = async (req, res, next) => {
 			userId
 		);
 		const unreadCount = await Notification.countUnread(req.user.id);
-		console.log(projects);
 
 		res.render('projects', {
-			title: 'Projects - Dakermanji Web Dev',
+			title: 'Projects - DWD',
 			navBar: navBar.projects,
 			projects,
 			scripts: ['helpers/modalHelper'],

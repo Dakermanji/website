@@ -129,7 +129,7 @@ export const getBoard = async (req, res) => {
 
 		const tasks = await Task.getTasksByProjectId(projectId);
 		res.render('taskmanager/board', {
-			title: `${project.name} - Kanban Board`,
+			title: `${project.name} - DWD`,
 			project,
 			navBar: navBar.projects,
 			tasks,

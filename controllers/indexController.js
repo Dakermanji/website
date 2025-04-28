@@ -13,7 +13,7 @@ export const getIndex = (req, res) => {
 	try {
 		const token = req.query.token;
 		res.render('index', {
-			title: `Home - Dakermanji`,
+			title: `Home - DWD`,
 			navBar: navBar.index,
 			about: aboutData,
 			services: servicesData,

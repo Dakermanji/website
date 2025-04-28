@@ -5,11 +5,10 @@ import {
 	markAllAsRead,
 	markAndRedirect,
 } from '../controllers/notificationsController.js';
-import { ensureAuthenticated } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
-router.get('/read/:notificationId', ensureAuthenticated, markAndRedirect);
-router.post('/mark-all-read', ensureAuthenticated, markAllAsRead);
+router.get('/read/:notificationId', markAndRedirect);
+router.post('/mark-all-read', markAllAsRead);
 
 export default router;
