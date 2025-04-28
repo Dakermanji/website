@@ -3,6 +3,10 @@
 import { navBar } from '../data/navBar.js';
 import Notification from '../models/Notification.js';
 import { getUserFriends } from '../utils/friends/userFriendsHelper.js';
+import {
+	getWeatherByCoordinates,
+	getCitySuggestions,
+} from '../utils/weatherHelper2.js';
 
 // Render the weather page
 export const renderWeatherPage = async (req, res) => {
@@ -32,10 +36,18 @@ export const fetchWeatherData = (req, res) => {
 	res.json({ message: 'fetchWeatherData controller not implemented yet.' });
 };
 
-// Fetch city suggestions for autocomplete (placeholder)
-export const fetchCitySuggestions = (req, res) => {
-	// Placeholder response
-	res.json({
-		message: 'fetchCitySuggestions controller not implemented yet.',
-	});
+export const fetchCitySuggestions = async (req, res) => {
+	const { query } = req.query;
+
+	if (!query) {
+		return res.status(400).json({ error: 'City name is required.' });
+	}
+
+	try {
+		const suggestions = await getCitySuggestions(query);
+		res.json({ suggestions });
+	} catch (error) {
+		console.error(error.message);
+		res.status(500).json({ error: 'Failed to fetch city suggestions.' });
+	}
 };
