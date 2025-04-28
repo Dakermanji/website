@@ -19,6 +19,9 @@ import projectsTMRoutes from '../routes/taskmanager/projectsRoutes.js';
 import tasksTMRoutes from '../routes/taskmanager/tasksRoutes.js';
 import collaborationsTMRoutes from '../routes/taskmanager/collaborationsRoutes.js';
 
+// import weather routes
+import weatherRoutes from '../routes/weatherRoutes.js';
+
 const router = express.Router();
 
 // Step 1: Apply global middlewares
@@ -39,10 +42,13 @@ router.use('/blocks', blocksRoutes);
 // Notification routes
 router.use('/notifications', notificationRoutes);
 
-// Task Manager
+// Task Manager routes
 router.use('/taskmanager/tasks', tasksTMRoutes);
 router.use('/taskmanager/collaborations', collaborationsTMRoutes);
 router.use('/taskmanager', projectsTMRoutes);
+
+// Weather routes
+router.use('/weather', weatherRoutes);
 
 // Step 3: Handle 404 errors: Catch-all route for unmatched paths
 router.use((req, res, next) => {
