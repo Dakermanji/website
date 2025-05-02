@@ -26,8 +26,8 @@ export const renderWeatherPage = async (req, res) => {
 		notifications,
 		userFriends,
 		unreadCount,
-		// styles: ['weather'],
-		// scripts: ['weather'],
+		styles: ['weather'],
+		scripts: ['weather'],
 	});
 };
 
