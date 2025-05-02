@@ -64,8 +64,9 @@ export const getWeatherByCoordinates = async (latitude, longitude, unit) => {
 // Fetching city suggestions
 export const getCitySuggestions = async (query) => {
 	try {
+		const sanitizedQuery = sanitizeCityName(query);
 		const url = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(
-			query
+			sanitizedQuery
 		)}&limit=10&appid=${OPENWEATHER_API_KEY}`;
 		const response = await axios.get(url);
 
@@ -105,6 +106,7 @@ function mostCommon(arr) {
 	return result;
 }
 
+// Fetching Background Image
 export const getBackgroundImage = async (description, orientation) => {
 	try {
 		const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(
@@ -122,3 +124,13 @@ export const getBackgroundImage = async (description, orientation) => {
 		return null;
 	}
 };
+
+// Helper: Sanitize city name
+function sanitizeCityName(city) {
+	return city
+		.toLowerCase()
+		.split(' ')
+		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+		.join(' ')
+		.trim();
+}

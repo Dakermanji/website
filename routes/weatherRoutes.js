@@ -5,7 +5,7 @@ import {
 	renderWeatherPage,
 	fetchWeatherData,
 	fetchCitySuggestions,
-} from '../controllers/weatherController2.js';
+} from '../controllers/weatherController.js';
 
 const router = express.Router();
 
