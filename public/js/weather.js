@@ -26,11 +26,25 @@ cityInput.addEventListener('input', async () => {
 
 	suggestionsBox.innerHTML = '';
 
+	const typed = cityInput.value.trim().toLowerCase();
+
+	if (!data.suggestions || data.suggestions.length === 0) {
+		const item = document.createElement('div');
+		item.className = 'list-group-item disabled';
+		item.textContent = 'No results found';
+		suggestionsBox.appendChild(item);
+		return;
+	}
+
 	const seen = new Set();
 
 	data.suggestions.forEach((city) => {
+		const cityName = city.name.toLowerCase();
+
+		if (!cityName.startsWith(typed)) return;
+
 		const key = `${city.name}-${city.state || ''}-${city.country}`;
-		if (seen.has(key)) return; // Skip duplicate
+		if (seen.has(key)) return;
 		seen.add(key);
 
 		const item = document.createElement('div');
