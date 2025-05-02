@@ -2,6 +2,7 @@
 
 import axios from 'axios';
 import env from '../config/dotenv.js';
+import { getCountryName } from './countries.js';
 
 const OPENWEATHER_API_KEY = env.OPENWEATHER_API_KEY;
 const UNSPLASH_ACCESS_KEY = env.UNSPLASH_ACCESS_KEY;
@@ -90,7 +91,7 @@ export const getCitySuggestions = async (query) => {
 			name: city.name,
 			latitude: city.lat,
 			longitude: city.lon,
-			country: city.country,
+			country: getCountryName(city.country),
 			state: city.state || null,
 		}));
 	} catch (error) {

@@ -31,6 +31,7 @@
 		"@sentry/profiling-node": "^8.48.0",
 		"axios": "^1.7.9",
 		"bcrypt": "^5.1.1",
+		"country-list": "^2.3.0",
 		"dotenv": "^16.4.7",
 		"ejs": "^3.1.10",
 		"express": "^4.21.2",
