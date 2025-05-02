@@ -12,13 +12,18 @@ cityInput.addEventListener('input', async () => {
 	const query = cityInput.value.trim();
 	if (query.length < 3) {
 		suggestionsBox.innerHTML = '';
+		hideLoading();
 		return;
 	}
+
+	showLoading();
 
 	const res = await fetch(
 		`/weather/city-suggestions?query=${encodeURIComponent(query)}`
 	);
 	const data = await res.json();
+
+	hideLoading();
 
 	const seen = new Set();
 
@@ -51,12 +56,16 @@ suggestionsBox.addEventListener('click', async (e) => {
 	suggestionsBox.innerHTML = '';
 	cityInput.value = e.target.textContent;
 
+	showLoading();
+
 	const res = await fetch('/weather/weather-data', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ latitude, longitude, unit, orientation }),
 	});
 	const data = await res.json();
+
+	hideLoading();
 
 	displayForecast(data.forecast);
 	setBackground(data.backgroundImage);
@@ -104,5 +113,17 @@ function showDay(day) {
 }
 
 function setBackground(url) {
-	background.style.backgroundImage = `url(${url})`;
+	background.style.opacity = 0;
+	setTimeout(() => {
+		background.style.backgroundImage = `url(${url})`;
+		background.style.opacity = 1;
+	}, 300);
+}
+
+function showLoading() {
+	document.getElementById('loading').classList.add('show');
+}
+
+function hideLoading() {
+	document.getElementById('loading').classList.remove('show');
 }
