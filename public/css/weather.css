@@ -53,6 +53,10 @@
     background-color: rgba(0, 123, 255, 0.1);
 }
 
+#suggestions .list-group-item strong {
+    color: var(--color-primary-dark);
+}
+
 #suggestions .list-group-item.disabled {
     color: var(--color-tertiary);
     pointer-events: none;

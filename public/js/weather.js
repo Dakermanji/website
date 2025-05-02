@@ -49,9 +49,13 @@ cityInput.addEventListener('input', async () => {
 
 		const item = document.createElement('div');
 		item.className = 'list-group-item';
-		item.textContent = `${city.name}${
+		const match = cityName.substr(0, typed.length);
+		const rest = cityName.substr(typed.length);
+
+		item.innerHTML = `<strong>${match}</strong>${rest}${
 			city.state ? ', ' + city.state : ''
 		}, ${city.country}`;
+
 		item.dataset.latitude = city.latitude;
 		item.dataset.longitude = city.longitude;
 		suggestionsBox.appendChild(item);
