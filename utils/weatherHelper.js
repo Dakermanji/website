@@ -4,6 +4,7 @@ import axios from 'axios';
 import env from '../config/dotenv.js';
 
 const OPENWEATHER_API_KEY = env.OPENWEATHER_API_KEY;
+const UNSPLASH_ACCESS_KEY = env.UNSPLASH_ACCESS_KEY;
 
 // Fetching weather by coordinates
 export const getWeatherByCoordinates = async (latitude, longitude, unit) => {
@@ -103,3 +104,21 @@ function mostCommon(arr) {
 
 	return result;
 }
+
+export const getBackgroundImage = async (description, orientation) => {
+	try {
+		const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(
+			description
+		)}&orientation=${orientation}&per_page=1&client_id=${UNSPLASH_ACCESS_KEY}`;
+		const response = await axios.get(url);
+
+		if (response.data.results.length > 0) {
+			return response.data.results[0].urls.full; // or regular/small as needed
+		} else {
+			return null;
+		}
+	} catch (error) {
+		console.error('Error fetching background image:', error.message);
+		return null;
+	}
+};

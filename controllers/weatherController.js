@@ -6,6 +6,7 @@ import { getUserFriends } from '../utils/friends/userFriendsHelper.js';
 import {
 	getWeatherByCoordinates,
 	getCitySuggestions,
+	getBackgroundImage,
 } from '../utils/weatherHelper.js';
 
 // Render the weather page
@@ -32,12 +33,12 @@ export const renderWeatherPage = async (req, res) => {
 
 // Fetch weather data based on user input (placeholder)
 export const fetchWeatherData = async (req, res) => {
-	const { latitude, longitude, unit } = req.body;
+	const { latitude, longitude, unit, orientation } = req.body;
 
-	if (!latitude || !longitude || !unit) {
-		return res
-			.status(400)
-			.json({ error: 'Latitude, longitude, and unit are required.' });
+	if (!latitude || !longitude || !unit || !orientation) {
+		return res.status(400).json({
+			error: 'Latitude, longitude, unit, and orientation are required.',
+		});
 	}
 
 	try {
@@ -46,7 +47,23 @@ export const fetchWeatherData = async (req, res) => {
 			longitude,
 			unit
 		);
-		res.json({ forecast });
+
+		if (!forecast || forecast.length === 0) {
+			return res.status(404).json({ error: 'No forecast data found.' });
+		}
+
+		// Use today's forecast description as background weather description
+		const todayDescription = forecast[0].description;
+
+		const backgroundImage = await getBackgroundImage(
+			todayDescription,
+			orientation
+		);
+
+		res.json({
+			forecast,
+			backgroundImage,
+		});
 	} catch (error) {
 		console.error(error.message);
 		res.status(500).json({ error: 'Failed to fetch weather data.' });
