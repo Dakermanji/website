@@ -64,9 +64,19 @@ export const getWeatherByCoordinates = async (latitude, longitude, unit) => {
 // Fetching city suggestions
 export const getCitySuggestions = async (query) => {
 	try {
-		const sanitizedQuery = sanitizeCityName(query);
+		const parsed = parseCityInput(query);
+		let q = parsed.city;
+
+		if (parsed.state) {
+			q += `,${parsed.state}`;
+		}
+
+		if (parsed.country) {
+			q += `,${parsed.country}`;
+		}
+
 		const url = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(
-			sanitizedQuery
+			q
 		)}&limit=10&appid=${OPENWEATHER_API_KEY}`;
 		const response = await axios.get(url);
 
@@ -133,4 +143,15 @@ function sanitizeCityName(city) {
 		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
 		.join(' ')
 		.trim();
+}
+
+// City Input to match City, State, Country
+function parseCityInput(query) {
+	const parts = query.split(',').map((part) => part.trim());
+
+	return {
+		city: parts[0] || '',
+		state: parts[1] || '',
+		country: parts[2] || parts[1] || '', // If only 2 parts, assume second is country
+	};
 }
