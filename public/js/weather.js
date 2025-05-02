@@ -12,7 +12,6 @@ cityInput.addEventListener('input', async () => {
 	const query = cityInput.value.trim();
 	if (query.length < 3) {
 		suggestionsBox.innerHTML = '';
-		hideLoading();
 		return;
 	}
 
@@ -24,6 +23,8 @@ cityInput.addEventListener('input', async () => {
 	const data = await res.json();
 
 	hideLoading();
+
+	suggestionsBox.innerHTML = '';
 
 	const seen = new Set();
 
