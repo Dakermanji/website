@@ -31,9 +31,26 @@ export const renderWeatherPage = async (req, res) => {
 };
 
 // Fetch weather data based on user input (placeholder)
-export const fetchWeatherData = (req, res) => {
-	// Placeholder response
-	res.json({ message: 'fetchWeatherData controller not implemented yet.' });
+export const fetchWeatherData = async (req, res) => {
+	const { latitude, longitude, unit } = req.body;
+
+	if (!latitude || !longitude || !unit) {
+		return res
+			.status(400)
+			.json({ error: 'Latitude, longitude, and unit are required.' });
+	}
+
+	try {
+		const forecast = await getWeatherByCoordinates(
+			latitude,
+			longitude,
+			unit
+		);
+		res.json({ forecast });
+	} catch (error) {
+		console.error(error.message);
+		res.status(500).json({ error: 'Failed to fetch weather data.' });
+	}
 };
 
 export const fetchCitySuggestions = async (req, res) => {
