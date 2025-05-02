@@ -42,11 +42,12 @@ export const fetchWeatherData = async (req, res) => {
 	}
 
 	try {
-		const forecast = await getWeatherByCoordinates(
+		const results = await getWeatherByCoordinates(
 			latitude,
 			longitude,
 			unit
 		);
+		const forecast = results.forecast;
 
 		if (!forecast || forecast.length === 0) {
 			return res.status(404).json({ error: 'No forecast data found.' });
@@ -63,6 +64,7 @@ export const fetchWeatherData = async (req, res) => {
 		res.json({
 			forecast,
 			backgroundImage,
+			timezone: results.timezone,
 		});
 	} catch (error) {
 		console.error(error.message);

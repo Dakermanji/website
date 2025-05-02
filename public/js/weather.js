@@ -6,6 +6,7 @@ const weatherResults = document.getElementById('weatherResults');
 const daySelector = document.getElementById('daySelector');
 const selectedDay = document.getElementById('selectedDay');
 const background = document.querySelector('.weather-background');
+let forecastTimezone = null;
 
 // Listen to city input
 cityInput.addEventListener('input', async () => {
@@ -39,9 +40,11 @@ cityInput.addEventListener('input', async () => {
 	const seen = new Set();
 
 	data.suggestions.forEach((city) => {
-		const cityName = city.name.toLowerCase();
+		const cityNameOriginal = city.name;
+		const cityNameLower = city.name.toLowerCase();
+		const typedLower = cityInput.value.trim().toLowerCase();
 
-		if (!cityName.startsWith(typed)) return;
+		if (!cityNameLower.startsWith(typedLower)) return;
 
 		const key = `${city.name}-${city.state || ''}-${city.country}`;
 		if (seen.has(key)) return;
@@ -49,13 +52,22 @@ cityInput.addEventListener('input', async () => {
 
 		const item = document.createElement('div');
 		item.className = 'list-group-item';
-		const match = cityName.substr(0, typed.length);
-		const rest = cityName.substr(typed.length);
 
-		item.innerHTML = `<strong>${match}</strong>${rest}${
+		// ✅ Capitalize first letter of original city name
+		const cityDisplay =
+			cityNameOriginal.charAt(0).toUpperCase() +
+			cityNameOriginal.slice(1);
+
+		// ✅ Highlight matching part (case insensitive)
+		const regex = new RegExp(`^(${typedLower})`, 'i');
+		const highlightedCity = cityDisplay.replace(
+			regex,
+			'<strong>$1</strong>'
+		);
+
+		item.innerHTML = `${highlightedCity}${
 			city.state ? ', ' + city.state : ''
 		}, ${city.country}`;
-
 		item.dataset.latitude = city.latitude;
 		item.dataset.longitude = city.longitude;
 		suggestionsBox.appendChild(item);
@@ -86,6 +98,7 @@ suggestionsBox.addEventListener('click', async (e) => {
 
 	hideLoading();
 
+	forecastTimezone = data.timezone;
 	displayForecast(data.forecast);
 	setBackground(data.backgroundImage);
 });
@@ -127,8 +140,18 @@ function showDay(day) {
 		'selectedDayTemp'
 	).textContent = `${day.min}° / ${day.max}°`;
 
-	// Local time could be fetched in the future if needed, placeholder for now
-	document.getElementById('selectedDayLocalTime').textContent = '';
+	// Local time
+	if (forecastTimezone) {
+		const now = new Date();
+		const localTime = now.toLocaleTimeString('en-US', {
+			timeZone: forecastTimezone,
+		});
+		document.getElementById(
+			'selectedDayLocalTime'
+		).textContent = `Local time: ${localTime}`;
+	} else {
+		document.getElementById('selectedDayLocalTime').textContent = '';
+	}
 }
 
 function setBackground(url) {

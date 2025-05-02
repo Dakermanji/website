@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 import env from '../config/dotenv.js';
-import { getCountryName } from './countries.js';
+import { getCountryName, getTimezone } from './countries.js';
 
 const OPENWEATHER_API_KEY = env.OPENWEATHER_API_KEY;
 const UNSPLASH_ACCESS_KEY = env.UNSPLASH_ACCESS_KEY;
@@ -55,7 +55,10 @@ export const getWeatherByCoordinates = async (latitude, longitude, unit) => {
 				icon: mostCommon(day.icons),
 			}));
 
-		return forecast;
+		return {
+			timezone: getTimezone(latitude, longitude),
+			forecast,
+		};
 	} catch (error) {
 		console.error('Error fetching weather forecast:', error.message);
 		return [];
@@ -135,16 +138,6 @@ export const getBackgroundImage = async (description, orientation) => {
 		return null;
 	}
 };
-
-// Helper: Sanitize city name
-function sanitizeCityName(city) {
-	return city
-		.toLowerCase()
-		.split(' ')
-		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-		.join(' ')
-		.trim();
-}
 
 // City Input to match City, State, Country
 function parseCityInput(query) {
