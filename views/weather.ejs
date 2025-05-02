@@ -8,8 +8,8 @@
 	<div class="weather-card p-4 rounded shadow-lg">
 		<!-- Search + Unit Toggle -->
 		<form id="weatherForm" class="mb-4">
-			<div class="row g-3 align-items-center">
-				<div class="col">
+			<div class="row g-3">
+				<div class="col-12">
 					<input
 						type="text"
 						id="city"
@@ -22,8 +22,8 @@
 					<div id="suggestions" class="list-group mt-2"></div>
 				</div>
 
-				<div class="col-auto mt-2">
-					<div class="unit-toggle d-flex">
+				<div class="col-12">
+					<div class="unit-toggle d-flex gap-2">
 						<input
 							type="radio"
 							name="unit"
@@ -33,7 +33,7 @@
 							checked
 							hidden
 						/>
-						<label for="metric" class="me-2">°C</label>
+						<label for="metric" class="btn btn-primary">°C</label>
 
 						<input
 							type="radio"
@@ -43,7 +43,9 @@
 							autocomplete="off"
 							hidden
 						/>
-						<label for="imperial">°F</label>
+						<label for="imperial" class="btn btn-outline-primary"
+							>°F</label
+						>
 					</div>
 				</div>
 			</div>
@@ -51,6 +53,7 @@
 
 		<!-- Weather Results -->
 		<div id="weatherResults" class="mt-4" hidden>
+			<h5 id="selectedCity" class="text-center mb-3"></h5>
 			<!-- Days Selector -->
 			<div class="row text-center mb-4" id="daySelector">
 				<!-- Days will be dynamically inserted here -->

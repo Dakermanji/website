@@ -7,6 +7,7 @@ const daySelector = document.getElementById('daySelector');
 const selectedDay = document.getElementById('selectedDay');
 const background = document.querySelector('.weather-background');
 let forecastTimezone = null;
+let selectedCityName = null;
 
 // Listen to city input
 cityInput.addEventListener('input', async () => {
@@ -85,7 +86,10 @@ suggestionsBox.addEventListener('click', async (e) => {
 		window.innerWidth >= window.innerHeight ? 'landscape' : 'portrait';
 
 	suggestionsBox.innerHTML = '';
-	cityInput.value = e.target.textContent;
+
+	const cityFullName = e.target.textContent.trim();
+	cityInput.value = cityFullName;
+	selectedCityName = cityFullName;
 
 	showLoading();
 
@@ -101,6 +105,7 @@ suggestionsBox.addEventListener('click', async (e) => {
 	forecastTimezone = data.timezone;
 	displayForecast(data.forecast);
 	setBackground(data.backgroundImage);
+	showSelectedCity();
 });
 
 function displayForecast(forecast) {
@@ -168,4 +173,9 @@ function showLoading() {
 
 function hideLoading() {
 	document.getElementById('loading').classList.remove('show');
+}
+
+function showSelectedCity() {
+	const cityDisplay = document.getElementById('selectedCity');
+	cityDisplay.textContent = selectedCityName || '';
 }

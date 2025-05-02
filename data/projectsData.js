@@ -8,12 +8,12 @@ export const projects = [
 			'Organize tasks, manage projects, collaborate with team members',
 		link: 'taskmanager',
 	},
-	// {
-	// 	img: 'weather_app.jpg',
-	// 	title: 'Weather App',
-	// 	description: 'Built with Express, EJS, and Weather API',
-	// 	link: 'weather',
-	// },
+	{
+		img: 'weather_app.jpg',
+		title: 'Weather App',
+		description: 'Built with Express, EJS, and Weather API',
+		link: 'weather',
+	},
 	// {
 	// 	img: 'chat_app.jpg',
 	// 	title: 'Chat App',
