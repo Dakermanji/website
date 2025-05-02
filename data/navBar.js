@@ -47,11 +47,11 @@ export const navBar = {
 			icon: '<i class="bi bi-list-task"></i>',
 			text: 'Task Manager',
 		},
-		// {
-		// 	link: '/weather',
-		// 	icon: '<i class="bi bi-thermometer-half"></i>',
-		// 	text: 'Weather',
-		// },
+		{
+			link: '/weather',
+			icon: '<i class="bi bi-thermometer-half"></i>',
+			text: 'Weather',
+		},
 		// {
 		// 	link: '/chat',
 		// 	icon: '<i class="bi bi-chat-dots"></i>',

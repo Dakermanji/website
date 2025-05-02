@@ -40,6 +40,7 @@ const env = {
 	EMAIL_SERVICE: requireEnv('EMAIL_SERVICE'),
 	EMAIL_USER: requireEnv('EMAIL_USER'),
 	EMAIL_PASS: requireEnv('EMAIL_PASS'),
+	OPENWEATHER_API_KEY: requireEnv('OPENWEATHER_API_KEY'),
 
 	// Optional variables with defaults
 	PORT: optionalEnv('PORT', 3000),

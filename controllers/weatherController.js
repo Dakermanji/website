@@ -6,7 +6,7 @@ import { getUserFriends } from '../utils/friends/userFriendsHelper.js';
 import {
 	getWeatherByCoordinates,
 	getCitySuggestions,
-} from '../utils/weatherHelper2.js';
+} from '../utils/weatherHelper.js';
 
 // Render the weather page
 export const renderWeatherPage = async (req, res) => {
@@ -38,9 +38,14 @@ export const fetchWeatherData = (req, res) => {
 
 export const fetchCitySuggestions = async (req, res) => {
 	const { query } = req.query;
-
 	if (!query) {
-		return res.status(400).json({ error: 'City name is required.' });
+		return res.status(400).json({ error: 'Query is required.' });
+	}
+
+	if (query.length < 3) {
+		return res
+			.status(400)
+			.json({ error: 'Query must be at least 3 characters' });
 	}
 
 	try {
