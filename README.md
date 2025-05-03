@@ -2,11 +2,9 @@
 
 ## Overview
 
-- It also features authentication, messaging, and social interactions like follows, blocks, notifications, and a Task Management System.
+- This is a personal portfolio website showcasing my skills, projects, and professional experience as a full-stack web developer. The website includes dynamic sections such as "About Me," "Services," "Portfolio," and "Contact Me," with data stored in a MySQL database.
 
-- It also features authentication, messaging, social interactions (follows, blocks, notifications), a Task Management System, and a dynamic Projects showcase page.
-
-This is a personal portfolio website showcasing my skills, projects, and professional experience as a full-stack web developer. The website includes dynamic sections such as "About Me," "Services," "Portfolio," and "Contact Me," with data stored in a MySQL database. It also features authentication, messaging, social interactions (follows, blocks, notifications), a **Task Management System** and a dynamic Projects showcase page.
+- It also features authentication, messaging, social interactions (follows, blocks, notifications), a Task Management System, a dynamic Projects showcase page, and a Weather Application with local timezone and background images.
 
 ## Features
 
@@ -32,7 +30,12 @@ This is a personal portfolio website showcasing my skills, projects, and profess
   - - Responsive Bootstrap card layout
   - - Clean scaling for desktop and mobile
   - - Easy to add new projects without modifying EJS templates
-
+- **Weather Application**:
+  - **Search cities worldwide with autocomplete** using OpenWeather and Geocoding API
+  - **Dynamic background images** powered by Unsplash API based on weather conditions
+  - Local timezone support with automatic local time display
+  - Responsive and clean design using Bootstrap + custom styles
+  - Mobile friendly layout with smooth UX and loading indicators
 - **Messaging**:
   - Allows user-linked messages with timestamped storage.
 - **Contact Form**:
@@ -53,6 +56,11 @@ This is a personal portfolio website showcasing my skills, projects, and profess
   - **Drag-and-drop** with JavaScript event handling.
   - **AJAX-based real-time updates**.
   - **Role-based authentication for collaboration**.
+- **Weather Application**:
+  - **OpenWeather API** (5-day forecast + current conditions)
+  - **Unsplash API** (dynamic background images)
+  - **Geocoding API** (city lookup with country/state support)
+  - **tz-lookup** (timezone calculation)
 - **Authentication**: Passport.js (local, Google, GitHub)
 - **Email Service**: Nodemailer
 - **Error Tracking**: Sentry
@@ -135,6 +143,10 @@ This is a personal portfolio website showcasing my skills, projects, and profess
 ### Task Manager
 
 ![Task Manager](./screenshots/taskmanager.png)
+
+### Weather Application
+
+![Weather Application](./screenshots/weather.png)
 
 ## Contribution
 
