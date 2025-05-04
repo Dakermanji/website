@@ -56,6 +56,15 @@ class Collaboration {
 
 		return rows.length && rows[0].role === 'editor';
 	}
+
+	static async isCollaborator(projectId, userId) {
+		const [rows] = await promisePool.query(
+			`SELECT * FROM Collaborations
+			 WHERE project_id = ? AND user_id = ?`,
+			[projectId, userId]
+		);
+		return rows.length > 0;
+	}
 }
 
 export default Collaboration;

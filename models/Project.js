@@ -25,6 +25,15 @@ class Project {
 		const [projects] = await promisePool.execute(query, [projectId]);
 		return projects[0];
 	}
+
+	static async isOwner(projectId, userId) {
+		const [rows] = await promisePool.query(
+			`SELECT * FROM projects
+			 WHERE id = ? AND owner_id = ?`,
+			[projectId, userId]
+		);
+		return rows.length > 0;
+	}
 }
 
 export default Project;

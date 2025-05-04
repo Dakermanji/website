@@ -96,6 +96,16 @@ class Follow {
 		const [rows] = await promisePool.execute(query, [followId]);
 		return rows[0];
 	}
+
+	// Check if the follow is mutual
+	static async isMutual(followerId, followedId) {
+		const [rows] = await promisePool.query(
+			`SELECT * FROM follows
+			 WHERE follower_id = ? AND followed_id = ? AND mutual_follow = 1`,
+			[followerId, followedId]
+		);
+		return rows.length > 0;
+	}
 }
 
 export default Follow;

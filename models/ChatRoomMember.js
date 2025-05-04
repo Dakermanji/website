@@ -29,6 +29,15 @@ class ChatRoomMember {
 			[roomId, userId]
 		);
 	}
+
+	static async isMember(roomId, userId) {
+		const [rows] = await promisePool.query(
+			`SELECT * FROM chat_room_members
+		 WHERE room_id = ? AND user_id = ?`,
+			[roomId, userId]
+		);
+		return rows.length > 0;
+	}
 }
 
 export default ChatRoomMember;
