@@ -10,3 +10,6 @@
 08. tasks
 09. collaborations
 10. notifications
+11. chat_messages
+12. chat_rooms
+13. chat_room_members
