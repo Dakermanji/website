@@ -14,14 +14,29 @@ export const initSocket = (server) => {
 	io.on('connection', (socket) => {
 		console.log(`User connected: ${socket.id}`);
 
+		// Join room
+		socket.on('joinRoom', (roomId) => {
+			socket.join(roomId);
+			console.log(`User ${socket.id} joined room ${roomId}`);
+		});
+
+		// Chat message
+		socket.on('chatMessage', ({ roomId, message, sender }) => {
+			// Broadcast to all in room except sender
+			socket.to(roomId).emit('chatMessage', {
+				message,
+				sender,
+				time: new Date(),
+			});
+
+			console.log(`Message from ${sender} in ${roomId}: ${message}`);
+		});
+
+		// Disconnect
 		socket.on('disconnect', () => {
 			console.log(`User disconnected: ${socket.id}`);
 		});
-
-		// TODO: join room, send message, typing, etc handlers will go here
 	});
-
-	return io;
 };
 
 export const getIO = () => {

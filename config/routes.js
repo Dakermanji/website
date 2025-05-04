@@ -22,6 +22,9 @@ import collaborationsTMRoutes from '../routes/taskmanager/collaborationsRoutes.j
 // import weather routes
 import weatherRoutes from '../routes/weatherRoutes.js';
 
+// import chat routes
+import chatRoutes from '../routes/chatRoutes.js';
+
 const router = express.Router();
 
 // Step 1: Apply global middlewares
@@ -49,6 +52,9 @@ router.use('/taskmanager', projectsTMRoutes);
 
 // Weather routes
 router.use('/weather', weatherRoutes);
+
+// Chat routes
+router.use('/chat', chatRoutes);
 
 // Step 3: Handle 404 errors: Catch-all route for unmatched paths
 router.use((req, res, next) => {
