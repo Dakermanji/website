@@ -37,7 +37,7 @@ export const formatMessage = (message, user) => {
 	return {
 		id: message.id,
 		user_id: message.user_id,
-		username: user.display_name,
+		username: user.username,
 		message: message.message,
 		created_at: message.created_at || new Date(),
 	};

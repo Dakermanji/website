@@ -5,7 +5,7 @@ import { promisePool } from '../config/database.js';
 class ChatRoomMember {
 	static async fetchMembers(roomId) {
 		const [rows] = await promisePool.query(
-			`SELECT crm.*, u.display_name AS username
+			`SELECT crm.*, u.username
 			FROM chat_room_members crm
 			JOIN users u ON crm.user_id = u.id
 			WHERE crm.room_id = ?`,
@@ -37,6 +37,17 @@ class ChatRoomMember {
 			[roomId, userId]
 		);
 		return rows.length > 0;
+	}
+
+	static async fetchUserRooms(userId) {
+		const [rows] = await promisePool.query(
+			`SELECT crm.*, cr.name
+		 FROM chat_room_members crm
+		 JOIN chat_rooms cr ON crm.room_id = cr.id
+		 WHERE crm.user_id = ?`,
+			[userId]
+		);
+		return rows;
 	}
 }
 

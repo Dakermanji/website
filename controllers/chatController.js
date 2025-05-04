@@ -8,26 +8,56 @@ import { getIO } from '../config/socket.js';
 import { navBar } from '../data/navBar.js';
 import Notification from '../models/Notification.js';
 import { getUserFriends } from '../utils/friends/userFriendsHelper.js';
+import Project from '../models/Project.js';
+import Collaboration from '../models/Collaboration.js';
+import Follow from '../models/Follow.js';
+import errorHandler from '../middlewares/errorHandler.js';
 
-export const renderChatHome = async (req, res) => {
+export const renderChatHome = async (req, res, next) => {
 	const userId = req.user?.id;
-	const userFriends = await getUserFriends(userId);
-	const notifications = await Notification.getUnreadNotiifcationsForUser(
-		userId
-	);
-	const unreadCount = await Notification.countUnread(req.user.id);
-	res.render('chat/index', {
-		title: 'Chat - DWD',
-		navBar: navBar.projects,
-		userFriends,
-		notifications,
-		unreadCount,
-		success_msg: res.locals.success,
-		error_msg: res.locals.error,
-		user: userId,
-		styles: ['chat'],
-		// scripts: [],
-	});
+	try {
+		const userFriends = await getUserFriends(userId);
+		const notifications = await Notification.getUnreadNotiifcationsForUser(
+			userId
+		);
+		const unreadCount = await Notification.countUnread(req.user.id);
+
+		const chat_friends = await Follow.fetchMutualFollowers(userId);
+		const chat_rooms = await ChatRoomMember.fetchUserRooms(userId);
+		const ownedProjects = await Project.getProjectsByOwner(userId);
+		const collaborationsProjects = await Collaboration.getProjectsForUser(
+			userId
+		);
+		const chat_projects = [
+			...ownedProjects.map((p) => ({
+				id: p.id,
+				name: p.name,
+				type: 'Owner',
+			})),
+			...collaborationsProjects.map((c) => ({
+				id: c.project_id,
+				name: c.name,
+				type: 'Collaborator',
+			})),
+		];
+
+		res.render('chat/index', {
+			title: 'Chat - DWD',
+			navBar: navBar.projects,
+			chat_friends,
+			chat_rooms,
+			chat_projects,
+			userFriends,
+			notifications,
+			unreadCount,
+			success_msg: res.locals.success,
+			error_msg: res.locals.error,
+			styles: ['chat'],
+			// scripts: [],
+		});
+	} catch (error) {
+		errorHandler(error, req, res, next);
+	}
 };
 
 export const renderChatPage = async (req, res) => {
@@ -47,26 +77,30 @@ export const renderChatPage = async (req, res) => {
 	}
 
 	const userId = req.user?.id;
-	const userFriends = await getUserFriends(userId);
-	const notifications = await Notification.getUnreadNotiifcationsForUser(
-		userId
-	);
-	const unreadCount = await Notification.countUnread(req.user.id);
+	try {
+		const userFriends = await getUserFriends(userId);
+		const notifications = await Notification.getUnreadNotiifcationsForUser(
+			userId
+		);
+		const unreadCount = await Notification.countUnread(req.user.id);
 
-	res.render('chat/chat', {
-		title: 'Chat - DWD',
-		navBar: navBar.projects,
-		userFriends,
-		notifications,
-		unreadCount,
-		success_msg: res.locals.success,
-		error_msg: res.locals.error,
-		projectName,
-		receiverId,
-		user: userId,
-		styles: ['chat'],
-		// scripts: ['chat'],
-	});
+		res.render('chat/chat', {
+			title: 'Chat - DWD',
+			navBar: navBar.projects,
+			userFriends,
+			notifications,
+			unreadCount,
+			success_msg: res.locals.success,
+			error_msg: res.locals.error,
+			projectName,
+			receiverId,
+			user: userId,
+			styles: ['chat'],
+			// scripts: ['chat'],
+		});
+	} catch (error) {
+		errorHandler(error, req, res, next);
+	}
 };
 
 export const fetchMessages = async (req, res) => {

@@ -106,6 +106,18 @@ class Follow {
 		);
 		return rows.length > 0;
 	}
+
+	// Get all mutual follows
+	static async fetchMutualFollowers(userId) {
+		const [rows] = await promisePool.query(
+			`SELECT f.*, u.username
+		 FROM follows f
+		 JOIN users u ON u.id = f.followed_id
+		 WHERE f.follower_id = ? AND f.mutual_follow = 1`,
+			[userId]
+		);
+		return rows;
+	}
 }
 
 export default Follow;

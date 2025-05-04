@@ -5,7 +5,7 @@ import { promisePool } from '../config/database.js';
 class ChatMessage {
 	static async fetchByReceiver(projectName, receiverId) {
 		const [rows] = await promisePool.query(
-			`SELECT cm.*, u.display_name AS username
+			`SELECT cm.*, u.username
 			FROM chat_messages cm
 			JOIN users u ON cm.user_id = u.id
 			WHERE cm.project_name = ? AND cm.receiver_id = ?
