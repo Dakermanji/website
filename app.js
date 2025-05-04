@@ -2,6 +2,8 @@
 
 import app from './config/express.js';
 import env from './config/dotenv.js';
+import http from 'http';
+import { initSocket } from './config/socket.js';
 
 // Catch uncaught exceptions
 process.on('uncaughtException', (err) => {
@@ -23,11 +25,16 @@ process.on('unhandledRejection', (reason, promise) => {
 // Function to start the server
 const startServer = () => {
 	try {
-		// Start listening on the defined port
-		app.listen(env.PORT, () => {
-			console.log(`Server is running on http://${env.HOST}:${env.PORT}`);
+		// Create HTTP server
+		const server = http.createServer(app);
 
-			// Warn if the default port is being used
+		// Init Socket.io
+		initSocket(server);
+
+		// Start server
+		server.listen(env.PORT, () => {
+			console.log(`Server is running on ${env.HOST}:${env.PORT}`);
+
 			if (!process.env.PORT) {
 				console.warn(
 					'[Warning]: PORT is not defined in .env. Using default: 3000'
@@ -38,7 +45,7 @@ const startServer = () => {
 		console.error(
 			`[Server Error]: Failed to start the server. ${error.message}`
 		);
-		process.exit(1); // Exit the process with failure code
+		process.exit(1);
 	}
 };
 
