@@ -4,7 +4,7 @@
 	<div class="sidebar">
 		<h3>Chat</h3>
 		<ul class="sidebar-list">
-			<li class="sidebar-section">
+			<li class="sidebar-section b-border">
 				<h5 class="toggle-section" data-target="friends-list"
 					>Friends</h5
 				>
@@ -21,8 +21,23 @@
 				</ul>
 			</li>
 
-			<li class="sidebar-section">
-				<h5 class="toggle-section" data-target="rooms-list">Rooms</h5>
+			<li class="sidebar-section b-border">
+				<div class="d-flex justify-content-between">
+					<h5 class="toggle-section w-100" data-target="rooms-list"
+						>Rooms</h5
+					>
+					<span
+						class="d-flex justify-content-between align-items-center"
+						data-target="rooms-list"
+					>
+						<button
+							id="open-room-modal"
+							class="btn btn-sm btn-primary"
+						>
+							<i class="bi bi-plus-lg"></i>
+						</button>
+					</span>
+				</div>
 				<ul class="sidebar-items d-none" id="rooms-list">
 					<% if (chat_rooms.length === 0) { %>
 					<li class="sidebar-item">No rooms</li>
@@ -36,7 +51,7 @@
 				</ul>
 			</li>
 
-			<li class="sidebar-section">
+			<li class="sidebar-section b-border">
 				<h5 class="toggle-section" data-target="projects-list"
 					>Projects</h5
 				>
@@ -57,3 +72,4 @@
 
 	<div class="chat-window"> </div>
 </div>
+<%- include('partials/room-modal') %>

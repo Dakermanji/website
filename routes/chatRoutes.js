@@ -6,6 +6,7 @@ import {
 	fetchMessages,
 	sendMessage,
 	renderChatHome,
+	createRoom,
 } from '../controllers/chatController.js';
 
 const router = express.Router();
@@ -22,6 +23,7 @@ router.post('/friends/:friendId/messages', sendMessage);
 router.get('/rooms/:roomId', renderChatPage);
 router.get('/rooms/:roomId/messages', fetchMessages);
 router.post('/rooms/:roomId/messages', sendMessage);
+router.post('/rooms/create', createRoom);
 
 // Tasks chat
 router.get('/tasks/:taskId', renderChatPage);

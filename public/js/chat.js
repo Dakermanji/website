@@ -39,3 +39,43 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 	});
 });
+
+//! Add to chat.js (inside DOMContentLoaded)
+
+const roomModal = document.getElementById('room-modal');
+const openModalBtn = document.getElementById('open-room-modal');
+const closeModalBtn = document.querySelector('.close-modal');
+const roomForm = document.getElementById('room-form');
+const roomNameInput = document.getElementById('room-name');
+
+openModalBtn.addEventListener('click', () => {
+	roomModal.classList.remove('d-none');
+});
+
+closeModalBtn.addEventListener('click', () => {
+	roomModal.classList.add('d-none');
+});
+
+roomForm.addEventListener('submit', async (e) => {
+	e.preventDefault();
+	const name = roomNameInput.value.trim();
+	if (!name) return;
+
+	try {
+		const response = await fetch('/chat/rooms/create', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ name }),
+		});
+
+		const result = await response.json();
+		if (response.ok) {
+			location.reload(); // Later: add dynamically to list
+		} else {
+			alert(result.error || 'Failed to create room');
+		}
+	} catch (err) {
+		console.error(err);
+		alert('Something went wrong.');
+	}
+});

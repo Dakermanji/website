@@ -1,17 +1,18 @@
 //! controllers/chatController.js
 
-import ChatMessage from '../models/ChatMessage.js';
-import ChatRoomMember from '../models/ChatRoomMember.js';
 import { v4 as uuidv4 } from 'uuid';
-import { canSendMessage, formatMessage } from '../utils/chatHelper.js';
 import { getIO } from '../config/socket.js';
 import { navBar } from '../data/navBar.js';
-import Notification from '../models/Notification.js';
-import { getUserFriends } from '../utils/friends/userFriendsHelper.js';
-import Project from '../models/Project.js';
-import Collaboration from '../models/Collaboration.js';
-import Follow from '../models/Follow.js';
 import errorHandler from '../middlewares/errorHandler.js';
+import ChatMessage from '../models/ChatMessage.js';
+import ChatRoom from '../models/ChatRoom.js';
+import Collaboration from '../models/Collaboration.js';
+import ChatRoomMember from '../models/ChatRoomMember.js';
+import Follow from '../models/Follow.js';
+import Notification from '../models/Notification.js';
+import Project from '../models/Project.js';
+import { canSendMessage, formatMessage } from '../utils/chatHelper.js';
+import { getUserFriends } from '../utils/friends/userFriendsHelper.js';
 
 export const renderChatHome = async (req, res, next) => {
 	const userId = req.user?.id;
@@ -188,5 +189,30 @@ export const joinRoom = async (req, res) => {
 		res.status(201).json({ message: 'Joined room successfully.' });
 	} catch (err) {
 		res.status(500).json({ error: 'Failed to join room.' });
+	}
+};
+
+export const createRoom = async (req, res, next) => {
+	const { name } = req.body;
+	const creator_id = req.user.id;
+
+	if (!name || name.trim().length < 2) {
+		return res.status(400).json({ error: 'Room name is too short' });
+	}
+
+	try {
+		const room = {
+			id: uuidv4(),
+			name: name.trim(),
+			creator_id,
+			is_locked: false,
+		};
+		await ChatRoom.create(room);
+		await ChatRoomMember.addMember(room.id, creator_id);
+
+		res.status(201).json({ message: 'Room created', room });
+	} catch (error) {
+		errorHandler(error, req, res, next);
+		res.status(500).json({ error: 'Failed to create room' });
 	}
 };
