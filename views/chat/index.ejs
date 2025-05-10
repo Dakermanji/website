@@ -1,0 +1,51 @@
+<!-- views/chat/index.ejs -->
+
+<div class="chat-container">
+	<ul class="sidebar">
+		<li class="sidebar-section"
+			>Friends
+			<ul class="sidebar-items">
+				<% if (chat_friends.length === 0) { %>
+				<li class="sidebar-item">No friends</li>
+				<% } else { %> <% chat_friends.forEach(friend => { %>
+				<li class="sidebar-item">
+					<a href="/chat/friends/<%= friend.followed_id %>"
+						><%= friend.username %></a
+					>
+				</li>
+				<% }) %> <% } %>
+			</ul>
+		</li>
+
+		<li class="sidebar-section"
+			>Rooms
+			<ul class="sidebar-items">
+				<% if (chat_rooms.length === 0) { %>
+				<li class="sidebar-item">No rooms</li>
+				<% } else { %> <% chat_rooms.forEach(room => { %>
+				<li class="sidebar-item">
+					<a href="/chat/rooms/<%= room.room_id %>"
+						><%= room.name %></a
+					>
+				</li>
+				<% }) %> <% } %>
+			</ul>
+		</li>
+
+		<li class="sidebar-section"
+			>Projects
+			<ul class="sidebar-items">
+				<% if (chat_projects.length === 0) { %>
+				<li class="sidebar-item">No projects</li>
+				<% } else { %> <% chat_projects.forEach(project => { %>
+				<li class="sidebar-item">
+					<a href="/chat/tasks/<%= project.id %>"
+						><%= project.name %> (<%= project.type %>)</a
+					>
+				</li>
+				<% }) %> <% } %>
+			</ul>
+		</li>
+	</ul>
+	<div class="chat-window"> </div>
+</div>

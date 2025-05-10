@@ -1,0 +1,89 @@
+<div class="chat-container">
+	<div class="sidebar">
+		<h3>Chat</h3>
+		<ul>
+			<li><a href="/chat/friends/<%= user.id %>">Friends</a></li>
+			<li><a href="/chat/rooms/sample-room-id">Rooms</a></li>
+			<li><a href="/chat/tasks/sample-task-id">Task Manager</a></li>
+		</ul>
+	</div>
+
+	<div class="chat-window">
+		<div id="messages" class="messages"></div>
+
+		<form id="messageForm">
+			<input
+				type="text"
+				id="messageInput"
+				placeholder="Type your message..."
+				autocomplete="off"
+			/>
+			<button type="submit">Send</button>
+		</form>
+	</div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+	const socket = io();
+
+	const roomId = '<%= receiverId %>';
+	const userId = '<%= user.id %>';
+	const username = '<%= user.username %>';
+
+	socket.emit('joinRoom', roomId);
+
+	const messagesDiv = document.getElementById('messages');
+	const form = document.getElementById('messageForm');
+	const input = document.getElementById('messageInput');
+
+	// Load existing messages
+	fetch(`/chat/${projectNameToUrl('<%= projectName %>')}/${roomId}/messages`)
+		.then((res) => res.json())
+		.then((messages) => {
+			messages.forEach((m) => {
+				addMessage(m.username, m.message, m.created_at);
+			});
+		});
+
+	// Receive new messages
+	socket.on('chatMessage', (data) => {
+		addMessage(data.username, data.message, data.time);
+	});
+
+	form.addEventListener('submit', (e) => {
+		e.preventDefault();
+		const message = input.value.trim();
+		if (!message) return;
+
+		fetch(
+			`/chat/${projectNameToUrl(
+				'<%= projectName %>'
+			)}/${roomId}/messages`,
+			{
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ message }),
+			}
+		);
+
+		input.value = '';
+	});
+
+	function addMessage(sender, message, time) {
+		const div = document.createElement('div');
+		div.classList.add('message');
+		div.innerHTML = `<strong>${sender}:</strong> ${message} <small>${new Date(
+			time
+		).toLocaleTimeString()}</small>`;
+		messagesDiv.appendChild(div);
+		messagesDiv.scrollTop = messagesDiv.scrollHeight;
+	}
+
+	function projectNameToUrl(name) {
+		if (name === 'chat_app') return 'friends';
+		if (name === 'chat_app_room') return 'rooms';
+		if (name === 'taskmanager') return 'tasks';
+		return '';
+	}
+</script>
