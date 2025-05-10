@@ -70,7 +70,24 @@ roomForm.addEventListener('submit', async (e) => {
 
 		const result = await response.json();
 		if (response.ok) {
-			location.reload(); // Later: add dynamically to list
+			const newRoom = result.room;
+
+			// Close modal
+			roomModal.classList.add('d-none');
+			roomNameInput.value = '';
+
+			// Expand list if collapsed
+			const roomList = document.getElementById('rooms-list');
+			roomList.classList.remove('d-none');
+
+			// Add new room to DOM
+			const li = document.createElement('li');
+			li.classList.add('sidebar-item');
+			const link = document.createElement('a');
+			link.href = `/chat/rooms/${newRoom.id}`;
+			link.textContent = newRoom.name;
+			li.appendChild(link);
+			roomList.appendChild(li);
 		} else {
 			alert(result.error || 'Failed to create room');
 		}
