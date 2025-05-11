@@ -1,52 +1,38 @@
 //! public/js/chat.js
 
-document.addEventListener('DOMContentLoaded', () => {
-	console.log('Chat index page loaded');
-
-	// Example: highlight current active chat link
-	const links = document.querySelectorAll('.sidebar-item a');
-	links.forEach((link) => {
-		if (link.href === window.location.href) {
-			link.classList.add('active');
-		}
-	});
-});
-
-//! public/js/chat.js
-
-document.addEventListener('DOMContentLoaded', () => {
-	console.log('Chat index page loaded');
-
-	// Toggle sidebar sections
-	const toggles = document.querySelectorAll('.toggle-section');
-	toggles.forEach((toggle) => {
-		toggle.addEventListener('click', () => {
-			const targetId = toggle.getAttribute('data-target');
-			const targetList = document.getElementById(targetId);
-			if (targetList) {
-				targetList.classList.toggle('d-none');
-			}
-		});
-	});
-
-	// Optional: auto-expand "active" section
-	const links = document.querySelectorAll('.sidebar-item a');
-	links.forEach((link) => {
-		if (link.href === window.location.href) {
-			link.classList.add('active');
-			const parentList = link.closest('ul.sidebar-items');
-			if (parentList) parentList.classList.remove('d-none');
-		}
-	});
-});
-
-//! Add to chat.js (inside DOMContentLoaded)
-
 const roomModal = document.getElementById('room-modal');
 const openModalBtn = document.getElementById('open-room-modal');
 const closeModalBtn = document.querySelector('.close-modal');
 const roomForm = document.getElementById('room-form');
 const roomNameInput = document.getElementById('room-name');
+const form = document.getElementById('messageForm');
+const input = document.getElementById('messageInput');
+const messagesDiv = document.getElementById('messages');
+const roomId = window.chatConfig?.roomId;
+const projectName = window.chatConfig?.projectName;
+const username = window.chatConfig?.username;
+const links = document.querySelectorAll('.sidebar-item a');
+const toggles = document.querySelectorAll('.toggle-section');
+
+// Toggle sidebar sections
+toggles.forEach((toggle) => {
+	toggle.addEventListener('click', () => {
+		const targetId = toggle.getAttribute('data-target');
+		const targetList = document.getElementById(targetId);
+		if (targetList) {
+			targetList.classList.toggle('d-none');
+		}
+	});
+});
+
+// auto-expand "active" section
+links.forEach((link) => {
+	if (link.href === window.location.href) {
+		link.classList.add('active');
+		const parentList = link.closest('ul.sidebar-items');
+		if (parentList) parentList.classList.remove('d-none');
+	}
+});
 
 openModalBtn.addEventListener('click', () => {
 	roomModal.classList.remove('d-none');
@@ -96,3 +82,43 @@ roomForm.addEventListener('submit', async (e) => {
 		alert('Something went wrong.');
 	}
 });
+
+// auto-scroll to bottom on new message
+function addMessage(sender, message, time) {
+	const div = document.createElement('div');
+	div.classList.add('message');
+	div.innerHTML = `<strong>${sender}:</strong> ${message} <small>${new Date(
+		time
+	).toLocaleTimeString()}</small>`;
+	messagesDiv.appendChild(div);
+	messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+// On message received (via socket.io)
+socket.on('chatMessage', (data) => {
+	addMessage(data.username, data.message, data.time);
+});
+
+// On form submit
+form.addEventListener('submit', async (e) => {
+	e.preventDefault();
+	const message = input.value.trim();
+	if (!message) return;
+
+	await fetch(`/chat/${projectNameToUrl(projectName)}/${roomId}/messages`, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ message }),
+	});
+
+	input.value = '';
+});
+
+if (!document.getElementById('messages')) return; // no chat selected
+
+function projectNameToUrl(name) {
+	if (name === 'chat_app') return 'friends';
+	if (name === 'chat_app_room') return 'rooms';
+	if (name === 'taskmanager') return 'tasks';
+	return '';
+}

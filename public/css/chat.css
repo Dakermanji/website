@@ -2,7 +2,7 @@
 
 .chat-container {
     display: flex;
-    height: 100vh;
+    height: 80vh;
 }
 
 .sidebar {
@@ -132,4 +132,38 @@
     background-color: var(--color-secondary-dark);
     color: white;
     border-color: var(--color-secondary-dark);
+}
+
+/* chat window */
+.messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+}
+
+#messageForm {
+    display: flex;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    gap: 10px;
+}
+
+#messageInput {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#messageForm button {
+    padding: 10px 20px;
+    border: none;
+    background-color: var(--color-primary);
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
 }

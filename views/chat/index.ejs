@@ -70,6 +70,21 @@
 		</ul>
 	</div>
 
-	<div class="chat-window"> </div>
+	<div class="chat-window">
+		<% if (projectName === 'chat_app') { %> <%-
+		include('chat/partials/friends') %> <% } else if (projectName ===
+		'chat_app_room') { %> <%- include('chat/partials/rooms') %> <% } else if
+		(projectName === 'taskmanager') { %> <%-
+		include('chat/partials/projects') %> <% } else { %>
+		<p>Please select a chat to start messaging.</p>
+		<% } %>
+	</div>
 </div>
 <%- include('partials/room-modal') %>
+<script>
+	window.chatConfig = {
+		roomId: '<%= receiverId %>',
+		projectName: '<%= projectName %>',
+		username: '<%= friend?.username || null %>',
+	};
+</script>
