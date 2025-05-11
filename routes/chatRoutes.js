@@ -2,31 +2,27 @@
 
 import express from 'express';
 import {
-	renderChatPage,
+	renderChatHome,
 	fetchMessages,
 	sendMessage,
-	renderChatHome,
 	createRoom,
 } from '../controllers/chatController.js';
 
 const router = express.Router();
 
-// Main route
-router.get('/', renderChatHome);
+// Main routes
+router.route('/').get(renderChatHome).post(renderChatHome);
 
 // Friends chat
-router.get('/friends/:friendId', renderChatPage);
 router.get('/friends/:friendId/messages', fetchMessages);
 router.post('/friends/:friendId/messages', sendMessage);
 
 // Rooms chat
-router.get('/rooms/:roomId', renderChatPage);
 router.get('/rooms/:roomId/messages', fetchMessages);
 router.post('/rooms/:roomId/messages', sendMessage);
 router.post('/rooms/create', createRoom);
 
 // Tasks chat
-router.get('/tasks/:taskId', renderChatPage);
 router.get('/tasks/:taskId/messages', fetchMessages);
 router.post('/tasks/:taskId/messages', sendMessage);
 

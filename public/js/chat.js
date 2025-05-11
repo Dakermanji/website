@@ -1,5 +1,6 @@
 //! public/js/chat.js
 
+const socket = io();
 const roomModal = document.getElementById('room-modal');
 const openModalBtn = document.getElementById('open-room-modal');
 const closeModalBtn = document.querySelector('.close-modal');
@@ -100,7 +101,7 @@ socket.on('chatMessage', (data) => {
 });
 
 // On form submit
-form.addEventListener('submit', async (e) => {
+form?.addEventListener('submit', async (e) => {
 	e.preventDefault();
 	const message = input.value.trim();
 	if (!message) return;
@@ -114,11 +115,9 @@ form.addEventListener('submit', async (e) => {
 	input.value = '';
 });
 
-if (!document.getElementById('messages')) return; // no chat selected
-
 function projectNameToUrl(name) {
-	if (name === 'chat_app') return 'friends';
-	if (name === 'chat_app_room') return 'rooms';
+	if (name === 'chat') return 'friends';
+	if (name === 'room') return 'rooms';
 	if (name === 'taskmanager') return 'tasks';
 	return '';
 }

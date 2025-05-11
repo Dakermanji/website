@@ -6,13 +6,13 @@ import Project from '../models/Project.js';
 import Collaboration from '../models/Collaboration.js';
 
 export const canSendMessage = async (projectName, receiverId, userId) => {
-	if (projectName === 'chat_app') {
+	if (projectName === 'chat') {
 		// Validate mutual follow
 		const mutual = await Follow.isMutual(userId, receiverId);
 		return mutual;
 	}
 
-	if (projectName === 'chat_app_room') {
+	if (projectName === 'room') {
 		// Validate if user is a room member
 		const isMember = await ChatRoomMember.isMember(receiverId, userId);
 		return isMember;

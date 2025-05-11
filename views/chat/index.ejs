@@ -13,9 +13,21 @@
 					<li class="sidebar-item">No friends</li>
 					<% } else { %> <% chat_friends.forEach(friend => { %>
 					<li class="sidebar-item">
-						<a href="/chat/friends/<%= friend.followed_id %>"
-							><%= friend.username %></a
-						>
+						<form method="POST" action="/chat" class="d-inline">
+							<input
+								type="hidden"
+								name="projectName"
+								value="chat"
+							/>
+							<input
+								type="hidden"
+								name="friend_id"
+								value="<%= friend.followed_id %>"
+							/>
+							<button type="submit" class="btn btn-link p-0">
+								<%= friend.username %>
+							</button>
+						</form>
 					</li>
 					<% }) %> <% } %>
 				</ul>
@@ -43,9 +55,21 @@
 					<li class="sidebar-item">No rooms</li>
 					<% } else { %> <% chat_rooms.forEach(room => { %>
 					<li class="sidebar-item">
-						<a href="/chat/rooms/<%= room.room_id %>"
-							><%= room.name %></a
-						>
+						<form method="POST" action="/chat" class="d-inline">
+							<input
+								type="hidden"
+								name="projectName"
+								value="room"
+							/>
+							<input
+								type="hidden"
+								name="room_id"
+								value="<%= room.id %>"
+							/>
+							<button type="submit" class="btn btn-link p-0">
+								<%= room.name %>
+							</button>
+						</form>
 					</li>
 					<% }) %> <% } %>
 				</ul>
@@ -60,9 +84,21 @@
 					<li class="sidebar-item">No projects</li>
 					<% } else { %> <% chat_projects.forEach(project => { %>
 					<li class="sidebar-item">
-						<a href="/chat/tasks/<%= project.id %>"
-							><%= project.name %> (<%= project.type %>)</a
-						>
+						<form method="POST" action="/chat" class="d-inline">
+							<input
+								type="hidden"
+								name="projectName"
+								value="taskmanager"
+							/>
+							<input
+								type="hidden"
+								name="project_id"
+								value="<%= project.id %>"
+							/>
+							<button type="submit" class="btn btn-link p-0">
+								<%= project.name %>
+							</button>
+						</form>
 					</li>
 					<% }) %> <% } %>
 				</ul>
@@ -71,16 +107,16 @@
 	</div>
 
 	<div class="chat-window">
-		<% if (projectName === 'chat_app') { %> <%-
-		include('chat/partials/friends') %> <% } else if (projectName ===
-		'chat_app_room') { %> <%- include('chat/partials/rooms') %> <% } else if
-		(projectName === 'taskmanager') { %> <%-
-		include('chat/partials/projects') %> <% } else { %>
+		<% if (projectName === 'chat') { %> <%- include('partials/friends') %>
+		<% } else if (projectName === 'room') { %> <%- include('partials/rooms')
+		%> <% } else if (projectName === 'taskmanager') { %> <%-
+		include('partials/projects') %> <% } else { %>
 		<p>Please select a chat to start messaging.</p>
 		<% } %>
 	</div>
 </div>
 <%- include('partials/room-modal') %>
+<script src="/socket.io/socket.io.js"></script>
 <script>
 	window.chatConfig = {
 		roomId: '<%= receiverId %>',

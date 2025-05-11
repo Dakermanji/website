@@ -52,11 +52,11 @@ export const navBar = {
 			icon: '<i class="bi bi-thermometer-half"></i>',
 			text: 'Weather',
 		},
-		// {
-		// 	link: '/chat',
-		// 	icon: '<i class="bi bi-chat-dots"></i>',
-		// 	text: 'Chat',
-		// },
+		{
+			link: '/chat',
+			icon: '<i class="bi bi-chat-dots"></i>',
+			text: 'Chat',
+		},
 		// {
 		// 	link: '/visited',
 		// 	icon: '<i class="bi bi-map"></i>',

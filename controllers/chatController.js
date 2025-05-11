@@ -17,6 +17,20 @@ import { getUserFriends } from '../utils/friends/userFriendsHelper.js';
 export const renderChatHome = async (req, res, next) => {
 	const userId = req.user?.id;
 	try {
+		const projectName = req.method === 'POST' ? req.body.projectName : null;
+		let receiverId = null;
+		let friend = null;
+
+		if (req.method === 'POST') {
+			if (projectName === 'chat') {
+				receiverId = req.body.friend_id;
+			} else if (projectName === 'room') {
+				receiverId = req.body.room_id;
+			} else if (projectName === 'taskmanager') {
+				receiverId = req.body.project_id;
+			}
+		}
+
 		const userFriends = await getUserFriends(userId);
 		const notifications = await Notification.getUnreadNotiifcationsForUser(
 			userId
@@ -51,9 +65,9 @@ export const renderChatHome = async (req, res, next) => {
 			userFriends,
 			notifications,
 			unreadCount,
-			projectName: null,
-			friend: null,
-			receiverId: null,
+			projectName,
+			friend,
+			receiverId,
 			success_msg: res.locals.success,
 			error_msg: res.locals.error,
 			styles: ['chat'],
@@ -64,57 +78,14 @@ export const renderChatHome = async (req, res, next) => {
 	}
 };
 
-export const renderChatPage = async (req, res) => {
-	const { friendId, roomId, taskId } = req.params;
-
-	let projectName = 'chat_app';
-	let receiverId = friendId;
-
-	if (roomId) {
-		projectName = 'chat_app_room';
-		receiverId = roomId;
-	}
-
-	if (taskId) {
-		projectName = 'taskmanager';
-		receiverId = taskId;
-	}
-
-	const userId = req.user?.id;
-	try {
-		const userFriends = await getUserFriends(userId);
-		const notifications = await Notification.getUnreadNotiifcationsForUser(
-			userId
-		);
-		const unreadCount = await Notification.countUnread(req.user.id);
-
-		res.render('chat/chat', {
-			title: 'Chat - DWD',
-			navBar: navBar.projects,
-			userFriends,
-			notifications,
-			unreadCount,
-			success_msg: res.locals.success,
-			error_msg: res.locals.error,
-			projectName,
-			receiverId,
-			user: userId,
-			styles: ['chat'],
-			// scripts: ['chat'],
-		});
-	} catch (error) {
-		errorHandler(error, req, res, next);
-	}
-};
-
 export const fetchMessages = async (req, res) => {
 	const { friendId, roomId, taskId } = req.params;
 
-	let projectName = 'chat_app';
+	let projectName = 'chat';
 	let receiverId = friendId;
 
 	if (roomId) {
-		projectName = 'chat_app_room';
+		projectName = 'room';
 		receiverId = roomId;
 	}
 
@@ -139,11 +110,11 @@ export const sendMessage = async (req, res) => {
 	const { message } = req.body;
 	const userId = req.user.id;
 
-	let projectName = 'chat_app';
+	let projectName = 'chat';
 	let receiverId = friendId;
 
 	if (roomId) {
-		projectName = 'chat_app_room';
+		projectName = 'room';
 		receiverId = roomId;
 	}
 
