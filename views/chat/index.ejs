@@ -119,6 +119,7 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
 	window.chatConfig = {
+		userId: '<%= user.id %>',
 		roomId: '<%= receiverId %>',
 		projectName: '<%= projectName %>',
 		username: '<%= friend?.username || null %>',

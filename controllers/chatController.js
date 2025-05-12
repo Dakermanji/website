@@ -11,7 +11,11 @@ import ChatRoomMember from '../models/ChatRoomMember.js';
 import Follow from '../models/Follow.js';
 import Notification from '../models/Notification.js';
 import Project from '../models/Project.js';
-import { canSendMessage, formatMessage } from '../utils/chatHelper.js';
+import {
+	canSendMessage,
+	formatMessage,
+	getSocketRoom,
+} from '../utils/chatHelper.js';
 import { getUserFriends } from '../utils/friends/userFriendsHelper.js';
 
 export const renderChatHome = async (req, res, next) => {
@@ -143,14 +147,21 @@ export const sendMessage = async (req, res) => {
 
 		await ChatMessage.create(newMessage);
 
-		const formattedMessage = formatMessage(newMessage, req.user);
+		// Fetch saved message including created_at and joined user info
+		const savedMessage = await ChatMessage.fetchById(newMessage.id);
+
+		// emit + response
+		const formattedMessage = formatMessage(savedMessage, req.user);
 
 		// Emit via socket.io
 		const io = getIO();
-		io.to(receiverId).emit('chatMessage', formattedMessage);
+		const socketRoom = getSocketRoom(projectName, userId, receiverId);
+
+		io.to(socketRoom).emit('chatMessage', formattedMessage);
 
 		res.status(201).json(formattedMessage);
 	} catch (err) {
+		console.error('Send message error:', err);
 		res.status(500).json({ error: 'Failed to send message.' });
 	}
 };

@@ -14,6 +14,21 @@ const projectName = window.chatConfig?.projectName;
 const username = window.chatConfig?.username;
 const links = document.querySelectorAll('.sidebar-item a');
 const toggles = document.querySelectorAll('.toggle-section');
+const isFriendChat = projectName === 'chat';
+const actualRoomId = isFriendChat
+	? getFriendRoomId(window.chatConfig.userId, roomId)
+	: roomId;
+
+socket.on('connect', () => {
+	socket.emit('joinRoom', actualRoomId); // join room after socket is actually ready
+});
+
+// Virtual RoomId for friends
+function getFriendRoomId(userId, friendId) {
+	return userId < friendId
+		? `friend-${userId}-${friendId}`
+		: `friend-${friendId}-${userId}`;
+}
 
 // Toggle sidebar sections
 toggles.forEach((toggle) => {
@@ -98,7 +113,19 @@ function addMessage(sender, message, time, isOwn = false) {
 
 // On message received (via socket.io)
 socket.on('chatMessage', (data) => {
-	addMessage(data.username, data.message, data.time);
+	const existing = Array.from(messagesDiv.children).some((msgEl) =>
+		msgEl.textContent.includes(data.message)
+	);
+
+	if (!existing) {
+		const isOwn = data.user_id === window.chatConfig.userId;
+		addMessage(
+			data.username,
+			data.message,
+			data.created_at || data.time,
+			isOwn
+		);
+	}
 });
 
 // On form submit
@@ -112,7 +139,6 @@ form?.addEventListener('submit', async (e) => {
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ message }),
 	});
-
 	input.value = '';
 });
 
@@ -136,8 +162,6 @@ if (form) {
 				const isOwn = msg.user_id === window.chatConfig.userId;
 				addMessage(msg.username, msg.message, msg.created_at, isOwn);
 			});
-
-			console.log(messages);
 		} catch (err) {
 			console.error('Failed to load messages:', err);
 		}

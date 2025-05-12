@@ -45,6 +45,17 @@ class ChatMessage {
 		);
 		return rows;
 	}
+
+	static async fetchById(id) {
+		const [rows] = await promisePool.query(
+			`SELECT cm.*, u.username
+			 FROM chat_messages cm
+			 JOIN users u ON cm.user_id = u.id
+			 WHERE cm.id = ?`,
+			[id]
+		);
+		return rows[0] || null;
+	}
 }
 
 export default ChatMessage;

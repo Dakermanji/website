@@ -42,3 +42,12 @@ export const formatMessage = (message, user) => {
 		created_at: message.created_at || new Date(),
 	};
 };
+
+export function getSocketRoom(projectName, userId, receiverId) {
+	if (projectName === 'chat') {
+		return userId < receiverId
+			? `friend-${userId}-${receiverId}`
+			: `friend-${receiverId}-${userId}`;
+	}
+	return receiverId;
+}
