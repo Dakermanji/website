@@ -21,7 +21,7 @@ toggles.forEach((toggle) => {
 		const targetId = toggle.getAttribute('data-target');
 		const targetList = document.getElementById(targetId);
 		if (targetList) {
-			targetList.classList.toggle('d-none');
+			targetList.classList.toggle('expanded');
 		}
 	});
 });

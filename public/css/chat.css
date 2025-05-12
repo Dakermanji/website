@@ -21,6 +21,17 @@
     margin-bottom: 10px;
 }
 
+.btn-sub {
+    color: var(--color-secondary);
+    padding: 0 10px;
+}
+
+:not(.btn-check)+.btn-sub:active,
+.btn-sub:hover {
+    color: var(--color-secondary-dark);
+    background-color: var(--color-primary);
+}
+
 .chat-window {
     padding: 20px;
     flex: 1;
@@ -69,14 +80,18 @@
     border-bottom: 1px solid #ccc;
 }
 
-/* Optional: expand/collapse animation */
 .sidebar-items {
-    transition: all 0.3s ease;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease;
 }
 
-/* When hidden */
-.d-none {
-    display: none;
+.sidebar-items.expanded {
+    max-height: 1000px;
+}
+
+.sidebar-items:not(.expanded) {
+    pointer-events: none;
 }
 
 /* Room Modal */
