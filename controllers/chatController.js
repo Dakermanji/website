@@ -6,34 +6,23 @@ import { navBar } from '../data/navBar.js';
 import errorHandler from '../middlewares/errorHandler.js';
 import ChatMessage from '../models/ChatMessage.js';
 import ChatRoom from '../models/ChatRoom.js';
-import Collaboration from '../models/Collaboration.js';
 import ChatRoomMember from '../models/ChatRoomMember.js';
 import Follow from '../models/Follow.js';
+import User from '../models/User.js';
 import Notification from '../models/Notification.js';
-import Project from '../models/Project.js';
 import {
 	canSendMessage,
 	formatMessage,
+	getChatProjects,
 	getSocketRoom,
+	getChatTarget,
 } from '../utils/chatHelper.js';
 import { getUserFriends } from '../utils/friends/userFriendsHelper.js';
 
 export const renderChatHome = async (req, res, next) => {
 	const userId = req.user?.id;
 	try {
-		const projectName = req.method === 'POST' ? req.body.projectName : null;
-		let receiverId = null;
-		let friend = null;
-
-		if (req.method === 'POST') {
-			if (projectName === 'chat') {
-				receiverId = req.body.friend_id;
-			} else if (projectName === 'room') {
-				receiverId = req.body.room_id;
-			} else if (projectName === 'taskmanager') {
-				receiverId = req.body.project_id;
-			}
-		}
+		const { projectName, receiverId } = getChatTarget(req);
 
 		const userFriends = await getUserFriends(userId);
 		const notifications = await Notification.getUnreadNotiifcationsForUser(
@@ -43,22 +32,11 @@ export const renderChatHome = async (req, res, next) => {
 
 		const chat_friends = await Follow.fetchMutualFollowers(userId);
 		const chat_rooms = await ChatRoomMember.fetchUserRooms(userId);
-		const ownedProjects = await Project.getProjectsByOwner(userId);
-		const collaborationsProjects = await Collaboration.getProjectsForUser(
-			userId
-		);
-		const chat_projects = [
-			...ownedProjects.map((p) => ({
-				id: p.id,
-				name: p.name,
-				type: 'Owner',
-			})),
-			...collaborationsProjects.map((c) => ({
-				id: c.project_id,
-				name: c.name,
-				type: 'Collaborator',
-			})),
-		];
+		const chat_projects = await getChatProjects(userId);
+		let friend = null;
+		if (projectName === 'chat') {
+			friend = await User.findById(receiverId);
+		}
 
 		res.render('chat/index', {
 			title: 'Chat - DWD',
