@@ -85,9 +85,10 @@ roomForm.addEventListener('submit', async (e) => {
 });
 
 // auto-scroll to bottom on new message
-function addMessage(sender, message, time) {
+function addMessage(sender, message, time, isOwn = false) {
 	const div = document.createElement('div');
 	div.classList.add('message');
+	if (isOwn) div.classList.add('own-message'); // Add a class if it's sent by the current user
 	div.innerHTML = `<strong>${sender}:</strong> ${message} <small>${new Date(
 		time
 	).toLocaleTimeString()}</small>`;
@@ -120,4 +121,25 @@ function projectNameToUrl(name) {
 	if (name === 'room') return 'rooms';
 	if (name === 'taskmanager') return 'tasks';
 	return '';
+}
+
+if (form) {
+	// Fetch and display previous messages
+	(async () => {
+		try {
+			const response = await fetch(
+				`/chat/${projectNameToUrl(projectName)}/${roomId}/messages`
+			);
+
+			const messages = await response.json();
+			messages.forEach((msg) => {
+				const isOwn = msg.user_id === window.chatConfig.userId;
+				addMessage(msg.username, msg.message, msg.created_at, isOwn);
+			});
+
+			console.log(messages);
+		} catch (err) {
+			console.error('Failed to load messages:', err);
+		}
+	})();
 }

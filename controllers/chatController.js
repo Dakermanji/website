@@ -97,7 +97,8 @@ export const fetchMessages = async (req, res) => {
 	try {
 		const messages = await ChatMessage.fetchByReceiver(
 			projectName,
-			receiverId
+			receiverId,
+			req.user.id
 		);
 		res.json(messages);
 	} catch (err) {
