@@ -64,7 +64,7 @@
 							<input
 								type="hidden"
 								name="room_id"
-								value="<%= room.id %>"
+								value="<%= room.room_id %>"
 							/>
 							<button type="submit" class="btn btn-sub">
 								<%= room.name %>
@@ -103,13 +103,44 @@
 					<% }) %> <% } %>
 				</ul>
 			</li>
+
+			<% if (projectName === 'room') { %>
+			<li class="sidebar-section b-border">
+				<div class="d-flex justify-content-between">
+					<h5 class="toggle-section w-100" data-target="room-members"
+						>Room Members</h5
+					>
+					<span
+						class="d-flex justify-content-between align-items-center"
+						data-target="rooms-list"
+					>
+						<button
+							id="open-members-modal"
+							class="btn btn-sm btn-primary"
+						>
+							<i class="bi bi-plus-lg"></i>
+						</button>
+					</span>
+				</div>
+
+				<ul class="sidebar-items" id="room-members">
+					<% room?.roomMembers.forEach(member => { %>
+					<li>
+						<span class="badge bg-secondary"
+							><%= member.username %></span
+						>
+					</li>
+					<% }) %>
+				</ul>
+			</li>
+			<% } %>
 		</ul>
 	</div>
 
 	<div class="chat-window">
-		<% if (projectName === 'chat') { %> <%- include('partials/friends',
-		{friend}) %> <% } else if (projectName === 'room') { %> <%-
-		include('partials/rooms') %> <% } else if (projectName ===
+		<% if (projectName === 'chat') { %> <%- include('partials/friends', {
+		friend }) %> <% } else if (projectName === 'room') { %> <%-
+		include('partials/rooms', { room }) %> <% } else if (projectName ===
 		'taskmanager') { %> <%- include('partials/projects') %> <% } else { %>
 		<p>Please select a chat to start messaging.</p>
 		<% } %>

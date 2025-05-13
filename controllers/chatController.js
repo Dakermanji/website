@@ -33,9 +33,15 @@ export const renderChatHome = async (req, res, next) => {
 		const chat_friends = await Follow.fetchMutualFollowers(userId);
 		const chat_rooms = await ChatRoomMember.fetchUserRooms(userId);
 		const chat_projects = await getChatProjects(userId);
+
 		let friend = null;
+		let room = null;
 		if (projectName === 'chat') {
 			friend = await User.findById(receiverId);
+		} else if (projectName === 'room' && receiverId) {
+			room = await ChatRoom.fetchById(receiverId);
+			const roomMembers = await ChatRoomMember.fetchMembers(receiverId);
+			room.roomMembers = roomMembers;
 		}
 
 		res.render('chat/index', {
@@ -49,6 +55,7 @@ export const renderChatHome = async (req, res, next) => {
 			unreadCount,
 			projectName,
 			friend,
+			room,
 			receiverId,
 			success_msg: res.locals.success,
 			error_msg: res.locals.error,

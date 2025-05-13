@@ -10,7 +10,10 @@ class ChatRoom {
 
 	static async fetchById(id) {
 		const [rows] = await promisePool.query(
-			`SELECT * FROM chat_rooms WHERE id = ?`,
+			`SELECT ch.*, u.username
+			 FROM chat_rooms ch
+			 JOIN users u ON ch.creator_id = u.id
+			 WHERE ch.id = ?`,
 			[id]
 		);
 		return rows[0];
