@@ -5,6 +5,7 @@
     height: 80vh;
 }
 
+/*** Sidebar ***/
 .sidebar {
     width: 250px;
     background-color: #f4f4f4;
@@ -26,12 +27,38 @@
     padding: 0 10px;
 }
 
-:not(.btn-check)+.btn-sub:active,
+.toggle-section {
+    cursor: pointer;
+    padding: 0.5rem 0;
+    color: var(--color-primary);
+}
+
+.b-border {
+    border-bottom: 1px solid #ccc;
+}
+
+.sidebar-items {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease;
+}
+
+.sidebar-items.expanded {
+    max-height: 1000px;
+}
+
+.sidebar-items:not(.expanded) {
+    pointer-events: none;
+}
+
+.sidebar-item .active,
 .btn-sub:hover {
     color: var(--color-secondary-dark);
     background-color: var(--color-primary-light);
+    border: none;
 }
 
+/*** Chat Window ***/
 .chat-window {
     padding: 20px;
     flex: 1;
@@ -71,31 +98,6 @@
     background-color: #333;
     color: white;
     cursor: pointer;
-}
-
-/* Toggle section headers */
-.toggle-section {
-    cursor: pointer;
-    padding: 0.5rem 0;
-    color: var(--color-primary);
-}
-
-.b-border {
-    border-bottom: 1px solid #ccc;
-}
-
-.sidebar-items {
-    overflow: hidden;
-    max-height: 0;
-    transition: max-height 0.3s ease;
-}
-
-.sidebar-items.expanded {
-    max-height: 1000px;
-}
-
-.sidebar-items:not(.expanded) {
-    pointer-events: none;
 }
 
 /* Room Modal */

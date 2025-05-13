@@ -41,12 +41,22 @@ toggles.forEach((toggle) => {
 	});
 });
 
-// auto-expand "active" section
-links.forEach((link) => {
-	if (link.href === window.location.href) {
-		link.classList.add('active');
-		const parentList = link.closest('ul.sidebar-items');
-		if (parentList) parentList.classList.remove('d-none');
+document.querySelectorAll('.sidebar-item form').forEach((form) => {
+	const projectInput = form.querySelector('input[name="projectName"]');
+	const receiverInput =
+		form.querySelector('input[name="friend_id"]') ||
+		form.querySelector('input[name="room_id"]') ||
+		form.querySelector('input[name="project_id"]');
+
+	if (
+		projectInput?.value === projectName &&
+		receiverInput?.value === roomId
+	) {
+		form.querySelector('button')?.classList.add('active');
+
+		// Expand the parent section too
+		const parentList = form.closest('ul.sidebar-items');
+		if (parentList) parentList.classList.add('expanded');
 	}
 });
 
