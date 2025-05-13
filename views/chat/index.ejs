@@ -107,10 +107,10 @@
 	</div>
 
 	<div class="chat-window">
-		<% if (projectName === 'chat') { %> <%- include('partials/friends') %>
-		<% } else if (projectName === 'room') { %> <%- include('partials/rooms')
-		%> <% } else if (projectName === 'taskmanager') { %> <%-
-		include('partials/projects') %> <% } else { %>
+		<% if (projectName === 'chat') { %> <%- include('partials/friends',
+		{friend}) %> <% } else if (projectName === 'room') { %> <%-
+		include('partials/rooms') %> <% } else if (projectName ===
+		'taskmanager') { %> <%- include('partials/projects') %> <% } else { %>
 		<p>Please select a chat to start messaging.</p>
 		<% } %>
 	</div>
