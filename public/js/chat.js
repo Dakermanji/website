@@ -100,13 +100,30 @@ roomForm.addEventListener('submit', async (e) => {
 });
 
 // auto-scroll to bottom on new message
-function addMessage(sender, message, time, isOwn = false) {
+function addMessage(sender, message, timestamp, isOwn = false) {
 	const div = document.createElement('div');
 	div.classList.add('message');
-	if (isOwn) div.classList.add('own-message'); // Add a class if it's sent by the current user
-	div.innerHTML = `<strong>${sender}:</strong> ${message} <small>${new Date(
-		time
-	).toLocaleTimeString()}</small>`;
+	div.classList.add(isOwn ? 'own' : 'friend');
+
+	const bubble = document.createElement('div');
+	bubble.classList.add('message-bubble');
+	bubble.textContent = message;
+
+	const time = document.createElement('div');
+	time.classList.add('message-time');
+	time.textContent = new Date(timestamp).toLocaleTimeString([], {
+		hour: '2-digit',
+		minute: '2-digit',
+	});
+
+	if (isOwn) {
+		div.appendChild(time);
+		div.appendChild(bubble);
+	} else {
+		div.appendChild(bubble);
+		div.appendChild(time);
+	}
+
 	messagesDiv.appendChild(div);
 	messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }

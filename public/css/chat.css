@@ -47,7 +47,11 @@
 
 .message {
     margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
 }
+
 
 #messageForm {
     display: flex;
@@ -157,6 +161,47 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-bottom: 1rem;
+}
+
+/* Friend Message - align left */
+.message.friend {
+    justify-content: flex-start;
+}
+
+/* User Message - align right */
+.message.own {
+    justify-content: flex-end;
+}
+
+/* Bubble shared styles */
+.message-bubble {
+    padding: 10px 14px;
+    border-radius: 20px;
+    max-width: 60%;
+    word-wrap: break-word;
+    font-size: 15px;
+}
+
+/* Friend bubble style */
+.message.friend .message-bubble {
+    background-color: var(--color-primary-light);
+    color: var(--color-dark);
+    border-bottom-left-radius: 0;
+}
+
+/* User bubble style */
+.message.own .message-bubble {
+    background-color: var(--color-secondary-dark);
+    color: #fff;
+    border-bottom-right-radius: 0;
+}
+
+/* Timestamp */
+.message-time {
+    font-size: 12px;
+    color: var(--color-tertiary-dark);
+    margin: 0 8px;
+    white-space: nowrap;
 }
 
 #messageForm {
