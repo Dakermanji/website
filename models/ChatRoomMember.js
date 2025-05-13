@@ -40,13 +40,11 @@ class ChatRoomMember {
 	}
 
 	static async fetchUserRooms(userId) {
-		const [rows] = await promisePool.query(
-			`SELECT crm.*, cr.name
+		const query = `SELECT crm.*, cr.name
 		 FROM chat_room_members crm
 		 JOIN chat_rooms cr ON crm.room_id = cr.id
-		 WHERE crm.user_id = ?`,
-			[userId]
-		);
+		 WHERE crm.user_id = ?`;
+		const [rows] = await promisePool.query(query, [userId]);
 		return rows;
 	}
 }
