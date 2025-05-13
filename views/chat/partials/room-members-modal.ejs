@@ -1,0 +1,33 @@
+<!-- views/chat/partials/room-members-modal.ejs -->
+
+<div id="members-modal" class="modal d-none">
+	<div class="modal-content">
+		<h5 class="mb-3">Add Member to Room</h5>
+
+		<form id="add-member-form">
+			<label for="memberId" class="form-label">Select user</label>
+			<select
+				id="memberId"
+				name="memberId"
+				class="form-select mb-3"
+				required
+			>
+				<% chat_friends.forEach(friend => { %>
+				<option value="<%= friend.followed_id %>"
+					><%= friend.username %></option
+				>
+				<% }) %>
+			</select>
+
+			<button type="submit" class="btn room-button-create w-100"
+				>Add Member</button
+			>
+		</form>
+
+		<button
+			type="button"
+			class="close-modal btn room-button-cancel btn-sm mt-2"
+			>Cancel</button
+		>
+	</div>
+</div>

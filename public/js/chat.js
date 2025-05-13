@@ -194,3 +194,15 @@ if (form) {
 		}
 	})();
 }
+
+const membersModal = document.getElementById('members-modal');
+const openMembersBtn = document.getElementById('open-members-modal');
+const closeMembersBtn = membersModal?.querySelector('.close-modal');
+
+openMembersBtn?.addEventListener('click', () => {
+	membersModal.classList.remove('d-none');
+});
+
+closeMembersBtn?.addEventListener('click', () => {
+	membersModal.classList.add('d-none');
+});
