@@ -29,6 +29,44 @@
 		notifications.forEach(n => { %>
 
 		<li class="mb-2">
+			<% if (n.project === 'chat_room_invite') { %>
+			<div class="dropdown-item small">
+				<%- n.description %>
+				<div class="text-muted small"
+					><%= new Date(n.created_at).toLocaleString() %></div
+				>
+				<form
+					method="POST"
+					action="/chat/rooms/accept"
+					class="d-inline"
+				>
+					<input
+						type="hidden"
+						name="notificationId"
+						value="<%= n.id %>"
+					/>
+					<button type="submit" class="btn btn-sm btn-success me-1"
+						>Accept</button
+					>
+				</form>
+				<form
+					method="POST"
+					action="/chat/rooms/decline"
+					class="d-inline"
+				>
+					<input
+						type="hidden"
+						name="notificationId"
+						value="<%= n.id %>"
+					/>
+					<button
+						type="submit"
+						class="btn btn-sm btn-outline-secondary"
+						>Decline</button
+					>
+				</form>
+			</div>
+			<% } else { %>
 			<a
 				class="dropdown-item small"
 				href="/notifications/read/<%= n.id %>"
@@ -38,6 +76,7 @@
 					><%= new Date(n.created_at).toLocaleString() %></div
 				>
 			</a>
+			<% } %>
 		</li>
 		<% }) %>
 		<li><hr class="dropdown-divider" /></li>
