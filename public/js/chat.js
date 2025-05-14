@@ -211,9 +211,7 @@ const addMemberForm = document.getElementById('add-member-form');
 
 addMemberForm?.addEventListener('submit', async (e) => {
 	e.preventDefault();
-
-	const formData = new FormData(addMemberForm);
-	const memberId = formData.get('memberId');
+	const memberId = document.getElementById('memberId').value;
 	const roomId = window.chatConfig.roomId;
 
 	try {
@@ -222,18 +220,16 @@ addMemberForm?.addEventListener('submit', async (e) => {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ memberId }),
 		});
-
-		const result = await res.json();
-
+		const json = await res.json();
 		if (res.ok) {
-			document.getElementById('members-modal')?.classList.add('d-none');
+			document.getElementById('members-modal').classList.add('d-none');
 			addMemberForm.reset();
-			location.reload(); // will replace with dynamic update later
+			// Optionally update UI or reload
+			location.reload();
 		} else {
-			alert(result.error || 'Failed to add member.');
+			alert(json.error || 'Failed to send invitation.');
 		}
-	} catch (err) {
-		console.error(err);
-		alert('Something went wrong.');
+	} catch (error) {
+		console.error(error);
 	}
 });

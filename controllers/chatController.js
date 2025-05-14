@@ -17,6 +17,7 @@ import {
 	getSocketRoom,
 	getChatTarget,
 } from '../utils/chatHelper.js';
+import { createNotification } from '../utils/notificationHelper.js';
 import { getUserFriends } from '../utils/friends/userFriendsHelper.js';
 
 export const renderChatHome = async (req, res, next) => {
@@ -191,18 +192,34 @@ export const createRoom = async (req, res, next) => {
 export const addRoomMember = async (req, res) => {
 	const { roomId } = req.params;
 	const { memberId } = req.body;
+	const userId = req.user.id;
 
 	try {
 		const existing = await ChatRoomMember.isMember(roomId, memberId);
 		if (existing) {
-			return res.status(400).json({ error: 'User is already a member.' });
+			return res.status(400).json({
+				error: 'User is already a member or already invited.',
+			});
 		}
 
+		// Insert invitation (pending acceptance)
 		await ChatRoomMember.addMember(roomId, memberId);
 
-		res.status(201).json({ message: 'Member added successfully.' });
+		// Fetch room name to include in description
+		const room = await ChatRoom.fetchById(roomId);
+
+		// Create the notification
+		await createNotification({
+			project: 'chat_room_invite',
+			userId,
+			memberId,
+			description: `You have been invited to join room <strong>${room.name}</strong>.`,
+			link: `/chat`, // Later: can add accept/decline route if needed
+		});
+
+		res.status(201).json({ message: 'Invitation sent successfully.' });
 	} catch (err) {
-		console.error(err);
-		res.status(500).json({ error: 'Failed to add member.' });
+		console.error('Error sending room invitation:', err);
+		res.status(500).json({ error: 'Failed to send invitation.' });
 	}
 };
