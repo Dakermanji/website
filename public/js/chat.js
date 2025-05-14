@@ -206,3 +206,34 @@ openMembersBtn?.addEventListener('click', () => {
 closeMembersBtn?.addEventListener('click', () => {
 	membersModal.classList.add('d-none');
 });
+
+const addMemberForm = document.getElementById('add-member-form');
+
+addMemberForm?.addEventListener('submit', async (e) => {
+	e.preventDefault();
+
+	const formData = new FormData(addMemberForm);
+	const memberId = formData.get('memberId');
+	const roomId = window.chatConfig.roomId;
+
+	try {
+		const res = await fetch(`/chat/rooms/${roomId}/members`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ memberId }),
+		});
+
+		const result = await res.json();
+
+		if (res.ok) {
+			document.getElementById('members-modal')?.classList.add('d-none');
+			addMemberForm.reset();
+			location.reload(); // will replace with dynamic update later
+		} else {
+			alert(result.error || 'Failed to add member.');
+		}
+	} catch (err) {
+		console.error(err);
+		alert('Something went wrong.');
+	}
+});

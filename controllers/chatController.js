@@ -187,3 +187,22 @@ export const createRoom = async (req, res, next) => {
 		res.status(500).json({ error: 'Failed to create room' });
 	}
 };
+
+export const addRoomMember = async (req, res) => {
+	const { roomId } = req.params;
+	const { memberId } = req.body;
+
+	try {
+		const existing = await ChatRoomMember.isMember(roomId, memberId);
+		if (existing) {
+			return res.status(400).json({ error: 'User is already a member.' });
+		}
+
+		await ChatRoomMember.addMember(roomId, memberId);
+
+		res.status(201).json({ message: 'Member added successfully.' });
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ error: 'Failed to add member.' });
+	}
+};
