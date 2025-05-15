@@ -64,7 +64,12 @@ export const renderChatHome = async (req, res, next) => {
 			success_msg: res.locals.success,
 			error_msg: res.locals.error,
 			styles: ['chat'],
-			scripts: ['chat'],
+			scripts: [
+				'chat/chatConstants',
+				'chat/chatSocket',
+				'chat/chatUtils',
+				'chat/chatEvents',
+			],
 		});
 	} catch (error) {
 		errorHandler(error, req, res, next);
