@@ -24,6 +24,15 @@ class ChatRoom {
 			 VALUES (?, ?, ?, ?)`;
 		await promisePool.query(query, [id, name, creator_id, is_locked]);
 	}
+
+	static async fetchOwnedRooms(userId) {
+		const query = `SELECT ch.*, u.username
+					   FROM chat_rooms ch
+					   JOIN users u ON ch.creator_id = u.id
+					   WHERE ch.creator_id = ?`;
+		const [rows] = await promisePool.query(query, [userId]);
+		return rows;
+	}
 }
 
 export default ChatRoom;

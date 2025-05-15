@@ -32,7 +32,10 @@ export const renderChatHome = async (req, res, next) => {
 		const unreadCount = await Notification.countUnread(req.user.id);
 
 		const chat_friends = await Follow.fetchMutualFollowers(userId);
-		const chat_rooms = await ChatRoomMember.fetchUserRooms(userId);
+		const memberRooms = await ChatRoomMember.fetchUserRooms(userId);
+		const ownedRooms = await ChatRoom.fetchOwnedRooms(userId);
+		const chat_rooms = [...ownedRooms, ...memberRooms];
+
 		const chat_projects = await getChatProjects(userId);
 
 		let friend = null;
@@ -180,7 +183,6 @@ export const createRoom = async (req, res, next) => {
 			is_locked: false,
 		};
 		await ChatRoom.create(room);
-		await ChatRoomMember.addMember(room.id, creator_id);
 
 		res.status(201).json({ message: 'Room created', room });
 	} catch (error) {
@@ -195,6 +197,16 @@ export const addRoomMember = async (req, res) => {
 	const userId = req.user.id;
 
 	try {
+		const room = await ChatRoom.fetchById(roomId);
+
+		// Prevent inviting the creator
+		if (room.creator_id === memberId) {
+			return res.status(400).json({
+				error: 'The room creator is already part of the room.',
+			});
+		}
+
+		// Prevent inviting existing member
 		const existing = await ChatRoomMember.isMember(roomId, memberId);
 		if (existing) {
 			return res.status(400).json({
@@ -204,9 +216,6 @@ export const addRoomMember = async (req, res) => {
 
 		// Insert invitation (pending acceptance)
 		await ChatRoomMember.addMember(roomId, memberId);
-
-		// Fetch room name to include in description
-		const room = await ChatRoom.fetchById(roomId);
 
 		// Create the notification
 		await createNotification({

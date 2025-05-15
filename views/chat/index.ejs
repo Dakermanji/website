@@ -64,7 +64,7 @@
 							<input
 								type="hidden"
 								name="room_id"
-								value="<%= room.room_id %>"
+								value="<%= room.id %>"
 							/>
 							<button type="submit" class="btn btn-sub">
 								<%= room.name %>
@@ -126,9 +126,12 @@
 				<ul class="sidebar-items" id="room-members">
 					<% room?.roomMembers.forEach(member => { %>
 					<li>
-						<span class="badge bg-secondary"
-							><%= member.username %></span
+						<span
+							class="badge <%= member.accepted_at ? 'bg-secondary' : 'bg-warning text-dark border border-secondary' %>"
 						>
+							<%= member.username %> <% if (!member.accepted_at) {
+							%> (Invited) <% } %>
+						</span>
 					</li>
 					<% }) %>
 				</ul>

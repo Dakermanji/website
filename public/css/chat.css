@@ -58,6 +58,11 @@
     border: none;
 }
 
+.badge.bg-warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
 /*** Chat Window ***/
 .chat-window {
     padding: 20px;
