@@ -211,15 +211,83 @@ export const addRoomMember = async (req, res) => {
 		// Create the notification
 		await createNotification({
 			project: 'chat_room_invite',
-			userId,
-			memberId,
+			notifierId: userId,
+			notifiedId: memberId,
 			description: `You have been invited to join room <strong>${room.name}</strong>.`,
-			link: `/chat`, // Later: can add accept/decline route if needed
+			link: `/chat/rooms/${room.id}`,
 		});
 
 		res.status(201).json({ message: 'Invitation sent successfully.' });
 	} catch (err) {
 		console.error('Error sending room invitation:', err);
 		res.status(500).json({ error: 'Failed to send invitation.' });
+	}
+};
+
+export const acceptRoomInvite = async (req, res) => {
+	const { notificationId } = req.body;
+	const { roomId } = req.params;
+	const userId = req.user.id;
+
+	try {
+		const notification = await Notification.getNotificationByIdForAUser(
+			notificationId,
+			userId
+		);
+
+		if (
+			!notification ||
+			notification.project !== 'chat_room_invite' ||
+			notification.notified_id !== userId
+		) {
+			req.flash('error', 'Invalid or unauthorized room invite.');
+			return res.redirect('/chat');
+		}
+
+		// Update accepted_at for this user in that room
+		await ChatRoomMember.acceptMember(roomId, userId);
+
+		await Notification.markAsRead(notificationId);
+
+		req.flash('success', 'You have joined the room.');
+		res.redirect('/chat');
+	} catch (err) {
+		console.error('Error accepting room invite:', err);
+		req.flash('error', 'Failed to join the room.');
+		res.redirect('/chat');
+	}
+};
+
+export const declineRoomInvite = async (req, res) => {
+	const { notificationId } = req.body;
+	const { roomId } = req.params;
+	const userId = req.user.id;
+
+	try {
+		const notification = await Notification.getNotificationByIdForAUser(
+			notificationId,
+			userId
+		);
+
+		if (
+			!notification ||
+			notification.project !== 'chat_room_invite' ||
+			notification.notified_id !== userId
+		) {
+			req.flash('error', 'Invalid or unauthorized decline.');
+			return res.redirect('/chat');
+		}
+
+		// Delete the row from chat_room_members
+		await ChatRoomMember.removeMember(roomId, userId);
+
+		await Notification.markAsRead(notificationId);
+
+		req.flash('success', 'You declined the room invitation.');
+		res.redirect('/chat');
+	} catch (err) {
+		console.error('Error declining room invite:', err);
+		req.flash('error', 'Failed to decline the invitation.');
+		res.redirect('/chat');
 	}
 };

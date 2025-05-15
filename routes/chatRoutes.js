@@ -7,6 +7,8 @@ import {
 	sendMessage,
 	createRoom,
 	addRoomMember,
+	acceptRoomInvite,
+	declineRoomInvite,
 } from '../controllers/chatController.js';
 
 const router = express.Router();
@@ -23,6 +25,8 @@ router.get('/rooms/:roomId/messages', fetchMessages);
 router.post('/rooms/:roomId/messages', sendMessage);
 router.post('/rooms/create', createRoom);
 router.post('/rooms/:roomId/members', addRoomMember);
+router.post('/rooms/:roomId/accept', acceptRoomInvite);
+router.post('/rooms/:roomId/decline', declineRoomInvite);
 
 // Tasks chat
 router.get('/tasks/:taskId/messages', fetchMessages);
