@@ -2,6 +2,10 @@
 
 import express from 'express';
 import {
+	validateChatAccess,
+	validateRoomInviteAccess,
+} from '../middlewares/chatMiddleware.js';
+import {
 	renderChatHome,
 	fetchMessages,
 	sendMessage,
@@ -14,17 +18,17 @@ import {
 const router = express.Router();
 
 // Main routes
-router.route('/').get(renderChatHome).post(renderChatHome);
+router.route('/').get(renderChatHome).post(validateChatAccess, renderChatHome);
 
 // Friends chat
 router.get('/friends/:friendId/messages', fetchMessages);
-router.post('/friends/:friendId/messages', sendMessage);
+router.post('/friends/:friendId/messages', validateChatAccess, sendMessage);
 
 // Rooms chat
 router.get('/rooms/:roomId/messages', fetchMessages);
-router.post('/rooms/:roomId/messages', sendMessage);
+router.post('/rooms/:roomId/messages', validateChatAccess, sendMessage);
 router.post('/rooms/create', createRoom);
-router.post('/rooms/:roomId/members', addRoomMember);
+router.post('/rooms/:roomId/members', validateRoomInviteAccess, addRoomMember);
 router.post('/rooms/:roomId/accept', acceptRoomInvite);
 router.post('/rooms/:roomId/decline', declineRoomInvite);
 

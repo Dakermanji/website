@@ -11,7 +11,6 @@ import Follow from '../models/Follow.js';
 import User from '../models/User.js';
 import Notification from '../models/Notification.js';
 import {
-	canSendMessage,
 	formatMessage,
 	getChatProjects,
 	getSocketRoom,
@@ -123,14 +122,6 @@ export const sendMessage = async (req, res) => {
 	}
 
 	try {
-		const allowed = await canSendMessage(projectName, receiverId, userId);
-
-		if (!allowed) {
-			return res
-				.status(403)
-				.json({ error: 'Not allowed to send message.' });
-		}
-
 		const newMessage = {
 			id: uuidv4(),
 			project_name: projectName,
@@ -203,6 +194,10 @@ export const addRoomMember = async (req, res) => {
 
 	try {
 		const room = await ChatRoom.fetchById(roomId);
+
+		if (!room) {
+			return res.status(404).json({ error: 'Room not found.' });
+		}
 
 		// Prevent inviting the creator
 		if (room.creator_id === memberId) {

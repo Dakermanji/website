@@ -33,6 +33,13 @@ class ChatRoom {
 		const [rows] = await promisePool.query(query, [userId]);
 		return rows;
 	}
+
+	static async isCreator(roomId, userId) {
+		const query = `SELECT * FROM chat_rooms
+		 WHERE id = ? AND creator_id = ?`;
+		const [rows] = await promisePool.query(query, [roomId, userId]);
+		return rows.length > 0;
+	}
 }
 
 export default ChatRoom;

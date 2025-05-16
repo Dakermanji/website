@@ -4,10 +4,12 @@ import { promisePool } from '../config/database.js';
 
 class ChatRoomMember {
 	static async fetchMembers(roomId) {
-		const query = `SELECT crm.*, u.username
+		const query = `
+			SELECT crm.*, u.username
 			FROM chat_room_members crm
 			JOIN users u ON crm.user_id = u.id
-			WHERE crm.room_id = ?`;
+			WHERE crm.room_id = ? AND crm.accepted_at IS NOT NULL
+		`;
 		const [rows] = await promisePool.query(query, [roomId]);
 		return rows;
 	}
@@ -47,6 +49,12 @@ class ChatRoomMember {
 		 WHERE crm.user_id = ?`;
 		const [rows] = await promisePool.query(query, [userId]);
 		return rows;
+	}
+
+	static async fetchMember(roomId, userId) {
+		const query = `SELECT * FROM chat_room_members WHERE room_id = ? AND user_id = ?`;
+		const [rows] = await promisePool.query(query, [roomId, userId]);
+		return rows[0] || null;
 	}
 }
 

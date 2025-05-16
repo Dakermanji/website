@@ -64,7 +64,7 @@
 							<input
 								type="hidden"
 								name="room_id"
-								value="<%= room.id %>"
+								value="<%= room.id || room.room_id %>"
 							/>
 							<button type="submit" class="btn btn-sub">
 								<%= room.name %>
