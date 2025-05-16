@@ -10,10 +10,12 @@ import {
 	fetchMessages,
 	sendMessage,
 	createRoom,
+} from '../controllers/chat/chatController.js';
+import {
 	addRoomMember,
 	acceptRoomInvite,
 	declineRoomInvite,
-} from '../controllers/chatController.js';
+} from '../controllers/chat/chatMemberController.js';
 
 const router = express.Router();
 
