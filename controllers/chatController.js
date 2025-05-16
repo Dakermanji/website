@@ -151,18 +151,6 @@ export const sendMessage = async (req, res) => {
 	}
 };
 
-export const joinRoom = async (req, res) => {
-	const { roomId } = req.params;
-	const userId = req.user.id;
-
-	try {
-		await ChatRoomMember.addMember(roomId, userId);
-		res.status(201).json({ message: 'Joined room successfully.' });
-	} catch (err) {
-		res.status(500).json({ error: 'Failed to join room.' });
-	}
-};
-
 export const createRoom = async (req, res, next) => {
 	const { name } = req.body;
 	const creator_id = req.user.id;
