@@ -65,7 +65,6 @@ export const renderChatHome = async (req, res, next) => {
 			scripts: [
 				'chat/chatConstants',
 				'chat/chatSocket',
-				'chat/chatUtils',
 				'chat/chatEvents',
 			],
 		});
