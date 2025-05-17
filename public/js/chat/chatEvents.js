@@ -159,3 +159,11 @@ openLeaveModalBtn?.addEventListener('click', () => {
 closeLeaveModalBtn?.addEventListener('click', () => {
 	leaveModal?.classList.add('d-none');
 });
+
+// Delete Modal
+openDeleteModalBtn?.addEventListener('click', () => {
+	deleteModal?.classList.remove('d-none');
+});
+closeDeleteModalBtn?.addEventListener('click', () => {
+	deleteModal?.classList.add('d-none');
+});

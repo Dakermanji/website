@@ -1,0 +1,20 @@
+<!-- views/chat/partials/leave-room-modal.ejs -->
+
+<div id="delete-modal" class="modal d-none" tabindex="-1">
+	<div class="modal-content text-center">
+		<h5 class="mb-3">Dlete Room?</h5>
+		<p class="text-muted mb-3">
+			Are you sure you want to delete <strong><%= room.name %></strong>?
+		</p>
+
+		<form method="POST" action="/chat/rooms/<%= room.id %>/delete">
+			<button type="submit" class="btn btn-danger w-100 mb-2">
+				Yes, Delete
+			</button>
+		</form>
+
+		<button type="button" class="btn btn-secondary w-100 close-modal">
+			Cancel
+		</button>
+	</div>
+</div>

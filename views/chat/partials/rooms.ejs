@@ -2,7 +2,14 @@
 
 <div class="d-flex justify-content-center align-items-center gap-2">
 	<h2 class="orange m-0"><%= room.name %></h2>
-	<% if (room.creator_id !== user.id) { %>
+	<% if (room.creator_id === user.id) { %>
+	<button
+		type="button"
+		class="btn btn-sm btn-outline-danger"
+		id="open-delete-modal"
+		>DELETE</button
+	>
+	<% } else { %>
 	<button
 		type="button"
 		class="btn btn-sm btn-outline-danger"

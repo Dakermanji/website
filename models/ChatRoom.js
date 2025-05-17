@@ -40,6 +40,12 @@ class ChatRoom {
 		const [rows] = await promisePool.query(query, [roomId, userId]);
 		return rows.length > 0;
 	}
+
+	static async delete(roomId, userId) {
+		const query = `DELETE FROM chat_rooms WHERE id = ? AND creator_id = ?`;
+		const [rows] = await promisePool.query(query, [roomId, userId]);
+		return rows.affectedRows > 0;
+	}
 }
 
 export default ChatRoom;

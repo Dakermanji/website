@@ -23,6 +23,11 @@ const leaveModal = document.getElementById('leave-modal');
 const openLeaveModalBtn = document.getElementById('open-leave-modal');
 const closeLeaveModalBtn = leaveModal?.querySelector('.close-modal');
 
+//? Delete Modal
+const deleteModal = document.getElementById('delete-modal');
+const openDeleteModalBtn = document.getElementById('open-delete-modal');
+const closeDeleteModalBtn = deleteModal?.querySelector('.close-modal');
+
 //* Message
 const form = document.getElementById('messageForm');
 const input = document.getElementById('messageInput');

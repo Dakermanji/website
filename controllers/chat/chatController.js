@@ -205,3 +205,29 @@ export const leaveRoom = async (req, res) => {
 		res.redirect('/chat');
 	}
 };
+
+export const deleteRoom = async (req, res) => {
+	const { roomId } = req.params;
+	const userId = req.user.id;
+
+	try {
+		const room = await ChatRoom.fetchById(roomId);
+		if (!room) {
+			req.flash('error', 'Room not found.');
+			return res.redirect('/chat');
+		}
+
+		if (room.creator_id !== userId) {
+			req.flash('error', 'You cannot delete a room you did not create.');
+			return res.redirect('/chat');
+		}
+
+		await ChatRoom.delete(roomId, userId);
+		req.flash('success', 'You successfully delete the room.');
+		res.redirect('/chat');
+	} catch (err) {
+		console.error('Leave room error:', err);
+		req.flash('error', 'Failed to delete the room.');
+		res.redirect('/chat');
+	}
+};

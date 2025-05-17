@@ -11,6 +11,7 @@ import {
 	sendMessage,
 	createRoom,
 	leaveRoom,
+	deleteRoom,
 } from '../controllers/chat/chatController.js';
 import {
 	addRoomMember,
@@ -31,6 +32,7 @@ router.post('/friends/:friendId/messages', validateChatAccess, sendMessage);
 router.get('/rooms/:roomId/messages', fetchMessages);
 router.post('/rooms/:roomId/messages', validateChatAccess, sendMessage);
 router.post('/rooms/create', createRoom);
+router.post('/rooms/:roomId/delete', deleteRoom);
 
 // Room members
 router.post('/rooms/:roomId/members', validateRoomInviteAccess, addRoomMember);
