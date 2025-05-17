@@ -10,6 +10,7 @@ import {
 	fetchMessages,
 	sendMessage,
 	createRoom,
+	leaveRoom,
 } from '../controllers/chat/chatController.js';
 import {
 	addRoomMember,
@@ -30,9 +31,12 @@ router.post('/friends/:friendId/messages', validateChatAccess, sendMessage);
 router.get('/rooms/:roomId/messages', fetchMessages);
 router.post('/rooms/:roomId/messages', validateChatAccess, sendMessage);
 router.post('/rooms/create', createRoom);
+
+// Room members
 router.post('/rooms/:roomId/members', validateRoomInviteAccess, addRoomMember);
 router.post('/rooms/:roomId/accept', acceptRoomInvite);
 router.post('/rooms/:roomId/decline', declineRoomInvite);
+router.post('/rooms/:roomId/leave', leaveRoom);
 
 // Tasks chat
 router.get('/tasks/:taskId/messages', fetchMessages);

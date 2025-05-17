@@ -30,22 +30,13 @@ sidebarItemsForms.forEach((form) => {
 	}
 });
 
-openModalBtn.addEventListener('click', () => {
+// Room Modal
+openRoomModalBtn.addEventListener('click', () => {
 	roomModal.classList.remove('d-none');
 });
-
-closeModalBtn.addEventListener('click', () => {
+closeRoomModalBtn.addEventListener('click', () => {
 	roomModal.classList.add('d-none');
 });
-
-openMembersBtn?.addEventListener('click', () => {
-	membersModal.classList.remove('d-none');
-});
-
-closeMembersBtn?.addEventListener('click', () => {
-	membersModal.classList.add('d-none');
-});
-
 roomForm.addEventListener('submit', async (e) => {
 	e.preventDefault();
 	const name = roomNameInput.value.trim();
@@ -96,6 +87,13 @@ roomForm.addEventListener('submit', async (e) => {
 	}
 });
 
+// Member Modal
+openMembersBtn?.addEventListener('click', () => {
+	membersModal.classList.remove('d-none');
+});
+closeMembersBtn?.addEventListener('click', () => {
+	membersModal.classList.add('d-none');
+});
 addMemberForm?.addEventListener('submit', async (e) => {
 	e.preventDefault();
 	const memberId = document.getElementById('memberId').value;
@@ -121,7 +119,7 @@ addMemberForm?.addEventListener('submit', async (e) => {
 	}
 });
 
-// On form submit
+// Message
 form?.addEventListener('submit', async (e) => {
 	e.preventDefault();
 	const message = input.value.trim();
@@ -153,3 +151,11 @@ if (form) {
 		}
 	})();
 }
+
+// Leave Modal
+openLeaveModalBtn?.addEventListener('click', () => {
+	leaveModal?.classList.remove('d-none');
+});
+closeLeaveModalBtn?.addEventListener('click', () => {
+	leaveModal?.classList.add('d-none');
+});

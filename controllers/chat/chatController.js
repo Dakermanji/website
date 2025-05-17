@@ -173,3 +173,35 @@ export const createRoom = async (req, res, next) => {
 		res.status(500).json({ error: 'Failed to create room' });
 	}
 };
+
+export const leaveRoom = async (req, res) => {
+	const { roomId } = req.params;
+	const userId = req.user.id;
+
+	try {
+		const room = await ChatRoom.fetchById(roomId);
+		if (!room) {
+			req.flash('error', 'Room not found.');
+			return res.redirect('/chat');
+		}
+
+		if (room.creator_id === userId) {
+			req.flash('error', 'You cannot leave a room you created.');
+			return res.redirect('/chat');
+		}
+
+		const member = await ChatRoomMember.fetchMember(roomId, userId);
+		if (!member || !member.accepted_at) {
+			req.flash('error', 'You are not an active member of this room.');
+			return res.redirect('/chat');
+		}
+
+		await ChatRoomMember.removeMember(roomId, userId);
+		req.flash('success', 'You have left the room.');
+		res.redirect('/chat');
+	} catch (err) {
+		console.error('Leave room error:', err);
+		req.flash('error', 'Failed to leave the room.');
+		res.redirect('/chat');
+	}
+};

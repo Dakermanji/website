@@ -25,7 +25,10 @@ export async function validateChatAccess(req, res, next) {
 				return res.redirect('/chat');
 			}
 			if (room.creator_id !== userId) {
-				const member = await ChatRoomMember.fetchMember(roomId, userId);
+				const member = await ChatRoomMember.fetchMember(
+					room_id,
+					userId
+				);
 				if (!member || !member.accepted_at) {
 					req.flash('error', 'You are not a member of this room.');
 					return res.redirect('/chat');

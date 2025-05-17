@@ -151,7 +151,8 @@
 </div>
 
 <%- include('partials/room-modal') %> <% if (projectName === 'room') { %> <%-
-include('partials/room-members-modal', { room, chat_friends }) %> <% } %>
+include('partials/room-members-modal', { room }) %> <% if (room.creator_id !==
+user.id) { %> <%- include('partials/leave-room-modal', { room }) %> <% }} %>
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
