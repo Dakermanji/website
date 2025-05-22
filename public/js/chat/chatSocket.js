@@ -16,6 +16,7 @@ socket.on('chatMessage', (data) => {
 	if (!existing) {
 		const isOwn = data.user_id === window.chatConfig.userId;
 		addMessage(
+			data.user_id,
 			data.username,
 			data.message,
 			data.created_at || data.time,

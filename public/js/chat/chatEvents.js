@@ -146,6 +146,7 @@ if (form) {
 				const isOwn = msg.user_id === window.chatConfig.userId;
 				const isBlocked = blockedMembers.includes(msg.user_id);
 				addMessage(
+					msg.user_id,
 					msg.username,
 					msg.message,
 					msg.created_at,
@@ -199,4 +200,59 @@ openKickModalBtns.forEach((btn) => {
 });
 closeKickModalBtn?.addEventListener('click', () => {
 	document.getElementById('kick-modal').classList.add('d-none');
+});
+blockForm?.addEventListener('submit', async (e) => {
+	e.preventDefault();
+
+	const formData = new FormData(blockForm);
+	const userId = formData.get('user_id');
+	const block = formData.get('block');
+	const roomId = window.chatConfig.roomId;
+
+	try {
+		const response = await fetch(`/chat/rooms/${roomId}/members/block`, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({ user_id: userId, block }),
+		});
+
+		if (response.ok) {
+			// Update roomMembers & blockedMembers
+			const member = window.chatConfig.roomMembers.find(
+				(m) => m.user_id === userId
+			);
+			if (member) member.blocked = block === '1';
+
+			// Refresh the blockedMembers array
+			window.chatConfig.blockedMembers = window.chatConfig.roomMembers
+				.filter((m) => m.blocked)
+				.map((m) => m.user_id);
+
+			// Update DOM (badge or label if needed)
+			const button = document.querySelector(
+				`.open-kick-modal[data-user-id="${userId}"]`
+			);
+			if (button) {
+				button.dataset.userBlocked = member.blocked ? '1' : '0';
+			}
+
+			// Update modal button text
+			const blockBtn = document.getElementById('block-btn');
+			blockBtn.textContent = member.blocked
+				? 'Unblock User'
+				: 'Block User';
+			blockBtn.className = `btn w-100 ${
+				member.blocked ? 'btn-outline-warning' : 'btn-warning'
+			}`;
+
+			// Close modal
+			document.getElementById('kick-modal').classList.add('d-none');
+			updateBlockedStyles();
+		} else {
+			alert('Failed to update block status.');
+		}
+	} catch (err) {
+		console.error('Block error:', err);
+		alert('Failed to update block status.');
+	}
 });

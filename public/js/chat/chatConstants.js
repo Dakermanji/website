@@ -33,6 +33,7 @@ const openKickModalBtns = document.querySelectorAll('.open-kick-modal');
 const closeKickModalBtn = document
 	.getElementById('kick-modal')
 	?.querySelector('.close-modal');
+const blockForm = document.querySelector('#kick-modal form[action*="block"]');
 
 //* Message
 const form = document.getElementById('messageForm');
@@ -60,6 +61,7 @@ function getFriendRoomId(userId, friendId) {
 
 // auto-scroll to bottom on new message
 function addMessage(
+	senderId,
 	sender,
 	message,
 	timestamp,
@@ -70,13 +72,22 @@ function addMessage(
 	div.classList.add('message');
 	div.classList.add(isOwn ? 'own' : 'friend');
 	if (isBlocked) div.classList.add('blocked');
+	div.dataset.userId = senderId;
 
 	const bubble = document.createElement('div');
 	bubble.classList.add('message-bubble');
-	bubble.innerHTML =
+
+	// Optional label for non-own messages in rooms/tasks
+	const showSender = window.chatConfig.projectName !== 'friends' && !isOwn;
+
+	const displayMessage =
 		isBlocked && !isOwn
 			? `<span class="fw-bold text-danger me-1">(Blocked)</span>${message}`
 			: message;
+
+	bubble.innerHTML = showSender
+		? `<strong class="d-block mb-1">${sender}</strong>${displayMessage}`
+		: displayMessage;
 
 	const time = document.createElement('div');
 	time.classList.add('message-time');
@@ -104,3 +115,35 @@ function projectNameToUrl(name) {
 	if (name === 'taskmanager') return 'tasks';
 	return '';
 }
+
+// Re-Render messages after (un)block
+const updateBlockedStyles = () => {
+	const messages = messagesDiv.querySelectorAll('.message');
+
+	messages.forEach((msgEl) => {
+		const userId = msgEl.dataset.userId;
+
+		const bubble = msgEl.querySelector('.message-bubble');
+
+		const isNowBlocked = window.chatConfig.blockedMembers.includes(userId);
+
+		// Remove any existing .blocked state
+		msgEl.classList.remove('blocked');
+		if (bubble) {
+			// Remove "(Blocked)" label if it exists
+			bubble.innerHTML = bubble.innerHTML.replace(
+				/^<span class="fw-bold text-danger me-1">\([Bb]locked\)<\/span>\s*/i,
+				''
+			);
+		}
+
+		// Add blocked class if applicable
+		if (isNowBlocked) {
+			msgEl.classList.add('blocked');
+			const bubble = msgEl.querySelector('.message-bubble');
+			if (bubble && !bubble.innerHTML.includes('(Blocked)')) {
+				bubble.innerHTML = `<span class="fw-bold text-danger me-1">(Blocked)</span> ${bubble.innerHTML}`;
+			}
+		}
+	});
+};

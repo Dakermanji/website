@@ -197,7 +197,7 @@ export const toggleRoomBlock = async (req, res) => {
 				block === '1' ? 'blocked' : 'unblocked'
 			} successfully.`
 		);
-		res.redirect('/chat');
+		res.status(200).json({ success: true });
 	} catch (err) {
 		console.error('Block/unblock error:', err);
 		req.flash('error', 'Failed to update block status.');
