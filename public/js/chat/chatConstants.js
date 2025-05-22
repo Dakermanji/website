@@ -66,7 +66,8 @@ function addMessage(
 	message,
 	timestamp,
 	isOwn = false,
-	isBlocked = false
+	isBlocked = false,
+	shouldShowSender = true
 ) {
 	const div = document.createElement('div');
 	div.classList.add('message');
@@ -80,14 +81,14 @@ function addMessage(
 	// Optional label for non-own messages in rooms/tasks
 	const showSender = window.chatConfig.projectName !== 'friends' && !isOwn;
 
-	const displayMessage =
-		isBlocked && !isOwn
-			? `<span class="fw-bold text-danger me-1">(Blocked)</span>${message}`
+	bubble.innerHTML =
+		showSender && shouldShowSender
+			? `<strong class="d-block mb-1">${sender}${
+					isBlocked && !isOwn
+						? ' <i class="bi bi-slash-circle text-danger ms-1" title="Blocked"></i>'
+						: ''
+			  }</strong>${message}`
 			: message;
-
-	bubble.innerHTML = showSender
-		? `<strong class="d-block mb-1">${sender}</strong>${displayMessage}`
-		: displayMessage;
 
 	const time = document.createElement('div');
 	time.classList.add('message-time');
@@ -117,33 +118,40 @@ function projectNameToUrl(name) {
 }
 
 // Re-Render messages after (un)block
-const updateBlockedStyles = () => {
+function updateBlockedStyles() {
 	const messages = messagesDiv.querySelectorAll('.message');
 
 	messages.forEach((msgEl) => {
 		const userId = msgEl.dataset.userId;
-
+		const isNowBlocked = window.chatConfig.blockedMembers.includes(userId);
 		const bubble = msgEl.querySelector('.message-bubble');
 
-		const isNowBlocked = window.chatConfig.blockedMembers.includes(userId);
-
-		// Remove any existing .blocked state
+		// Reset blocked class
 		msgEl.classList.remove('blocked');
+
 		if (bubble) {
-			// Remove "(Blocked)" label if it exists
-			bubble.innerHTML = bubble.innerHTML.replace(
-				/^<span class="fw-bold text-danger me-1">\([Bb]locked\)<\/span>\s*/i,
-				''
-			);
+			// Remove previous blocked icon if it exists
+			const senderLine = bubble.querySelector('strong');
+			if (senderLine) {
+				const icon = senderLine.querySelector('.bi-slash-circle');
+				if (icon) senderLine.removeChild(icon);
+			}
 		}
 
-		// Add blocked class if applicable
+		// Add blocked styles and icon if user is now blocked
 		if (isNowBlocked) {
 			msgEl.classList.add('blocked');
-			const bubble = msgEl.querySelector('.message-bubble');
-			if (bubble && !bubble.innerHTML.includes('(Blocked)')) {
-				bubble.innerHTML = `<span class="fw-bold text-danger me-1">(Blocked)</span> ${bubble.innerHTML}`;
+
+			const senderLine = bubble?.querySelector('strong');
+			if (
+				senderLine &&
+				!senderLine.innerHTML.includes('bi-slash-circle')
+			) {
+				const icon = document.createElement('i');
+				icon.className = 'bi bi-slash-circle text-danger ms-1';
+				icon.title = 'Blocked';
+				senderLine.appendChild(icon);
 			}
 		}
 	});
-};
+}

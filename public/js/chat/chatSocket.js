@@ -15,12 +15,25 @@ socket.on('chatMessage', (data) => {
 
 	if (!existing) {
 		const isOwn = data.user_id === window.chatConfig.userId;
+		const blockedMembers = window.chatConfig.blockedMembers || [];
+		const isBlocked = blockedMembers.includes(data.user_id);
+
+		// DOM-based check: was the last message from the same user?
+		const lastMessage = messagesDiv.querySelector('.message:last-child');
+		const lastSenderId = lastMessage?.dataset.userId;
+		const shouldShowSender =
+			window.chatConfig.projectName !== 'friends' &&
+			!isOwn &&
+			data.user_id !== lastSenderId;
+
 		addMessage(
 			data.user_id,
 			data.username,
 			data.message,
 			data.created_at || data.time,
-			isOwn
+			isOwn,
+			isBlocked,
+			shouldShowSender
 		);
 	}
 });

@@ -142,17 +142,28 @@ if (form) {
 			);
 
 			const messages = await response.json();
+			let lastSenderId = null;
 			messages.forEach((msg) => {
-				const isOwn = msg.user_id === window.chatConfig.userId;
-				const isBlocked = blockedMembers.includes(msg.user_id);
+				const senderId = msg.user_id;
+				const isOwn = senderId === window.chatConfig.userId;
+				const isBlocked = blockedMembers.includes(senderId);
+
+				const shouldShowSender =
+					window.chatConfig.projectName !== 'friends' &&
+					!isOwn &&
+					senderId !== lastSenderId;
+
 				addMessage(
-					msg.user_id,
+					senderId,
 					msg.username,
 					msg.message,
 					msg.created_at,
 					isOwn,
-					isBlocked
+					isBlocked,
+					shouldShowSender
 				);
+
+				lastSenderId = senderId;
 			});
 		} catch (err) {
 			console.error('Failed to load messages:', err);
