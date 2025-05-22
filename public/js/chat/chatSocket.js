@@ -22,9 +22,7 @@ socket.on('chatMessage', (data) => {
 		const lastMessage = messagesDiv.querySelector('.message:last-child');
 		const lastSenderId = lastMessage?.dataset.userId;
 		const shouldShowSender =
-			window.chatConfig.projectName !== 'friends' &&
-			!isOwn &&
-			data.user_id !== lastSenderId;
+			projectName !== 'chat' && !isOwn && data.user_id !== lastSenderId;
 
 		addMessage(
 			data.user_id,

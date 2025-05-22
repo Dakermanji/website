@@ -151,7 +151,7 @@ if (form) {
 				const isBlocked = blockedMembers.includes(senderId);
 
 				const shouldShowSender =
-					window.chatConfig.projectName !== 'friends' &&
+					projectName !== 'chat' &&
 					!isOwn &&
 					senderId !== lastSenderId;
 

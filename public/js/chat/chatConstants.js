@@ -79,7 +79,7 @@ function addMessage(
 	bubble.classList.add('message-bubble');
 
 	// Optional label for non-own messages in rooms/tasks
-	const showSender = window.chatConfig.projectName !== 'friends' && !isOwn;
+	const showSender = projectName !== 'chat' && !isOwn;
 
 	bubble.innerHTML =
 		showSender && shouldShowSender
@@ -109,7 +109,7 @@ function addMessage(
 	messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
-// simplified project name
+// URL project name
 function projectNameToUrl(name) {
 	if (name === 'chat') return 'friends';
 	if (name === 'room') return 'rooms';
