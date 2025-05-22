@@ -144,7 +144,14 @@ if (form) {
 			const messages = await response.json();
 			messages.forEach((msg) => {
 				const isOwn = msg.user_id === window.chatConfig.userId;
-				addMessage(msg.username, msg.message, msg.created_at, isOwn);
+				const isBlocked = blockedMembers.includes(msg.user_id);
+				addMessage(
+					msg.username,
+					msg.message,
+					msg.created_at,
+					isOwn,
+					isBlocked
+				);
 			});
 		} catch (err) {
 			console.error('Failed to load messages:', err);
@@ -166,4 +173,30 @@ openDeleteModalBtn?.addEventListener('click', () => {
 });
 closeDeleteModalBtn?.addEventListener('click', () => {
 	deleteModal?.classList.add('d-none');
+});
+
+// Kick Modal
+openKickModalBtns.forEach((btn) => {
+	btn.addEventListener('click', () => {
+		const modal = document.getElementById('kick-modal');
+		const userId = btn.dataset.userId;
+		const username = btn.dataset.username;
+		const isBlocked = btn.dataset.userBlocked === '1';
+
+		document.getElementById('kick-user-id').value = userId;
+		document.getElementById('block-user-id').value = userId;
+		document.getElementById('kick-username').textContent = username;
+		document.getElementById('block-action').value = isBlocked ? '0' : '1';
+
+		const blockBtn = document.getElementById('block-btn');
+		blockBtn.textContent = isBlocked ? 'Unblock User' : 'Block User';
+		blockBtn.className = `btn w-100 ${
+			isBlocked ? 'btn-outline-warning' : 'btn-warning'
+		}`;
+
+		modal.classList.remove('d-none');
+	});
+});
+closeKickModalBtn?.addEventListener('click', () => {
+	document.getElementById('kick-modal').classList.add('d-none');
 });

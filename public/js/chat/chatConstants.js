@@ -28,6 +28,12 @@ const deleteModal = document.getElementById('delete-modal');
 const openDeleteModalBtn = document.getElementById('open-delete-modal');
 const closeDeleteModalBtn = deleteModal?.querySelector('.close-modal');
 
+//? Kick Modal
+const openKickModalBtns = document.querySelectorAll('.open-kick-modal');
+const closeKickModalBtn = document
+	.getElementById('kick-modal')
+	?.querySelector('.close-modal');
+
 //* Message
 const form = document.getElementById('messageForm');
 const input = document.getElementById('messageInput');
@@ -41,6 +47,8 @@ const isFriendChat = projectName === 'chat';
 const actualRoomId = isFriendChat
 	? getFriendRoomId(window.chatConfig.userId, roomId)
 	: roomId;
+const members = window.chatConfig.roomMembers;
+const blockedMembers = members.filter((m) => m.blocked).map((m) => m.user_id);
 
 //* Helper Functions
 // Virtual RoomId for friends
@@ -51,14 +59,24 @@ function getFriendRoomId(userId, friendId) {
 }
 
 // auto-scroll to bottom on new message
-function addMessage(sender, message, timestamp, isOwn = false) {
+function addMessage(
+	sender,
+	message,
+	timestamp,
+	isOwn = false,
+	isBlocked = false
+) {
 	const div = document.createElement('div');
 	div.classList.add('message');
 	div.classList.add(isOwn ? 'own' : 'friend');
+	if (isBlocked) div.classList.add('blocked');
 
 	const bubble = document.createElement('div');
 	bubble.classList.add('message-bubble');
-	bubble.textContent = message;
+	bubble.innerHTML =
+		isBlocked && !isOwn
+			? `<span class="fw-bold text-danger me-1">(Blocked)</span>${message}`
+			: message;
 
 	const time = document.createElement('div');
 	time.classList.add('message-time');
@@ -79,6 +97,7 @@ function addMessage(sender, message, timestamp, isOwn = false) {
 	messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
+// simplified project name
 function projectNameToUrl(name) {
 	if (name === 'chat') return 'friends';
 	if (name === 'room') return 'rooms';

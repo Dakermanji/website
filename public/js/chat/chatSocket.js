@@ -23,9 +23,3 @@ socket.on('chatMessage', (data) => {
 		);
 	}
 });
-
-function getFriendRoomId(userId, friendId) {
-	return userId < friendId
-		? `friend-${userId}-${friendId}`
-		: `friend-${friendId}-${userId}`;
-}

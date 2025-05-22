@@ -203,6 +203,13 @@
     border-bottom-right-radius: 0;
 }
 
+.message.blocked .message-bubble {
+    background-color: #f8d7da;
+    color: #842029;
+    font-style: italic;
+    border: 1px dashed #dc3545;
+}
+
 /* Timestamp */
 .message-time {
     font-size: 12px;

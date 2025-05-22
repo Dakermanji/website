@@ -29,8 +29,11 @@ export async function validateChatAccess(req, res, next) {
 					room_id,
 					userId
 				);
-				if (!member || !member.accepted_at) {
-					req.flash('error', 'You are not a member of this room.');
+				if (!member || !member.accepted_at || member.blocked) {
+					req.flash(
+						'error',
+						'You cannot access this room. It may have been deleted or you no longer have permission to view it.'
+					);
 					return res.redirect('/chat');
 				}
 			}
@@ -72,7 +75,7 @@ export async function validateRoomInviteAccess(req, res, next) {
 
 		// Allow accepted member only
 		const member = await ChatRoomMember.fetchMember(roomId, userId);
-		if (member && member.accepted_at) {
+		if (member && member.accepted_at && !member.blocked) {
 			return next();
 		}
 

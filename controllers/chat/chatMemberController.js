@@ -118,3 +118,133 @@ export const declineRoomInvite = async (req, res) => {
 		res.redirect('/chat');
 	}
 };
+
+export const leaveRoom = async (req, res) => {
+	const { roomId } = req.params;
+	const userId = req.user.id;
+
+	try {
+		const room = await ChatRoom.fetchById(roomId);
+		if (!room) {
+			req.flash('error', 'Room not found.');
+			return res.redirect('/chat');
+		}
+
+		if (room.creator_id === userId) {
+			req.flash('error', 'You cannot leave a room you created.');
+			return res.redirect('/chat');
+		}
+
+		const member = await ChatRoomMember.fetchMember(roomId, userId);
+		if (!member || !member.accepted_at) {
+			req.flash('error', 'You are not an active member of this room.');
+			return res.redirect('/chat');
+		}
+
+		if (member.blocked) {
+			req.flash('error', 'Room not found.');
+			return res.redirect('/chat');
+		}
+
+		await ChatRoomMember.removeMember(roomId, userId);
+		req.flash('success', 'You have left the room.');
+		res.redirect('/chat');
+	} catch (err) {
+		console.error('Leave room error:', err);
+		req.flash('error', 'Failed to leave the room.');
+		res.redirect('/chat');
+	}
+};
+
+export const toggleRoomBlock = async (req, res) => {
+	const { roomId } = req.params;
+	const { user_id, block } = req.body;
+	const userId = req.user.id;
+
+	try {
+		const room = await ChatRoom.fetchById(roomId);
+
+		if (!room) {
+			req.flash('error', 'Room not found.');
+			return res.redirect('/chat');
+		}
+
+		// Only the creator can block/unblock members
+		if (room.creator_id !== userId) {
+			req.flash('error', 'Only the room creator can block members.');
+			return res.redirect('/chat');
+		}
+
+		if (user_id === userId) {
+			req.flash('error', 'You cannot block yourself.');
+			return res.redirect('/chat');
+		}
+
+		const member = await ChatRoomMember.fetchMember(roomId, user_id);
+		if (!member || !member.accepted_at) {
+			req.flash(
+				'error',
+				'That user is not an accepted member of this room.'
+			);
+			return res.redirect('/chat');
+		}
+
+		await ChatRoomMember.setBlocked(roomId, user_id, block === '1' ? 1 : 0);
+
+		req.flash(
+			'success',
+			`User has been ${
+				block === '1' ? 'blocked' : 'unblocked'
+			} successfully.`
+		);
+		res.redirect('/chat');
+	} catch (err) {
+		console.error('Block/unblock error:', err);
+		req.flash('error', 'Failed to update block status.');
+		res.redirect('/chat');
+	}
+};
+
+export const removeRoomMember = async (req, res) => {
+	const { roomId } = req.params;
+	const { user_id } = req.body;
+	const userId = req.user.id;
+
+	try {
+		const room = await ChatRoom.fetchById(roomId);
+
+		if (!room) {
+			req.flash('error', 'Room not found.');
+			return res.redirect('/chat');
+		}
+
+		// Only the creator can remove members
+		if (room.creator_id !== userId) {
+			req.flash('error', 'Only the room creator can remove members.');
+			return res.redirect('/chat');
+		}
+
+		if (user_id === userId) {
+			req.flash(
+				'error',
+				'You cannot remove yourself from your own room.'
+			);
+			return res.redirect('/chat');
+		}
+
+		const member = await ChatRoomMember.fetchMember(roomId, user_id);
+		if (!member) {
+			req.flash('error', 'That user is not a member of this room.');
+			return res.redirect('/chat');
+		}
+
+		await ChatRoomMember.removeMember(roomId, user_id);
+
+		req.flash('success', 'User has been removed from the room.');
+		res.redirect('/chat');
+	} catch (err) {
+		console.error('Remove member error:', err);
+		req.flash('error', 'Failed to remove user.');
+		res.redirect('/chat');
+	}
+};

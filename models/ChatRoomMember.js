@@ -46,7 +46,7 @@ class ChatRoomMember {
 		const query = `SELECT crm.*, cr.name
 		 FROM chat_room_members crm
 		 JOIN chat_rooms cr ON crm.room_id = cr.id
-		 WHERE crm.user_id = ?`;
+		 WHERE crm.user_id = ? AND crm.blocked = 0`;
 		const [rows] = await promisePool.query(query, [userId]);
 		return rows;
 	}
@@ -55,6 +55,15 @@ class ChatRoomMember {
 		const query = `SELECT * FROM chat_room_members WHERE room_id = ? AND user_id = ?`;
 		const [rows] = await promisePool.query(query, [roomId, userId]);
 		return rows[0] || null;
+	}
+
+	static async setBlocked(roomId, userId, blocked) {
+		const query = `
+			UPDATE chat_room_members
+			SET blocked = ?
+			WHERE room_id = ? AND user_id = ?
+		`;
+		await promisePool.query(query, [blocked, roomId, userId]);
 	}
 }
 

@@ -75,6 +75,7 @@ export const renderChatHome = async (req, res, next) => {
 
 export const fetchMessages = async (req, res) => {
 	const { friendId, roomId, taskId } = req.params;
+	const userId = req.user.id;
 
 	let projectName = 'chat';
 	let receiverId = friendId;
@@ -90,13 +91,23 @@ export const fetchMessages = async (req, res) => {
 	}
 
 	try {
+		if (projectName === 'room') {
+			const member = await ChatRoomMember.fetchMember(receiverId, userId);
+			const isCreator = await ChatRoom.isCreator(roomId, userId);
+			if (!isCreator && (!member || member.blocked)) {
+				return res.status(404).json({ error: 'Room not found.' });
+			}
+		}
+
 		const messages = await ChatMessage.fetchByReceiver(
 			projectName,
 			receiverId,
-			req.user.id
+			userId
 		);
+
 		res.json(messages);
 	} catch (err) {
+		console.error('Failed to fetch messages:', err);
 		res.status(500).json({ error: 'Failed to fetch messages.' });
 	}
 };
@@ -127,6 +138,14 @@ export const sendMessage = async (req, res) => {
 			user_id: userId,
 			message,
 		};
+		if (projectName === 'room') {
+			console.log('here');
+
+			const member = await ChatRoomMember.fetchMember(roomId, userId);
+			if (member?.blocked) {
+				return res.status(404).json({ error: 'Room not found.' });
+			}
+		}
 
 		await ChatMessage.create(newMessage);
 
@@ -170,38 +189,6 @@ export const createRoom = async (req, res, next) => {
 	} catch (error) {
 		errorHandler(error, req, res, next);
 		res.status(500).json({ error: 'Failed to create room' });
-	}
-};
-
-export const leaveRoom = async (req, res) => {
-	const { roomId } = req.params;
-	const userId = req.user.id;
-
-	try {
-		const room = await ChatRoom.fetchById(roomId);
-		if (!room) {
-			req.flash('error', 'Room not found.');
-			return res.redirect('/chat');
-		}
-
-		if (room.creator_id === userId) {
-			req.flash('error', 'You cannot leave a room you created.');
-			return res.redirect('/chat');
-		}
-
-		const member = await ChatRoomMember.fetchMember(roomId, userId);
-		if (!member || !member.accepted_at) {
-			req.flash('error', 'You are not an active member of this room.');
-			return res.redirect('/chat');
-		}
-
-		await ChatRoomMember.removeMember(roomId, userId);
-		req.flash('success', 'You have left the room.');
-		res.redirect('/chat');
-	} catch (err) {
-		console.error('Leave room error:', err);
-		req.flash('error', 'Failed to leave the room.');
-		res.redirect('/chat');
 	}
 };
 

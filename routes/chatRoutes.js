@@ -10,13 +10,15 @@ import {
 	fetchMessages,
 	sendMessage,
 	createRoom,
-	leaveRoom,
 	deleteRoom,
 } from '../controllers/chat/chatController.js';
 import {
 	addRoomMember,
 	acceptRoomInvite,
 	declineRoomInvite,
+	leaveRoom,
+	toggleRoomBlock,
+	removeRoomMember,
 } from '../controllers/chat/chatMemberController.js';
 
 const router = express.Router();
@@ -39,6 +41,8 @@ router.post('/rooms/:roomId/members', validateRoomInviteAccess, addRoomMember);
 router.post('/rooms/:roomId/accept', acceptRoomInvite);
 router.post('/rooms/:roomId/decline', declineRoomInvite);
 router.post('/rooms/:roomId/leave', leaveRoom);
+router.post('/rooms/:roomId/members/block', toggleRoomBlock);
+router.post('/rooms/:roomId/members/remove', removeRoomMember);
 
 // Tasks chat
 router.get('/tasks/:taskId/messages', fetchMessages);

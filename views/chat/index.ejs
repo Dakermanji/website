@@ -125,13 +125,29 @@
 
 				<ul class="sidebar-items" id="room-members">
 					<% room?.roomMembers.forEach(member => { %>
-					<li>
+					<li
+						class="d-flex justify-content-between align-items-center"
+					>
 						<span
 							class="badge <%= member.accepted_at ? 'bg-secondary' : 'bg-warning text-dark border border-secondary' %>"
 						>
 							<%= member.username %> <% if (!member.accepted_at) {
 							%> (Invited) <% } %>
 						</span>
+
+						<% if (room.creator_id === user.id && member.user_id !==
+						user.id) { %>
+						<!-- Button that opens modal -->
+						<button
+							type="button"
+							class="badge bg-danger text-white border-0 open-kick-modal"
+							data-user-id="<%= member.user_id %>"
+							data-username="<%= member.username %>"
+							data-user-blocked="<%= member.blocked %>"
+						>
+							<i class="bi bi-x"></i>
+						</button>
+						<% } %>
 					</li>
 					<% }) %>
 				</ul>
@@ -152,8 +168,9 @@
 
 <%- include('partials/room-modal') %> <% if (projectName === 'room') { %> <%-
 include('partials/room-members-modal', { room }) %> <% if (room.creator_id ===
-user.id) { %> <%- include('partials/delete-room-modal', { room }) %> <% } else {
-%> <%- include('partials/leave-room-modal', { room }) %> <% }} %>
+user.id) { %> <%- include('partials/delete-room-modal', { room }) %><%-
+include('partials/kick-room-member-modal', { room }) %> <% } else { %> <%-
+include('partials/leave-room-modal', { room }) %> <% }} %>
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
@@ -162,5 +179,6 @@ user.id) { %> <%- include('partials/delete-room-modal', { room }) %> <% } else {
 		roomId: '<%= receiverId %>',
 		projectName: '<%= projectName %>',
 		username: '<%= friend?.username || null %>',
+		roomMembers: <%- JSON.stringify(room?.roomMembers || []) %>
 	};
 </script>
