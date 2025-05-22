@@ -160,6 +160,14 @@
     border-color: var(--color-secondary-dark);
 }
 
+.timestamp-separator {
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #888;
+    margin: 1rem 0 0.5rem;
+}
+
 /* chat window */
 .messages {
     flex: 1;

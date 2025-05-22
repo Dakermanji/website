@@ -143,6 +143,8 @@ if (form) {
 
 			const messages = await response.json();
 			let lastSenderId = null;
+			let lastMessageDate = null;
+
 			messages.forEach((msg) => {
 				const senderId = msg.user_id;
 				const isOwn = senderId === window.chatConfig.userId;
@@ -152,6 +154,16 @@ if (form) {
 					window.chatConfig.projectName !== 'friends' &&
 					!isOwn &&
 					senderId !== lastSenderId;
+
+				const msgDateOnly = new Date(msg.created_at).toDateString();
+
+				if (msgDateOnly !== lastMessageDate) {
+					const separator = document.createElement('div');
+					separator.className = 'timestamp-separator';
+					separator.textContent = getReadableDate(msg.created_at);
+					messagesDiv.appendChild(separator);
+					lastMessageDate = msgDateOnly;
+				}
 
 				addMessage(
 					senderId,
