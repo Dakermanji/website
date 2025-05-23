@@ -42,6 +42,7 @@ const messagesDiv = document.getElementById('messages');
 const roomId = window.chatConfig?.roomId;
 const projectName = window.chatConfig?.projectName;
 const username = window.chatConfig?.username;
+const user = window.chatConfig?.user;
 const links = document.querySelectorAll('.sidebar-item a');
 const toggles = document.querySelectorAll('.toggle-section');
 const isFriendChat = projectName === 'chat';
@@ -50,6 +51,10 @@ const actualRoomId = isFriendChat
 	: roomId;
 const members = window.chatConfig.roomMembers;
 const blockedMembers = members.filter((m) => m.blocked).map((m) => m.user_id);
+
+//* Typing
+const typingIndicator = document.getElementById('typing-indicator');
+let typingTimeout;
 
 //* Helper Functions
 // Virtual RoomId for friends

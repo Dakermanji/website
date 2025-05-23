@@ -279,3 +279,7 @@ blockForm?.addEventListener('submit', async (e) => {
 		alert('Failed to update block status.');
 	}
 });
+
+input?.addEventListener('input', () => {
+	socket.emit('typing', { roomId: actualRoomId, username: user });
+});

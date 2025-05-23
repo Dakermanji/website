@@ -1,15 +1,6 @@
 <!-- views/chat/partials/projects.ejs -->
+<h2 class="text-center"
+	>Project: <strong class="orange">PLACEHOLDER</strong></h2
+>
 
-<div id="messages" class="messages"></div>
-
-<form id="messageForm">
-	<input
-		type="text"
-		id="messageInput"
-		placeholder="Type your message..."
-		autocomplete="off"
-	/>
-	<button type="submit">
-		<i class="bi bi-send-fill"></i>
-	</button>
-</form>
+<%- include('messages') %>

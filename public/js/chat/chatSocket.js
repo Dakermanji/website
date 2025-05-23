@@ -7,7 +7,7 @@ socket.on('connect', () => {
 	socket.emit('joinRoom', actualRoomId); // join room after socket is actually ready
 });
 
-// On message received (via socket.io)
+// On message received
 socket.on('chatMessage', (data) => {
 	const existing = Array.from(messagesDiv.children).some((msgEl) =>
 		msgEl.textContent.includes(data.message)
@@ -34,4 +34,13 @@ socket.on('chatMessage', (data) => {
 			shouldShowSender
 		);
 	}
+});
+
+// Show typing indicator on client
+socket.on('typing', ({ username }) => {
+	typingIndicator.textContent = `✍🏻 ${username} is typing...`;
+	clearTimeout(typingTimeout);
+	typingTimeout = setTimeout(() => {
+		typingIndicator.textContent = '';
+	}, 1000);
 });

@@ -32,6 +32,11 @@ export const initSocket = (server) => {
 			console.log(`Message from ${sender} in ${roomId}: ${message}`);
 		});
 
+		// On message typing
+		socket.on('typing', ({ roomId, username }) => {
+			socket.to(roomId).emit('typing', { username });
+		});
+
 		// Disconnect
 		socket.on('disconnect', () => {
 			console.log(`User disconnected: ${socket.id}`);

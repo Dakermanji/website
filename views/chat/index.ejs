@@ -179,6 +179,7 @@ include('partials/leave-room-modal', { room }) %> <% }} %>
 		roomId: '<%= receiverId %>',
 		projectName: '<%= projectName %>',
 		username: '<%= friend?.username || null %>',
-		roomMembers: <%- JSON.stringify(room?.roomMembers || []) %>
+		roomMembers: <%- JSON.stringify(room?.roomMembers || []) %>,
+		user: '<%= user.username %>'
 	};
 </script>
