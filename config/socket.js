@@ -33,8 +33,25 @@ export const initSocket = (server) => {
 		});
 
 		// On message typing
+		const typingUsers = {};
+
 		socket.on('typing', ({ roomId, username }) => {
-			socket.to(roomId).emit('typing', { username });
+			if (!typingUsers[roomId]) typingUsers[roomId] = new Set();
+
+			typingUsers[roomId].add(username);
+
+			// Emit to others in the room
+			socket.to(roomId).emit('typing', {
+				users: Array.from(typingUsers[roomId]),
+			});
+
+			// Auto-remove after timeout (e.g. 3s)
+			setTimeout(() => {
+				typingUsers[roomId].delete(username);
+				socket.to(roomId).emit('typing', {
+					users: Array.from(typingUsers[roomId]),
+				});
+			}, 3000);
 		});
 
 		// Disconnect

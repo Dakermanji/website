@@ -37,10 +37,26 @@ socket.on('chatMessage', (data) => {
 });
 
 // Show typing indicator on client
-socket.on('typing', ({ username }) => {
-	typingIndicator.textContent = `✍🏻 ${username} is typing...`;
-	clearTimeout(typingTimeout);
-	typingTimeout = setTimeout(() => {
+socket.on('typing', ({ users }) => {
+	if (!users || users.length === 0) {
 		typingIndicator.textContent = '';
-	}, 1000);
+		return;
+	}
+
+	const otherUsers = users.filter((u) => u !== user);
+	if (otherUsers.length === 0) {
+		typingIndicator.textContent = '';
+		return;
+	}
+
+	let text = '';
+	if (otherUsers.length === 1) {
+		text = `${otherUsers[0]} is typing...`;
+	} else if (otherUsers.length === 2) {
+		text = `${otherUsers[0]} and ${otherUsers[1]} are typing...`;
+	} else {
+		text = `${otherUsers.length} people are typing...`;
+	}
+
+	typingIndicator.textContent = `✍🏻 ${text}`;
 });
